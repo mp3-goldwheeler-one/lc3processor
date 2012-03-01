@@ -16,15 +16,22 @@ USE ece411.LC3b_types.all;
 
 ENTITY Memory IS
    PORT( 
-      ADDRESS   : IN     LC3b_word;
-      CLK       : IN     std_logic;
-      DATAOUT   : IN     LC3b_word;
-      MREAD_L   : IN     std_logic;
-      MWRITEH_L : IN     std_logic;
-      MWRITEL_L : IN     std_logic;
-      RESET_L   : IN     std_logic;
-      DATAIN    : OUT    LC3b_word;
-      MRESP_H   : OUT    std_logic
+      CLK             : IN     std_logic;
+      DATAOUT         : IN     LC3b_word;
+      RESET_L         : IN     std_logic;
+      data_addr       : IN     LC3b_word;
+      data_mread_l    : IN     std_logic;
+      data_mwriteh_l  : IN     std_logic;
+      data_mwritel_l  : IN     std_logic;
+      instr_addr      : IN     LC3b_word;
+      instr_mread_l   : IN     std_logic;
+      instr_mwriteh_l : IN     std_logic;
+      instr_mwritel_l : IN     std_logic;
+      instr_out       : IN     std_logic;
+      DATAIN          : OUT    LC3b_word;
+      data_resp_h     : OUT    std_logic;
+      instr_in        : OUT    std_logic;
+      instr_resp_h    : OUT    std_logic
    );
 
 -- Declarations
