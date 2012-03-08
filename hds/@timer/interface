@@ -25,7 +25,7 @@ appVersion "2005.3 (Build 75)"
 model (Symbol
 commonDM (CommonDM
 ldm (LogicalDM
-suid 3,0
+suid 6,0
 usingSuid 1
 emptyRow *1 (LEmptyRow
 )
@@ -67,13 +67,13 @@ tm "EolColHdrMgr"
 *14 (LogPort
 port (LogicalPort
 decl (Decl
-n "Clk"
-t "STD_LOGIC"
+n "CLK"
+t "std_logic"
 o 2
-suid 1,0
+suid 4,0
 )
 )
-uid 66,0
+uid 129,0
 )
 *15 (LogPort
 port (LogicalPort
@@ -81,11 +81,11 @@ m 1
 decl (Decl
 n "LRUgate"
 t "STD_LOGIC"
-o 50
-suid 2,0
+o 21
+suid 5,0
 )
 )
-uid 68,0
+uid 131,0
 )
 *16 (LogPort
 port (LogicalPort
@@ -93,11 +93,11 @@ m 1
 decl (Decl
 n "writegate"
 t "std_logic"
-o 49
-suid 3,0
+o 51
+suid 6,0
 )
 )
-uid 70,0
+uid 133,0
 )
 ]
 )
@@ -153,19 +153,19 @@ uid 92,0
 litem &14
 pos 0
 dimension 20
-uid 67,0
+uid 130,0
 )
 *23 (MRCItem
 litem &15
 pos 1
 dimension 20
-uid 69,0
+uid 132,0
 )
 *24 (MRCItem
 litem &16
 pos 2
 dimension 20
-uid 71,0
+uid 134,0
 )
 ]
 )
@@ -244,23 +244,23 @@ VExpander (VariableExpander
 vvMap [
 (vvPair
 variable "HDLDir"
-value "/home/goldste6/ece411/mp2.2/hdl"
+value "/home/wheele11/Desktop/lc3processor/hdl"
 )
 (vvPair
 variable "HDSDir"
-value "/home/goldste6/ece411/mp2.2/hds"
+value "/home/wheele11/Desktop/lc3processor/hds"
 )
 (vvPair
 variable "SideDataDesignDir"
-value "/home/goldste6/ece411/mp2.2/hds/@timer/interface.info"
+value "/home/wheele11/Desktop/lc3processor/hds/@timer/interface.info"
 )
 (vvPair
 variable "SideDataUserDir"
-value "/home/goldste6/ece411/mp2.2/hds/@timer/interface.user"
+value "/home/wheele11/Desktop/lc3processor/hds/@timer/interface.user"
 )
 (vvPair
 variable "SourceDir"
-value "/home/goldste6/ece411/mp2.2/hds"
+value "/home/wheele11/Desktop/lc3processor/hds"
 )
 (vvPair
 variable "appl"
@@ -276,27 +276,27 @@ value "%(unit)_config"
 )
 (vvPair
 variable "d"
-value "/home/goldste6/ece411/mp2.2/hds/@timer"
+value "/home/wheele11/Desktop/lc3processor/hds/@timer"
 )
 (vvPair
 variable "d_logical"
-value "/home/goldste6/ece411/mp2.2/hds/Timer"
+value "/home/wheele11/Desktop/lc3processor/hds/Timer"
 )
 (vvPair
 variable "date"
-value "02/16/12"
+value "03/07/12"
 )
 (vvPair
 variable "day"
-value "Thu"
+value "Wed"
 )
 (vvPair
 variable "day_long"
-value "Thursday"
+value "Wednesday"
 )
 (vvPair
 variable "dd"
-value "16"
+value "07"
 )
 (vvPair
 variable "entity_name"
@@ -324,7 +324,7 @@ value "ews"
 )
 (vvPair
 variable "host"
-value "linux1.ews.illinois.edu"
+value "gelib-057-18.ews.illinois.edu"
 )
 (vvPair
 variable "language"
@@ -348,7 +348,7 @@ value "$HDS_PROJECT_DIR/compile"
 )
 (vvPair
 variable "mm"
-value "02"
+value "03"
 )
 (vvPair
 variable "module_name"
@@ -356,23 +356,23 @@ value "Timer"
 )
 (vvPair
 variable "month"
-value "Feb"
+value "Mar"
 )
 (vvPair
 variable "month_long"
-value "February"
+value "March"
 )
 (vvPair
 variable "p"
-value "/home/goldste6/ece411/mp2.2/hds/@timer/interface"
+value "/home/wheele11/Desktop/lc3processor/hds/@timer/interface"
 )
 (vvPair
 variable "p_logical"
-value "/home/goldste6/ece411/mp2.2/hds/Timer/interface"
+value "/home/wheele11/Desktop/lc3processor/hds/Timer/interface"
 )
 (vvPair
 variable "project_name"
-value "ece411"
+value "ece411_mp3"
 )
 (vvPair
 variable "series"
@@ -388,7 +388,7 @@ value "<TBD>"
 )
 (vvPair
 variable "task_ModelSimPath"
-value "<TBD>"
+value "$HDS_HOME/../Modeltech/linux"
 )
 (vvPair
 variable "task_NC-SimPath"
@@ -408,7 +408,7 @@ value "<TBD>"
 )
 (vvPair
 variable "time"
-value "16:42:33"
+value "22:37:44"
 )
 (vvPair
 variable "unit"
@@ -416,7 +416,7 @@ value "Timer"
 )
 (vvPair
 variable "user"
-value "goldste6"
+value "wheele11"
 )
 (vvPair
 variable "version"
@@ -443,10 +443,10 @@ optionalChildren [
 uid 8,0
 optionalChildren [
 *34 (CptPort
-uid 51,0
+uid 114,0
 ps "OnEdgeStrategy"
 shape (Triangle
-uid 52,0
+uid 115,0
 ro 90
 va (VaSet
 vasetType 1
@@ -455,42 +455,43 @@ fg "0,65535,0"
 xt "14250,7625,15000,8375"
 )
 tg (CPTG
-uid 53,0
+uid 116,0
 ps "CptPortTextPlaceStrategy"
 stg "VerticalLayoutStrategy"
 f (Text
-uid 54,0
+uid 117,0
 va (VaSet
 font "courier,8,0"
 )
 xt "16000,7550,17500,8450"
-st "Clk"
+st "CLK"
 blo "16000,8250"
 tm "CptPortNameMgr"
 )
 )
 dt (MLText
-uid 55,0
+uid 118,0
 va (VaSet
 font "courier,8,0"
 )
 xt "44000,1800,60000,2700"
-st "Clk       : IN     STD_LOGIC  ;"
+st "CLK       : IN     std_logic  ;
+"
 )
 thePort (LogicalPort
 decl (Decl
-n "Clk"
-t "STD_LOGIC"
+n "CLK"
+t "std_logic"
 o 2
-suid 1,0
+suid 4,0
 )
 )
 )
 *35 (CptPort
-uid 56,0
+uid 119,0
 ps "OnEdgeStrategy"
 shape (Triangle
-uid 57,0
+uid 120,0
 ro 90
 va (VaSet
 vasetType 1
@@ -499,11 +500,11 @@ fg "0,65535,0"
 xt "23000,9625,23750,10375"
 )
 tg (CPTG
-uid 58,0
+uid 121,0
 ps "CptPortTextPlaceStrategy"
 stg "RightVerticalLayoutStrategy"
 f (Text
-uid 59,0
+uid 122,0
 va (VaSet
 font "courier,8,0"
 )
@@ -515,28 +516,29 @@ tm "CptPortNameMgr"
 )
 )
 dt (MLText
-uid 60,0
+uid 123,0
 va (VaSet
 font "courier,8,0"
 )
 xt "44000,2700,60000,3600"
-st "LRUgate   : OUT    STD_LOGIC  ;"
+st "LRUgate   : OUT    STD_LOGIC  ;
+"
 )
 thePort (LogicalPort
 m 1
 decl (Decl
 n "LRUgate"
 t "STD_LOGIC"
-o 50
-suid 2,0
+o 21
+suid 5,0
 )
 )
 )
 *36 (CptPort
-uid 61,0
+uid 124,0
 ps "OnEdgeStrategy"
 shape (Triangle
-uid 62,0
+uid 125,0
 ro 90
 va (VaSet
 vasetType 1
@@ -545,11 +547,11 @@ fg "0,65535,0"
 xt "23000,7625,23750,8375"
 )
 tg (CPTG
-uid 63,0
+uid 126,0
 ps "CptPortTextPlaceStrategy"
 stg "RightVerticalLayoutStrategy"
 f (Text
-uid 64,0
+uid 127,0
 va (VaSet
 font "courier,8,0"
 )
@@ -561,20 +563,21 @@ tm "CptPortNameMgr"
 )
 )
 dt (MLText
-uid 65,0
+uid 128,0
 va (VaSet
 font "courier,8,0"
 )
 xt "44000,3600,59000,4500"
-st "writegate : OUT    std_logic "
+st "writegate : OUT    std_logic 
+"
 )
 thePort (LogicalPort
 m 1
 decl (Decl
 n "writegate"
 t "std_logic"
-o 49
-suid 3,0
+o 51
+suid 6,0
 )
 )
 )
@@ -1260,5 +1263,5 @@ xt "42000,0,42000,0"
 tm "SyDeclarativeTextMgr"
 )
 )
-lastUid 101,0
+lastUid 134,0
 )

@@ -17,23 +17,10 @@ USE ece411.LC3b_types.all;
 ENTITY WordSelector IS
    PORT( 
       Input  : IN     LC3b_oword;
-      Index  : IN     LC3b_index;
+      Index  : IN     std_logic_vector(2 downto 0);
       Output : OUT    LC3b_word
    );
 
 -- Declarations
 
 END WordSelector ;
-
---
-ARCHITECTURE untitled OF WordSelector IS
-  signal tempout : LC3b_word;
-BEGIN
-  DoOutput : Process(input, index) is
-  begin
-    tempout <= input(to_integer((index+1)*16 -1) downto to_integer(index*16));
-  end process DoOutput;
-  
-  Output <= tempout after Delay_Mux8;
-END ARCHITECTURE untitled;
-

@@ -17,7 +17,7 @@ USE ece411.LC3b_types.all;
 ENTITY decode_exec_pipe IS
    PORT( 
       CLK              : IN     std_logic;
-      RESET_L          : IN     std_logic;
+      RESET_L          : IN     STD_LOGIC;
       control_word     : IN     LC3b_word;
       decode_instr     : IN     STD_LOGIC_VECTOR (15 DOWNTO 0);
       decode_pc        : IN     LC3b_word;

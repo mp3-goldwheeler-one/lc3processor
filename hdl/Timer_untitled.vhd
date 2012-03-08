@@ -16,7 +16,7 @@ USE ece411.LC3b_types.all;
 
 ENTITY Timer IS
    PORT( 
-      Clk       : IN     STD_LOGIC;
+      CLK       : IN     std_logic;
       LRUgate   : OUT    STD_LOGIC;
       writegate : OUT    std_logic
    );

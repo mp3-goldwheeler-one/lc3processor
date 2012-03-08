@@ -1,0 +1,41 @@
+In this directory, there are 4 files doify.sh, LC3bAssembler, LC3bIDE, and newdoify.sh.
+-------------
+LC3bAssembler
+-------------
+Assembles an .asm file containing LC3b assembly code into one of many formats (in this class, we will only compile into a .vhd memory vector file). 
+
+The syntax for this program is:
+./LC3bAssembler - test.asm -v
+NOTE: test.asm contains an assembly file of LC3b code and this will create a file called test.vhd
+
+-----------
+doify.sh
+-----------
+Assembles an .asm file into a .vhd file, then creates a .do file from that .vhd file.  The .asm file must not have syntax errors. The .do file is then copied to the compile directory of your design. At that point, you can use this file to load your program into memory within ModelSim. 
+
+The syntax for this program is:
+./doify.sh memvectors.vhd [memory path[,second_memory_path]] [compile path]
+NOTE: The variables memory path and compile path can be specified within the script. 
+
+For example, "./doify.sh ../testcode/test.asm /mp1_cpu/dram/vhdl_memory ../mp1/compile" will create a file called test.do in the compile directory listed.
+
+For simplicity, you can hard-code the last two arguments within the doify.sh
+script and omit them when executing:
+
+"./doify.sh ../testcode/test.asm"
+
+LC3bIDE
+-------
+A graphical simulating environment for the LC3b assembly code.
+
+The syntax for this program is:
+./LC3bIDE
+
+1) Select Project, then Open File and navigate to the .asm file you wish to simulate.
+2) In the AshIDE - AshOS_LC3b window, make sure your .asm file is selected under LC3b Source Files.
+3) In the Project Settings box, uncheck "Use Ash Operating System", "Support Old LC3 Syntax"
+4) In the File Settings box, select Language as "LC3b", Source Type as "LC3b Source", then click Assemble. Most assembly warnings may be ignored, such as "Program origin not specified".
+5) In the window that opened which is named after your .asm file, select Go One Instruction from the Simulate menu (or press F6). This will advance your program through the first instruction and open a Simulator window.
+6) In the Simulator window, select Registers from the View menu. This will allow you to view the register values as you step through your LC3b program. You may also choose to view things such as your Memory.
+
+Note: LC3bIDE has R6 initialized to E000 when you begin your program. Don't use R6 unless you initialize it to a proper value. This probably can be fixed by some setting of AshIDE but I haven't track that down yet.

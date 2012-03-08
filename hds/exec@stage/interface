@@ -69,7 +69,7 @@ port (LogicalPort
 decl (Decl
 n "ALUOP"
 t "LC3B_ALUOP"
-o 32
+o 1
 suid 7,0
 )
 )
@@ -81,7 +81,7 @@ m 1
 decl (Decl
 n "ALUout"
 t "LC3B_WORD"
-o 33
+o 6
 suid 8,0
 )
 )
@@ -92,7 +92,7 @@ port (LogicalPort
 decl (Decl
 n "CLK"
 t "std_logic"
-o 1
+o 2
 suid 9,0
 )
 )
@@ -103,7 +103,7 @@ port (LogicalPort
 decl (Decl
 n "exec_controlword"
 t "LC3b_word"
-o 25
+o 3
 suid 10,0
 )
 )
@@ -114,7 +114,7 @@ port (LogicalPort
 decl (Decl
 n "exec_opcode"
 t "LC3b_word"
-o 25
+o 4
 suid 11,0
 )
 )
@@ -125,7 +125,7 @@ port (LogicalPort
 decl (Decl
 n "exec_pc"
 t "LC3b_word"
-o 25
+o 5
 suid 12,0
 )
 )
@@ -183,37 +183,37 @@ uid 99,0
 )
 *25 (MRCItem
 litem &14
-pos 0
+pos 4
 dimension 20
 uid 166,0
 )
 *26 (MRCItem
 litem &15
-pos 1
+pos 5
 dimension 20
 uid 168,0
 )
 *27 (MRCItem
 litem &16
-pos 2
+pos 0
 dimension 20
 uid 170,0
 )
 *28 (MRCItem
 litem &17
-pos 3
+pos 1
 dimension 20
 uid 172,0
 )
 *29 (MRCItem
 litem &18
-pos 4
+pos 2
 dimension 20
 uid 174,0
 )
 *30 (MRCItem
 litem &19
-pos 5
+pos 3
 dimension 20
 uid 176,0
 )
@@ -294,23 +294,23 @@ VExpander (VariableExpander
 vvMap [
 (vvPair
 variable "HDLDir"
-value "/home/one1/lc3processor/hdl"
+value "/home/wheele11/Desktop/lc3processor/hdl"
 )
 (vvPair
 variable "HDSDir"
-value "/home/one1/lc3processor/hds"
+value "/home/wheele11/Desktop/lc3processor/hds"
 )
 (vvPair
 variable "SideDataDesignDir"
-value "/home/one1/lc3processor/hds/exec@stage/interface.info"
+value "/home/wheele11/Desktop/lc3processor/hds/exec@stage/interface.info"
 )
 (vvPair
 variable "SideDataUserDir"
-value "/home/one1/lc3processor/hds/exec@stage/interface.user"
+value "/home/wheele11/Desktop/lc3processor/hds/exec@stage/interface.user"
 )
 (vvPair
 variable "SourceDir"
-value "/home/one1/lc3processor/hds"
+value "/home/wheele11/Desktop/lc3processor/hds"
 )
 (vvPair
 variable "appl"
@@ -326,11 +326,11 @@ value "%(unit)_config"
 )
 (vvPair
 variable "d"
-value "/home/one1/lc3processor/hds/exec@stage"
+value "/home/wheele11/Desktop/lc3processor/hds/exec@stage"
 )
 (vvPair
 variable "d_logical"
-value "/home/one1/lc3processor/hds/execStage"
+value "/home/wheele11/Desktop/lc3processor/hds/execStage"
 )
 (vvPair
 variable "date"
@@ -374,7 +374,7 @@ value "ews"
 )
 (vvPair
 variable "host"
-value "gelib-057-19.ews.illinois.edu"
+value "gelib-057-18.ews.illinois.edu"
 )
 (vvPair
 variable "language"
@@ -406,11 +406,11 @@ value "March"
 )
 (vvPair
 variable "p"
-value "/home/one1/lc3processor/hds/exec@stage/interface"
+value "/home/wheele11/Desktop/lc3processor/hds/exec@stage/interface"
 )
 (vvPair
 variable "p_logical"
-value "/home/one1/lc3processor/hds/execStage/interface"
+value "/home/wheele11/Desktop/lc3processor/hds/execStage/interface"
 )
 (vvPair
 variable "project_name"
@@ -450,7 +450,7 @@ value "<TBD>"
 )
 (vvPair
 variable "time"
-value "22:17:42"
+value "22:23:32"
 )
 (vvPair
 variable "unit"
@@ -458,7 +458,7 @@ value "execStage"
 )
 (vvPair
 variable "user"
-value "one1"
+value "wheele11"
 )
 (vvPair
 variable "version"
@@ -516,12 +516,15 @@ uid 139,0
 va (VaSet
 font "courier,8,0"
 )
+xt "44000,1800,64000,2700"
+st "ALUOP            : IN     LC3B_ALUOP  ;
+"
 )
 thePort (LogicalPort
 decl (Decl
 n "ALUOP"
 t "LC3B_ALUOP"
-o 32
+o 1
 suid 7,0
 )
 )
@@ -559,13 +562,16 @@ uid 144,0
 va (VaSet
 font "courier,8,0"
 )
+xt "44000,6300,62500,7200"
+st "ALUout           : OUT    LC3B_WORD 
+"
 )
 thePort (LogicalPort
 m 1
 decl (Decl
 n "ALUout"
 t "LC3B_WORD"
-o 33
+o 6
 suid 8,0
 )
 )
@@ -602,12 +608,15 @@ uid 149,0
 va (VaSet
 font "courier,8,0"
 )
+xt "44000,2700,63500,3600"
+st "CLK              : IN     std_logic  ;
+"
 )
 thePort (LogicalPort
 decl (Decl
 n "CLK"
 t "std_logic"
-o 1
+o 2
 suid 9,0
 )
 )
@@ -644,12 +653,15 @@ uid 154,0
 va (VaSet
 font "courier,8,0"
 )
+xt "44000,3600,63500,4500"
+st "exec_controlword : IN     LC3b_word  ;
+"
 )
 thePort (LogicalPort
 decl (Decl
 n "exec_controlword"
 t "LC3b_word"
-o 25
+o 3
 suid 10,0
 )
 )
@@ -686,12 +698,15 @@ uid 159,0
 va (VaSet
 font "courier,8,0"
 )
+xt "44000,4500,63500,5400"
+st "exec_opcode      : IN     LC3b_word  ;
+"
 )
 thePort (LogicalPort
 decl (Decl
 n "exec_opcode"
 t "LC3b_word"
-o 25
+o 4
 suid 11,0
 )
 )
@@ -728,12 +743,15 @@ uid 164,0
 va (VaSet
 font "courier,8,0"
 )
+xt "44000,5400,63500,6300"
+st "exec_pc          : IN     LC3b_word  ;
+"
 )
 thePort (LogicalPort
 decl (Decl
 n "exec_pc"
 t "LC3b_word"
-o 25
+o 5
 suid 12,0
 )
 )
@@ -1420,5 +1438,5 @@ xt "42000,0,42000,0"
 tm "SyDeclarativeTextMgr"
 )
 )
-lastUid 176,0
+lastUid 188,0
 )

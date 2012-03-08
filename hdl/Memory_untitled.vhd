@@ -17,8 +17,8 @@ USE ece411.LC3b_types.all;
 ENTITY Memory IS
    PORT( 
       CLK             : IN     std_logic;
-      DATAOUT         : IN     LC3b_word;
-      RESET_L         : IN     std_logic;
+      Dataout         : IN     LC3b_word;
+      RESET_L         : IN     STD_LOGIC;
       data_addr       : IN     LC3b_word;
       data_mread_l    : IN     std_logic;
       data_mwriteh_l  : IN     std_logic;
@@ -28,9 +28,9 @@ ENTITY Memory IS
       instr_mwriteh_l : IN     std_logic;
       instr_mwritel_l : IN     std_logic;
       instr_out       : IN     std_logic;
-      DATAIN          : OUT    LC3b_word;
+      DATAIN          : OUT    std_logic;
       data_resp_h     : OUT    std_logic;
-      instr_in        : OUT    std_logic;
+      instr_in        : OUT    LC3B_WORD;
       instr_resp_h    : OUT    std_logic
    );
 
