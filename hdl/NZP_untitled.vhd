@@ -16,9 +16,9 @@ USE ece411.LC3b_types.all;
 
 ENTITY NZP IS
    PORT( 
-      GenCCout : IN     std_logic_vector (2 DOWNTO 0);
-      LoadNZP  : IN     std_logic;
       clk      : IN     std_logic;
+      wb_cc    : IN     LC3b_cc;
+      load_nzp : IN     std_logic;
       n        : OUT    std_logic;
       p        : OUT    std_logic;
       z        : OUT    std_logic
@@ -30,15 +30,15 @@ END NZP ;
 
 --
 ARCHITECTURE UNTITLED OF NZP IS
-SIGNAL PRE_NZP : STD_LOGIC_VECTOR (2 DOWNTO 0);
+  SIGNAL PRE_NZP : LC3b_cc;
 BEGIN
 	------------------------------
-	VHDL_NZP : PROCESS (CLK, GENCCOUT)
+	VHDL_NZP : PROCESS (CLK, wb_cc)
 	------------------------------
 	BEGIN
 		IF (CLK'EVENT AND (CLK = '1') AND (CLK'LAST_VALUE = '0')) THEN
-			IF (LOADNZP = '1') THEN
-				PRE_NZP <= GENCCOUT;
+			IF (load_nzp = '1') THEN
+				PRE_NZP <= wb_cc;
 			END IF;
 		END IF;
 	END PROCESS VHDL_NZP;
@@ -46,4 +46,3 @@ BEGIN
 	Z <= PRE_NZP(1) AFTER DELAY_REG;
 	P <= PRE_NZP(0) AFTER DELAY_REG;
 END UNTITLED;
-

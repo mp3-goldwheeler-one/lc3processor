@@ -27,6 +27,6 @@ END SEXT11 ;
 --
 ARCHITECTURE untitled OF SEXT11 IS
 BEGIN
-    output <= std_logic_vector(resize(signed(in11), 16)) after DELAY_MUX2;
+    output <= in11(10) & in11(10) & in11(10) & in11(10) & in11 & '0'  after DELAY_MUX2;
 END ARCHITECTURE untitled;
 

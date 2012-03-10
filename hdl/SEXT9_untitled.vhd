@@ -27,6 +27,6 @@ END SEXT9 ;
 --
 ARCHITECTURE untitled OF SEXT9 IS
 BEGIN
-  output <= std_logic_vector(resize(signed(in9), 16)) after DELAY_MUX2;
+  output <= in9(8) & in9(8) & in9(8) & in9(8) & in9(8) & in9(8) & in9 & '0'  after DELAY_MUX2;
 END ARCHITECTURE untitled;
 

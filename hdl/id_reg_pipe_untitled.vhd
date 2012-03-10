@@ -27,6 +27,7 @@ ENTITY decode_exec_pipe IS
       decode_pc           : IN     LC3b_word;
       decode_ready        : IN     std_logic;
       decode_regwrite     : IN     std_logic;
+      decode_set_cc       : IN     std_logic;
       decode_shift_imm    : IN     STD_LOGIC;
       decode_src_a        : IN     LC3b_word;
       decode_src_b        : IN     LC3b_word;
@@ -40,6 +41,7 @@ ENTITY decode_exec_pipe IS
       exec_opcode         : OUT    LC3b_opcode;
       exec_pc             : OUT    LC3b_word;
       exec_regwrite       : OUT    STD_LOGIC;
+      exec_set_cc         : OUT    std_logic;
       exec_shift_imm      : OUT    STD_LOGIC;
       exec_src_a          : OUT    LC3b_word;
       exec_src_b          : OUT    LC3b_word;

@@ -16,9 +16,8 @@ USE ece411.LC3b_types.all;
 
 ENTITY GenCC IS
    PORT( 
-      RFMuxout : IN     LC3b_word;
-      clk      : IN     std_logic;
-      GenCCout : OUT    std_logic_vector (2 DOWNTO 0)
+      Input  : IN     LC3b_word;
+      Output : OUT    LC3b_cc
    );
 
 -- Declarations
@@ -28,14 +27,14 @@ END GenCC ;
 --
 ARCHITECTURE UNTITLED OF GENCC IS
 BEGIN
-	VHDL_GENCC : PROCESS (RFMUXOUT)
+	VHDL_GENCC : PROCESS (Input)
 	BEGIN    
-		IF (RFMUXOUT = "0000000000000000") THEN
-			GENCCOUT <= "010" AFTER DELAY_GENCC;
-		ELSIF (RFMUXOUT(15) = '1') THEN
-			GENCCOUT <= "100" AFTER DELAY_GENCC;
+		IF (Input = "0000000000000000") THEN
+			Output <= "010" AFTER DELAY_GENCC;
+		ELSIF (Input(15) = '1') THEN
+			Output <= "100" AFTER DELAY_GENCC;
 		ELSE
-			GENCCOUT <= "001" AFTER DELAY_GENCC;
+			Output <= "001" AFTER DELAY_GENCC;
 		END IF;
 	END PROCESS VHDL_GENCC;
 END UNTITLED;
