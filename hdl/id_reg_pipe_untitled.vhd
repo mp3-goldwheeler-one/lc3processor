@@ -20,6 +20,7 @@ ENTITY decode_exec_pipe IS
       RESET_L           : IN     STD_LOGIC;
       decode_alumux_sel : IN     STD_LOGIC_VECTOR (1 DOWNTO 0);
       decode_aluop      : IN     LC3b_aluop;
+      decode_dr         : IN     LC3B_REG;
       decode_instr      : IN     LC3b_word;
       decode_opcode     : IN     LC3b_opcode;
       decode_pc         : IN     LC3b_word;
@@ -30,6 +31,7 @@ ENTITY decode_exec_pipe IS
       decode_src_b      : IN     LC3b_word;
       exec_alumux_sel   : OUT    LC3b_4mux_sel;
       exec_aluop        : OUT    LC3B_ALUOP;
+      exec_dr           : OUT    LC3B_REG;
       exec_instr        : OUT    LC3b_word;
       exec_opcode       : OUT    LC3b_opcode;
       exec_pc           : OUT    LC3b_word;
