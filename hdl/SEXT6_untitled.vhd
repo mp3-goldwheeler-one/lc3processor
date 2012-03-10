@@ -15,10 +15,9 @@ LIBRARY ece411;
 USE ece411.LC3b_types.all;
 
 ENTITY SEXT6 IS
-   PORT( 
-      clk      : IN     std_logic;
-      index6   : IN     LC3b_index6;
-      sextimm6 : OUT    LC3b_word
+   PORT(
+      in6    : IN     LC3b_index6;
+      output : OUT    LC3b_word
    );
 
 -- Declarations
@@ -28,6 +27,6 @@ END SEXT6 ;
 --
 ARCHITECTURE untitled OF SEXT6 IS
 BEGIN
-  sextimm6 <= std_logic_vector(resize(signed(index6), 16)) after Delay_Mux2;
+  output <= std_logic_vector(resize(signed(in6), 16)) after Delay_Mux2;
 END ARCHITECTURE untitled;
 
