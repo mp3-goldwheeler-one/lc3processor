@@ -1,16 +1,10 @@
 ORIGIN 0
 SEGMENT CodeSegment:
-	ADD R0, R0, 1 ; R0 <- 1
-	ADD R2, R1, 6 ; R2 <- 6
-	ADD R3, R2, 3 ; R3 <- 9
-	ADD R0, R4, 4 ; R0 <- 4
-	ADD R1, R5, 5 ; R1 <- 5
-	; AND R1, R2, 5
-	; LDB R6, R0, 5
-	; AND R4, R1, R7
-	; ADD R0, R1, 6
-	; RSHFA R0, R1, 3
-	; LDR R6, R0, 5
+    ADD R1, R1, 2
+    ADD R2, R2, 3
+    ADD R3, R3, 4
+    ADD R4, R4, 5
+    JMP R0
 	NOP
 	NOP
 	NOP
