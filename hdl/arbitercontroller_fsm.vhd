@@ -1,4 +1,4 @@
--- VHDL Entity ece411.Cache_Controller.symbol
+-- VHDL Entity ece411.ArbiterController.interface
 --
 -- Created:
 --          by - goldste6.ews (gelib-057-08.ews.illinois.edu)
@@ -13,26 +13,24 @@ USE ieee.NUMERIC_STD.all;
 LIBRARY ece411;
 USE ece411.LC3b_types.all;
 
-ENTITY Cache_Controller IS
+ENTITY ArbiterController IS
    PORT( 
-      CLK          : IN     std_logic;
-      Dirty        : IN     std_logic;
-      PMRESP_H     : IN     STD_LOGIC;
-      RESET_L      : IN     STD_LOGIC;
-      miss         : IN     std_logic;
-      PMREAD_L     : OUT    STD_LOGIC;
-      PMWRITE_L    : OUT    STD_LOGIC;
-      in_idlehit   : OUT    std_logic;
-      in_load      : OUT    std_logic;
-      in_writeback : OUT    std_logic
+      D_ACCESS         : IN     STD_LOGIC;
+      I_ACCESS         : IN     STD_LOGIC;
+      PMRESP_H         : IN     std_logic;
+      clk              : IN     std_logic;
+      reset_l          : IN     std_logic;
+      ArbiterSel       : OUT    STD_LOGIC;
+      in_data_access_L : OUT    std_logic;
+      in_inst_access_L : OUT    std_logic
    );
 
 -- Declarations
 
-END Cache_Controller ;
+END ArbiterController ;
 
 --
--- VHDL Architecture ece411.Cache_Controller.fsm
+-- VHDL Architecture ece411.ArbiterController.fsm
 --
 -- Created:
 --          by - goldste6.ews (gelib-057-08.ews.illinois.edu)
@@ -47,12 +45,12 @@ USE ieee.NUMERIC_STD.all;
 LIBRARY ece411;
 USE ece411.LC3b_types.all;
  
-ARCHITECTURE fsm OF Cache_Controller IS
+ARCHITECTURE fsm OF ArbiterController IS
 
    TYPE STATE_TYPE IS (
-      IDLE_HIT,
-      WRITE_BACK,
-      LOAD
+      idle,
+      DataAccess,
+      InstAccess
    );
  
    -- State vector declaration
@@ -67,49 +65,50 @@ BEGIN
 
    -----------------------------------------------------------------
    clocked_proc : PROCESS ( 
-      clk
+      clk,
+      reset_l
    )
    -----------------------------------------------------------------
    BEGIN
-      IF (clk'EVENT AND clk = '1') THEN
+      IF (reset_l = '0') THEN
+         current_state <= idle;
+      ELSIF (clk'EVENT AND clk = '1') THEN
          current_state <= next_state;
       END IF;
    END PROCESS clocked_proc;
  
    -----------------------------------------------------------------
    nextstate_proc : PROCESS ( 
-      Dirty,
+      D_ACCESS,
+      I_ACCESS,
       PMRESP_H,
-      current_state,
-      miss
+      current_state
    )
    -----------------------------------------------------------------
    BEGIN
       CASE current_state IS
-         WHEN IDLE_HIT => 
-            IF (dirty = '1' and
-                miss = '1') THEN 
-               next_state <= WRITE_BACK;
-            ELSIF (dirty = '0' and
-                   miss = '1') THEN 
-               next_state <= LOAD;
+         WHEN idle => 
+            IF (D_ACCESS = '1') THEN 
+               next_state <= DataAccess;
+            ELSIF (I_ACCESS = '1') THEN 
+               next_state <= InstAccess;
             ELSE
-               next_state <= IDLE_HIT;
+               next_state <= idle;
             END IF;
-         WHEN WRITE_BACK => 
+         WHEN DataAccess => 
             IF (PMRESP_H = '1') THEN 
-               next_state <= LOAD;
+               next_state <= idle;
             ELSE
-               next_state <= WRITE_BACK;
+               next_state <= DataAccess;
             END IF;
-         WHEN LOAD => 
+         WHEN InstAccess => 
             IF (PMRESP_H = '1') THEN 
-               next_state <= IDLE_HIT;
+               next_state <= idle;
             ELSE
-               next_state <= LOAD;
+               next_state <= InstAccess;
             END IF;
          WHEN OTHERS =>
-            next_state <= IDLE_HIT;
+            next_state <= idle;
       END CASE;
    END PROCESS nextstate_proc;
  
@@ -120,22 +119,19 @@ BEGIN
    -----------------------------------------------------------------
    BEGIN
       -- Default Assignment
-      PMREAD_L <= '1';
-      PMWRITE_L <= '1';
-      in_idlehit <= '0';
-      in_load <= '0';
-      in_writeback <= '0';
+      in_data_access_L <= '1';
+      in_inst_access_L <= '1';
 
       -- Combined Actions
       CASE current_state IS
-         WHEN IDLE_HIT => 
-            in_idlehit <= '1';
-         WHEN WRITE_BACK => 
-            in_writeback <= '1';
-            PMWRITE_L <= '0' after 6ns;
-         WHEN LOAD => 
-            in_load <= '1';
-            PMREAD_L <= '0' after 6ns;
+         WHEN idle => 
+            ArbiterSel <= 'X';
+         WHEN DataAccess => 
+            in_data_access_L <= '0';
+            ArbiterSel <= '0';
+         WHEN InstAccess => 
+            in_inst_access_L <= '0';
+            ArbiterSel <= '1';
          WHEN OTHERS =>
             NULL;
       END CASE;

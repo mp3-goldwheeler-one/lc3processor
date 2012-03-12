@@ -27,8 +27,8 @@ ENTITY Memory IS
       instr_mread_l   : IN     std_logic;
       instr_mwriteh_l : IN     std_logic;
       instr_mwritel_l : IN     std_logic;
-      instr_out       : IN     std_logic;
-      DATAIN          : OUT    std_logic;
+      instr_out       : IN     LC3b_word;
+      DATAIN          : OUT    LC3B_WORD;
       data_resp_h     : OUT    std_logic;
       instr_in        : OUT    LC3B_WORD;
       instr_resp_h    : OUT    std_logic

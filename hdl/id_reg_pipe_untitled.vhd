@@ -21,7 +21,7 @@ ENTITY decode_exec_pipe IS
       decode_alumux_sel   : IN     STD_LOGIC_VECTOR (1 DOWNTO 0);
       decode_aluop        : IN     LC3b_aluop;
       decode_dr           : IN     LC3B_REG;
-      decode_instr        : IN     LC3b_word;
+      decode_instr        : IN     STD_LOGIC_VECTOR (15 DOWNTO 0);
       decode_load_jump_pc : IN     STD_LOGIC;
       decode_opcode       : IN     LC3b_opcode;
       decode_pc           : IN     LC3b_word;
