@@ -8,7 +8,11 @@ START:
 	NOP
 	NOP
 	NOP
-    BRp START
+	NOP
+	NOP
+	NOP
+	ADD R5, R0, #-24
+	JMP START
 	NOP
 	NOP
 	NOP
