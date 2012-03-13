@@ -37,10 +37,14 @@ add wave -noupdate -divider Mem
 add wave -noupdate -color Gold -format Literal -itemcolor Gold -radix hexadecimal /cpu/pipelineddatapath/mem_pc
 add wave -noupdate -color Gold -format Literal -itemcolor Gold -radix hexadecimal /cpu/pipelineddatapath/mem_instr
 add wave -noupdate -color Gold -format Literal -itemcolor Gold -radix hexadecimal /cpu/pipelineddatapath/mem_opcode
+add wave -noupdate -color Gold -format Literal -itemcolor Gold -radix hexadecimal /cpu/pipelineddatapath/mem_aluout
 add wave -noupdate -color Gold -format Literal -itemcolor Gold -radix hexadecimal /cpu/pipelineddatapath/mem_dr
+add wave -noupdate -color Gold -format Logic -itemcolor Gold -radix hexadecimal /cpu/pipelineddatapath/mem_ready
 add wave -noupdate -color Gold -format Logic -itemcolor Gold -radix hexadecimal /cpu/pipelineddatapath/mem_regwrite
+add wave -noupdate -color Gold -format Logic -itemcolor Gold -radix hexadecimal /cpu/pipelineddatapath/mem_set_cc
 add wave -noupdate -color Gold -format Literal -itemcolor Gold -radix hexadecimal /cpu/pipelineddatapath/mem_src_a
 add wave -noupdate -color Gold -format Literal -itemcolor Gold -radix hexadecimal /cpu/pipelineddatapath/mem_src_b
+add wave -noupdate -color Gold -format Literal -itemcolor Gold -radix hexadecimal /cpu/pipelineddatapath/datain
 add wave -noupdate -divider Writeback
 add wave -noupdate -color {Green Yellow} -format Literal -itemcolor {Green Yellow} -radix hexadecimal /cpu/pipelineddatapath/wb_pc
 add wave -noupdate -color {Green Yellow} -format Literal -itemcolor {Green Yellow} -radix hexadecimal /cpu/pipelineddatapath/wb_instr
@@ -56,14 +60,32 @@ add wave -noupdate -color {Green Yellow} -format Literal -itemcolor {Green Yello
 add wave -noupdate -divider Regfile
 add wave -noupdate -format Event -radix decimal -expand /cpu/pipelineddatapath/decode/arf/ram
 add wave -noupdate -divider Caches
-add wave -noupdate -format Event -radix hexadecimal -expand /cpu/dram/cache_dp1/way0/tagbits/data
-add wave -noupdate -format Event -radix hexadecimal -expand /cpu/dram/cache_dp1/way0/waydata/data
-add wave -noupdate -format Literal -radix hexadecimal /cpu/dram/cache_dp1/way1/tagbits/data
-add wave -noupdate -format Literal -radix hexadecimal /cpu/dram/cache_dp1/way1/waydata/data
+add wave -noupdate -format Literal -radix hexadecimal /cpu/datain
+add wave -noupdate -format Literal -radix hexadecimal /cpu/dataout
+add wave -noupdate -format Literal -radix hexadecimal /cpu/data_addr
+add wave -noupdate -format Logic -radix hexadecimal /cpu/data_mread_l
+add wave -noupdate -format Logic -radix hexadecimal /cpu/data_mwriteh_l
+add wave -noupdate -format Logic -radix hexadecimal /cpu/data_mwritel_l
+add wave -noupdate -format Logic -radix hexadecimal /cpu/data_resp_h
+add wave -noupdate -format Literal -radix hexadecimal /cpu/instr_addr
+add wave -noupdate -format Literal -radix hexadecimal /cpu/instr_in
+add wave -noupdate -format Logic -radix hexadecimal /cpu/instr_mread_l
+add wave -noupdate -format Logic -radix hexadecimal /cpu/instr_mwriteh_l
+add wave -noupdate -format Logic -radix hexadecimal /cpu/instr_mwritel_l
+add wave -noupdate -format Literal -radix hexadecimal /cpu/instr_out
+add wave -noupdate -format Logic -radix hexadecimal /cpu/instr_resp_h
+add wave -noupdate -format Event -radix hexadecimal -expand /cpu/dram/dcache/cache_dp1/way0/tagbits/data
+add wave -noupdate -format Event -radix hexadecimal -expand /cpu/dram/dcache/cache_dp1/way0/waydata/data
+add wave -noupdate -format Event -radix hexadecimal /cpu/dram/dcache/cache_dp1/way1/tagbits/data
+add wave -noupdate -format Event -radix hexadecimal /cpu/dram/dcache/cache_dp1/way1/waydata/data
+add wave -noupdate -format Event -radix hexadecimal -expand /cpu/dram/icache/cache_dp1/way0/tagbits/data
+add wave -noupdate -format Event -radix hexadecimal -expand /cpu/dram/icache/cache_dp1/way0/waydata/data
+add wave -noupdate -format Event -radix hexadecimal /cpu/dram/icache/cache_dp1/way1/tagbits/data
+add wave -noupdate -format Event -radix hexadecimal /cpu/dram/icache/cache_dp1/way1/waydata/data
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {1986 ns} 0}
-configure wave -namecolwidth 325
-configure wave -valuecolwidth 233
+WaveRestoreCursors {{Cursor 1} {19 ns} 0}
+configure wave -namecolwidth 374
+configure wave -valuecolwidth 171
 configure wave -justifyvalue left
 configure wave -signalnamewidth 0
 configure wave -snapdistance 10
@@ -75,4 +97,4 @@ configure wave -gridperiod 1
 configure wave -griddelta 40
 configure wave -timeline 0
 update
-WaveRestoreZoom {1750 ns} {2024 ns}
+WaveRestoreZoom {0 ns} {534 ns}

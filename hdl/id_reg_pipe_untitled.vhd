@@ -25,7 +25,7 @@ ENTITY decode_exec_pipe IS
       decode_load_jump_pc : IN     STD_LOGIC;
       decode_opcode       : IN     LC3b_opcode;
       decode_pc           : IN     LC3b_word;
-      decode_ready        : IN     std_logic;
+      decode_read         : IN     std_logic;
       decode_regwrite     : IN     std_logic;
       decode_set_cc       : IN     std_logic;
       decode_shift_imm    : IN     STD_LOGIC;
@@ -33,6 +33,9 @@ ENTITY decode_exec_pipe IS
       decode_src_b        : IN     LC3b_word;
       decode_use_offset11 : IN     STD_LOGIC;
       decode_use_pc_adder : IN     STD_LOGIC;
+      decode_write_byte   : IN     std_logic;
+      decode_write_word   : IN     std_logic;
+      mem_ready           : IN     STD_LOGIC;
       exec_alumux_sel     : OUT    LC3b_4mux_sel;
       exec_aluop          : OUT    LC3B_ALUOP;
       exec_dr             : OUT    LC3B_REG;
@@ -40,13 +43,16 @@ ENTITY decode_exec_pipe IS
       exec_load_jump_pc   : OUT    STD_LOGIC;
       exec_opcode         : OUT    LC3b_opcode;
       exec_pc             : OUT    LC3b_word;
+      exec_read           : OUT    std_logic;
       exec_regwrite       : OUT    STD_LOGIC;
       exec_set_cc         : OUT    std_logic;
       exec_shift_imm      : OUT    STD_LOGIC;
       exec_src_a          : OUT    LC3b_word;
       exec_src_b          : OUT    LC3b_word;
       exec_use_offset11   : OUT    std_logic;
-      exec_use_pc_adder   : OUT    std_logic
+      exec_use_pc_adder   : OUT    std_logic;
+      exec_write_byte     : OUT    std_logic;
+      exec_write_word     : OUT    std_logic
    );
 
 -- Declarations
