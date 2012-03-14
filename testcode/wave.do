@@ -5,14 +5,12 @@ add wave -noupdate -format Logic -radix hexadecimal /cpu/pipelineddatapath/start
 add wave -noupdate -format Logic -radix hexadecimal /cpu/clk
 add wave -noupdate -divider Fetch
 add wave -noupdate -color Salmon -format Literal -itemcolor Salmon -radix hexadecimal /cpu/pipelineddatapath/fetch_instr
-add wave -noupdate -color Salmon -format Logic -itemcolor Salmon -radix hexadecimal /cpu/pipelineddatapath/fetch_ready
 add wave -noupdate -color Salmon -format Literal -itemcolor Salmon -radix hexadecimal /cpu/pipelineddatapath/pc
 add wave -noupdate -divider Decode
 add wave -noupdate -color Aquamarine -format Literal -itemcolor Aquamarine -radix hexadecimal /cpu/pipelineddatapath/decode_pc
 add wave -noupdate -color Aquamarine -format Literal -itemcolor Aquamarine -radix hexadecimal /cpu/pipelineddatapath/decode_instr
 add wave -noupdate -color Aquamarine -format Literal -itemcolor Aquamarine -radix hexadecimal /cpu/pipelineddatapath/decode_opcode
 add wave -noupdate -color Aquamarine -format Literal -itemcolor Aquamarine -radix hexadecimal /cpu/pipelineddatapath/decode_aluop
-add wave -noupdate -color Aquamarine -format Logic -itemcolor Aquamarine -radix hexadecimal /cpu/pipelineddatapath/decode_ready
 add wave -noupdate -color Aquamarine -format Logic -itemcolor Aquamarine -radix hexadecimal /cpu/pipelineddatapath/decode_regwrite
 add wave -noupdate -color Aquamarine -format Logic -itemcolor Aquamarine -radix hexadecimal /cpu/pipelineddatapath/decode_shift_imm
 add wave -noupdate -color Aquamarine -format Literal -itemcolor Aquamarine -radix hexadecimal /cpu/pipelineddatapath/decode_src_a
@@ -83,7 +81,7 @@ add wave -noupdate -format Event -radix hexadecimal -expand /cpu/dram/icache/cac
 add wave -noupdate -format Event -radix hexadecimal /cpu/dram/icache/cache_dp1/way1/tagbits/data
 add wave -noupdate -format Event -radix hexadecimal /cpu/dram/icache/cache_dp1/way1/waydata/data
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {19 ns} 0}
+WaveRestoreCursors {{Cursor 1} {3156 ns} 0}
 configure wave -namecolwidth 374
 configure wave -valuecolwidth 171
 configure wave -justifyvalue left
@@ -97,4 +95,4 @@ configure wave -gridperiod 1
 configure wave -griddelta 40
 configure wave -timeline 0
 update
-WaveRestoreZoom {0 ns} {534 ns}
+WaveRestoreZoom {2957 ns} {6113 ns}
