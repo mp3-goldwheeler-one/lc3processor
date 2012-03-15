@@ -36,18 +36,13 @@ PACKAGE LC3B_TYPES IS
   SUBTYPE LC3B_C_OFFSET  IS STD_LOGIC_VECTOR(3 DOWNTO 0);
   SUBTYPE LC3B_C_INDEX   IS STD_LOGIC_VECTOR(2 DOWNTO 0);
   SUBTYPE LC3B_C_TAG     IS STD_LOGIC_VECTOR(8 DOWNTO 0);
+  subtype lc3b_alumux_sel  is std_logic_vector(1 downto 0);
 
 	TYPE MEMORY_ARRAY_64K IS ARRAY (0 TO 65535) OF LC3B_BYTE;
 	
 	TYPE OPNAME IS (add_op, and_op, not_op, pass_op, sll_op, srl_op, sra_op, bad_op);
 	TYPE EX_CONTROL IS RECORD
 	    aluop : LC3B_ALUOP;
-	END RECORD;
-	
-	TYPE CONTROL_WORD IS RECORD
-	    ex : EX_CONTROL;
-	    mem, wb : LC3B_WORD;
-	    name : OPNAME;
 	END RECORD;
 	
 	-- ALU OP DEFINITIONS
@@ -124,10 +119,376 @@ PACKAGE LC3B_TYPES IS
 	CONSTANT DELAY_64B_MEM  : TIME := 530 NS;
 	CONSTANT DELAY_128B_MEM : TIME := 570 NS;
 	CONSTANT DELAY_256B_MEM : TIME := 650 NS;
-      
+
 	PROCEDURE MYDRAMINIT_64K (
 		VARIABLE MEM : OUT MEMORY_ARRAY_64K);
 
+	CONSTANT alumux_sr2  : LC3B_4MUX_SEL := "00";
+	CONSTANT alumux_imm4 : LC3B_4MUX_SEL := "01";
+	CONSTANT alumux_imm5 : LC3B_4MUX_SEL := "10";
+	CONSTANT alumux_idx6 : LC3B_4MUX_SEL := "11";
+
+	TYPE exec_control IS RECORD
+		alumux_sel   : lc3b_alumux_sel;
+		aluop        : LC3B_ALUOP;
+		shift_imm    : std_logic;
+		use_offset11 : std_logic;
+		use_pc_adder : std_logic;
+	END RECORD;
+
+	TYPE mem_control IS RECORD
+		mem_read       : std_logic;
+		mem_write_byte : std_logic;
+		mem_write_word : std_logic;
+	END RECORD;
+
+	TYPE wb_control IS RECORD
+		set_cc    : std_logic;
+		regwrite  : std_logic;
+	END RECORD;
+
+	TYPE pipe_data IS RECORD
+		aluout       : lc3b_word;
+		mem_data_in  : lc3b_word;
+		sr1_val      : lc3b_word;
+		sr2_val      : lc3b_word;
+		dr_val       : lc3b_word;
+		dr           : lc3b_reg;
+		imm4         : LC3B_IMM4;
+		imm5         : LC3B_IMM5;
+		idx6         : LC3B_INDEX6;
+		off9         : LC3B_OFFSET9;
+		off11        : LC3B_OFFSET11;
+		load_jump_pc : std_logic;
+	END RECORD;
+
+	TYPE control_word IS RECORD
+		exec  : exec_control;
+		mem   : mem_control;
+		wb    : wb_control;
+		op    : LC3b_opcode;
+		pc    : LC3b_word;
+		instr : LC3b_word;
+	END RECORD;
+
+	CONSTANT logic_mem_control : mem_control := (
+		mem_read       => '0',
+		mem_write_word => '0',
+		mem_write_byte => '0'
+	);
+
+	CONSTANT logic_wb_control : wb_control := (
+		set_cc   => '1',
+		regwrite => '1'
+	);
+
+	CONSTANT default_control_word : control_word := (
+		exec  => (
+			alumux_sel     => "XX",
+			aluop          => "XX",
+			shift_imm      => 'X',
+			use_offset11   => 'X',
+			use_pc_adder   => 'X',
+		), mem => (
+			mem_read       => '0',
+			mem_write_byte => '0',
+			mem_write_word => '0'
+		), wb => logic_wb_control
+		,  op    => "1110"
+		,  pc    => (others => 'X')
+		,  instr => (others => 'X')
+	);
+
+	-- "Opcode & Bit11 & Bit5 & Bit 4"
+	-- "0001X0X"
+	CONSTANT add_reg_instr : control_word := (
+		exec  => (
+			alumux_sel     => alumux_sr2,
+			aluop          => ALU_ADD,
+			shift_imm      => 'X',
+			use_offset11   => 'X',
+			use_pc_adder   => 'X',
+		), mem   => logic_mem_control
+		,  wb    => logic_wb_control
+		,  op    => "0001"
+		,  pc    => (others => 'X')
+		,  instr => (others => 'X')
+	);
+
+	-- "0001X1X"
+	CONSTANT add_reg_instr : control_word := (
+		exec  => (
+			alumux_sel     => alumux_imm5,
+			aluop          => ALU_ADD,
+			shift_imm      => 'X',
+			use_offset11   => 'X',
+			use_pc_adder   => 'X',
+		), mem   => logic_mem_control
+		,  wb    => logic_wb_control
+		,  op    => "0001"
+		,  pc    => (others => 'X')
+		,  instr => (others => 'X')
+	);
+
+	-- "0101X0X"
+	CONSTANT and_imm_instr : control_word := (
+		exec  => (
+			alumux_sel     => alumux_sr2,
+			aluop          => ALU_AND,
+			shift_imm      => 'X',
+			use_offset11   => 'X',
+			use_pc_adder   => 'X',
+		), mem   => logic_mem_control
+		,  wb    => logic_wb_control
+		,  op    => "0101"
+		,  pc    => (others => 'X')
+		,  instr => (others => 'X')
+	);
+
+	-- "0101X1X"
+	CONSTANT and_imm_instr : control_word := (
+		exec  => (
+			alumux_sel     => alumux_imm5,
+			aluop          => ALU_AND,
+			shift_imm      => 'X',
+			use_offset11   => 'X',
+			use_pc_adder   => 'X',
+		), mem   => logic_mem_control
+		,  wb    => logic_wb_control
+		,  op    => "0101"
+		,  pc    => (others => 'X')
+		,  instr => (others => 'X')
+	);
+
+	-- "0000XXX"
+	CONSTANT br_instr : control_word := (
+		exec  => (
+			alumux_sel     => "XX",
+			aluop          => "XX",
+			shift_imm      => 'X',
+			use_offset11   => '0',
+			use_pc_adder   => '1',
+		), mem => logic_mem_control
+		,  wb => (
+			set_cc         => '0',
+			regwrite       => '0'
+		), op    => "0000"
+		,  pc    => (others => 'X')
+		,  instr => (others => 'X')
+	);
+
+	-- "1100XXX"
+	CONSTANT jmp_instr : control_word := (
+		exec  => (
+			alumux_sel     => "XX",
+			aluop          => "XX",
+			shift_imm      => 'X',
+			use_offset11   => 'X',
+			use_pc_adder   => '0',
+		), mem => logic_mem_control
+		,  wb => (
+			set_cc         => '0',
+			regwrite       => '0'
+		), op    => "1100"
+		,  pc    => (others => 'X')
+		,  instr => (others => 'X')
+	);
+
+	-- "01001XX"
+	CONSTANT jsr_instr : control_word := (
+		exec  => (
+			alumux_sel     => "XX",
+			aluop          => "XX",
+			shift_imm      => 'X',
+			use_offset11   => '1',
+			use_pc_adder   => '1',
+		), mem => logic_mem_control
+		,  wb => (
+			set_cc         => '0',
+			regwrite       => '1'
+		), op    => "0100"
+		,  pc    => (others => 'X')
+		,  instr => (others => 'X')
+	);
+
+	-- "01000XX"
+	CONSTANT jsrr_instr : control_word := (
+		exec  => (
+			alumux_sel     => "XX",
+			aluop          => "XX",
+			shift_imm      => 'X',
+			use_offset11   => 'X',
+			use_pc_adder   => '0',
+		), mem => logic_mem_control
+		,  wb => (
+			set_cc         => '0',
+			regwrite       => '1'
+		), op    => "0100"
+		,  pc    => (others => 'X')
+		,  instr => (others => 'X')
+	);
+
+	-- "0010XXX"
+	CONSTANT ldb_instr : control_word := (
+		exec  => (
+			alumux_sel     => alumux_idx6,
+			aluop          => ALU_ADD,
+			shift_imm      => '0',
+			use_offset11   => 'X',
+			use_pc_adder   => 'X',
+		), mem => (
+			mem_read       => '1',
+			mem_write_byte => '0',
+			mem_write_word => '0'
+		), wb => logic_wb_control
+		,  op    => "0010"
+		,  pc    => (others => 'X')
+		,  instr => (others => 'X')
+	);
+
+	-- "1010XXX"
+	CONSTANT ldi_instr : control_word := (
+		exec  => (
+			alumux_sel     => "XX",
+			aluop          => "XX",
+			shift_imm      => 'X',
+			use_offset11   => 'X',
+			use_pc_adder   => 'X',
+		), mem => (
+			mem_read       => '0',
+			mem_write_byte => '0',
+			mem_write_word => '0'
+		), wb => logic_wb_control
+		,  op    => "1010"
+		,  pc    => (others => 'X')
+		,  instr => (others => 'X')
+	);
+
+	-- "0110XXX"
+	CONSTANT ldr_instr : control_word := (
+		exec  => (
+			alumux_sel     => alumux_idx6,
+			aluop          => ALU_ADD,
+			shift_imm      => '1',
+			use_offset11   => 'X',
+			use_pc_adder   => 'X',
+		), mem => (
+			mem_read       => '1',
+			mem_write_byte => '0',
+			mem_write_word => '0'
+		), wb => logic_wb_control
+		,  op    => "0110"
+		,  pc    => (others => 'X')
+		,  instr => (others => 'X')
+	);
+
+	-- "1110XXX"
+	CONSTANT lea_instr : control_word := default_control_word;
+
+	-- "1001XXX"
+	CONSTANT not_instr : control_word := (
+		exec  => (
+			alumux_sel     => alumux_sr2,
+			aluop          => ALU_NOT,
+			shift_imm      => 'X',
+			use_offset11   => 'X',
+			use_pc_adder   => 'X',
+		), mem   => logic_mem_control
+		,  wb    => logic_wb_control
+		,  op    => "1001"
+		,  pc    => (others => 'X')
+		,  instr => (others => 'X')
+	);
+
+	-- "1000XXX"
+	CONSTANT rti_instr : control_word := default_control_word;
+
+	-- "1101XX0"
+	CONSTANT lshf_instr : control_word := (
+		exec  => (
+			alumux_sel     => alumux_imm4,
+			aluop          => ALU_SLL,
+			shift_imm      => 'X',
+			use_offset11   => 'X',
+			use_pc_adder   => 'X',
+		), mem   => logic_mem_control
+		,  wb    => logic_wb_control
+		,  op    => "1101"
+		,  pc    => (others => 'X')
+		,  instr => (others => 'X')
+	);
+
+	-- "1101X01"
+	CONSTANT rshfl_instr : control_word := (
+		exec  => (
+			alumux_sel     => alumux_imm4,
+			aluop          => ALU_SRL,
+			shift_imm      => 'X',
+			use_offset11   => 'X',
+			use_pc_adder   => 'X',
+		), mem   => logic_mem_control
+		,  wb    => logic_wb_control
+		,  op    => "1101"
+		,  pc    => (others => 'X')
+		,  instr => (others => 'X')
+	);
+
+	-- "1101x11"
+	constant rshfa_instr : control_word := (
+		exec  => (
+			alumux_sel     => alumux_imm4,
+			aluop          => alu_sra,
+			shift_imm      => 'x',
+			use_offset11   => 'x',
+			use_pc_adder   => 'x',
+		), mem   => logic_mem_control
+		,  wb    => logic_wb_control
+		,  op    => "1101"
+		,  pc    => (others => 'x')
+		,  instr => (others => 'x')
+	);
+
+	-- "0011XXX"
+	CONSTANT stb_instr : control_word := (
+		exec  => (
+			alumux_sel     => alumux_imm6,
+			aluop          => ALU_ADD,
+			shift_imm      => '0',
+			use_offset11   => 'X',
+			use_pc_adder   => 'X',
+		), mem   => (
+			mem_read       => '0',
+			mem_write_byte => '1',
+			mem_write_word => '0'
+		), wb    => logic_wb_control
+		,  op    => "0011"
+		,  pc    => (others => 'X')
+		,  instr => (others => 'X')
+	);
+
+	-- "1011XXX"
+	CONSTANT sti_instr : control_word := default_control_word;
+
+	-- "0111XXX"
+	CONSTANT str_instr : control_word := (
+		exec  => (
+			alumux_sel     => alumux_imm6,
+			aluop          => ALU_ADD,
+			shift_imm      => '1',
+			use_offset11   => 'X',
+			use_pc_adder   => 'X',
+		), mem   => (
+			mem_read       => '0',
+			mem_write_byte => '0',
+			mem_write_word => '1'
+		), wb    => logic_wb_control
+		,  op    => "0111"
+		,  pc    => (others => 'X')
+		,  instr => (others => 'X')
+	);
+
+	-- "1111XXX"
+	CONSTANT trap_instr : control_word := default_control_word;
 END LC3B_TYPES ;
 
 PACKAGE BODY LC3B_TYPES IS
