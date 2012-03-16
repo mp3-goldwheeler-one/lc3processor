@@ -162,6 +162,12 @@ PACKAGE LC3B_TYPES IS
 		load_jump_pc : std_logic;
 	END RECORD;
 
+	constant pipe_data_length : integer := 12;
+	type pipe_data_sizes_array is array (0 to pipe_data_length - 1) of integer;
+	constant pipe_data_sizes : pipe_data_sizes_array := (
+		16, 16, 16, 16, 16, 3, 4, 5, 6, 9, 11, 1
+	);
+
 	TYPE control_word IS RECORD
 		exec  : exec_control;
 		mem   : mem_control;
@@ -182,13 +188,43 @@ PACKAGE LC3B_TYPES IS
 		regwrite => '1'
 	);
 
+	CONSTANT default_pipe_data : pipe_data := (
+		aluout       => "XXXXXXXXXXXXXXXX",
+		mem_data_in  => "XXXXXXXXXXXXXXXX",
+		sr1_val      => "XXXXXXXXXXXXXXXX",
+		sr2_val      => "XXXXXXXXXXXXXXXX",
+		dr_val       => "XXXXXXXXXXXXXXXX",
+		dr           => "XXX",
+		imm4         => "XXXX",
+		imm5         => "XXXXX",
+		idx6         => "XXXXXX",
+		off9         => "XXXXXXXXX",
+		off11        => "XXXXXXXXXXX",
+		load_jump_pc => 'X'
+	);
+
+	CONSTANT test_pipe_data : pipe_data := (
+		aluout       => "1010101000101011",
+		mem_data_in  => "XXXXXXXXXXXXXXXX",
+		sr1_val      => "1000111010111001",
+		sr2_val      => "XXXXXXXXXXXXXXXX",
+		dr_val       => "XXXXXXXXXXXXXXXX",
+		dr           => "010",
+		imm4         => "XXXX",
+		imm5         => "XXXXX",
+		idx6         => "XXXXXX",
+		off9         => "010101001",
+		off11        => "XXXXXXXXXXX",
+		load_jump_pc => '1'
+	);
+
 	CONSTANT default_control_word : control_word := (
 		exec  => (
 			alumux_sel     => "XX",
-			aluop          => "XX",
+			aluop          => "XXX",
 			shift_imm      => 'X',
 			use_offset11   => 'X',
-			use_pc_adder   => 'X',
+			use_pc_adder   => 'X'
 		), mem => (
 			mem_read       => '0',
 			mem_write_byte => '0',
@@ -207,7 +243,7 @@ PACKAGE LC3B_TYPES IS
 			aluop          => ALU_ADD,
 			shift_imm      => 'X',
 			use_offset11   => 'X',
-			use_pc_adder   => 'X',
+			use_pc_adder   => 'X'
 		), mem   => logic_mem_control
 		,  wb    => logic_wb_control
 		,  op    => "0001"
@@ -216,13 +252,13 @@ PACKAGE LC3B_TYPES IS
 	);
 
 	-- "0001X1X"
-	CONSTANT add_reg_instr : control_word := (
+	CONSTANT add_imm_instr : control_word := (
 		exec  => (
 			alumux_sel     => alumux_imm5,
 			aluop          => ALU_ADD,
 			shift_imm      => 'X',
 			use_offset11   => 'X',
-			use_pc_adder   => 'X',
+			use_pc_adder   => 'X'
 		), mem   => logic_mem_control
 		,  wb    => logic_wb_control
 		,  op    => "0001"
@@ -231,13 +267,13 @@ PACKAGE LC3B_TYPES IS
 	);
 
 	-- "0101X0X"
-	CONSTANT and_imm_instr : control_word := (
+	CONSTANT and_reg_instr : control_word := (
 		exec  => (
 			alumux_sel     => alumux_sr2,
 			aluop          => ALU_AND,
 			shift_imm      => 'X',
 			use_offset11   => 'X',
-			use_pc_adder   => 'X',
+			use_pc_adder   => 'X'
 		), mem   => logic_mem_control
 		,  wb    => logic_wb_control
 		,  op    => "0101"
@@ -252,7 +288,7 @@ PACKAGE LC3B_TYPES IS
 			aluop          => ALU_AND,
 			shift_imm      => 'X',
 			use_offset11   => 'X',
-			use_pc_adder   => 'X',
+			use_pc_adder   => 'X'
 		), mem   => logic_mem_control
 		,  wb    => logic_wb_control
 		,  op    => "0101"
@@ -264,10 +300,10 @@ PACKAGE LC3B_TYPES IS
 	CONSTANT br_instr : control_word := (
 		exec  => (
 			alumux_sel     => "XX",
-			aluop          => "XX",
+			aluop          => "XXX",
 			shift_imm      => 'X',
 			use_offset11   => '0',
-			use_pc_adder   => '1',
+			use_pc_adder   => '1'
 		), mem => logic_mem_control
 		,  wb => (
 			set_cc         => '0',
@@ -281,10 +317,10 @@ PACKAGE LC3B_TYPES IS
 	CONSTANT jmp_instr : control_word := (
 		exec  => (
 			alumux_sel     => "XX",
-			aluop          => "XX",
+			aluop          => "XXX",
 			shift_imm      => 'X',
 			use_offset11   => 'X',
-			use_pc_adder   => '0',
+			use_pc_adder   => '0'
 		), mem => logic_mem_control
 		,  wb => (
 			set_cc         => '0',
@@ -298,10 +334,10 @@ PACKAGE LC3B_TYPES IS
 	CONSTANT jsr_instr : control_word := (
 		exec  => (
 			alumux_sel     => "XX",
-			aluop          => "XX",
+			aluop          => "XXX",
 			shift_imm      => 'X',
 			use_offset11   => '1',
-			use_pc_adder   => '1',
+			use_pc_adder   => '1'
 		), mem => logic_mem_control
 		,  wb => (
 			set_cc         => '0',
@@ -315,10 +351,10 @@ PACKAGE LC3B_TYPES IS
 	CONSTANT jsrr_instr : control_word := (
 		exec  => (
 			alumux_sel     => "XX",
-			aluop          => "XX",
+			aluop          => "XXX",
 			shift_imm      => 'X',
 			use_offset11   => 'X',
-			use_pc_adder   => '0',
+			use_pc_adder   => '0'
 		), mem => logic_mem_control
 		,  wb => (
 			set_cc         => '0',
@@ -335,7 +371,7 @@ PACKAGE LC3B_TYPES IS
 			aluop          => ALU_ADD,
 			shift_imm      => '0',
 			use_offset11   => 'X',
-			use_pc_adder   => 'X',
+			use_pc_adder   => 'X'
 		), mem => (
 			mem_read       => '1',
 			mem_write_byte => '0',
@@ -350,10 +386,10 @@ PACKAGE LC3B_TYPES IS
 	CONSTANT ldi_instr : control_word := (
 		exec  => (
 			alumux_sel     => "XX",
-			aluop          => "XX",
+			aluop          => "XXX",
 			shift_imm      => 'X',
 			use_offset11   => 'X',
-			use_pc_adder   => 'X',
+			use_pc_adder   => 'X'
 		), mem => (
 			mem_read       => '0',
 			mem_write_byte => '0',
@@ -371,7 +407,7 @@ PACKAGE LC3B_TYPES IS
 			aluop          => ALU_ADD,
 			shift_imm      => '1',
 			use_offset11   => 'X',
-			use_pc_adder   => 'X',
+			use_pc_adder   => 'X'
 		), mem => (
 			mem_read       => '1',
 			mem_write_byte => '0',
@@ -392,7 +428,7 @@ PACKAGE LC3B_TYPES IS
 			aluop          => ALU_NOT,
 			shift_imm      => 'X',
 			use_offset11   => 'X',
-			use_pc_adder   => 'X',
+			use_pc_adder   => 'X'
 		), mem   => logic_mem_control
 		,  wb    => logic_wb_control
 		,  op    => "1001"
@@ -410,7 +446,7 @@ PACKAGE LC3B_TYPES IS
 			aluop          => ALU_SLL,
 			shift_imm      => 'X',
 			use_offset11   => 'X',
-			use_pc_adder   => 'X',
+			use_pc_adder   => 'X'
 		), mem   => logic_mem_control
 		,  wb    => logic_wb_control
 		,  op    => "1101"
@@ -425,7 +461,7 @@ PACKAGE LC3B_TYPES IS
 			aluop          => ALU_SRL,
 			shift_imm      => 'X',
 			use_offset11   => 'X',
-			use_pc_adder   => 'X',
+			use_pc_adder   => 'X'
 		), mem   => logic_mem_control
 		,  wb    => logic_wb_control
 		,  op    => "1101"
@@ -433,29 +469,29 @@ PACKAGE LC3B_TYPES IS
 		,  instr => (others => 'X')
 	);
 
-	-- "1101x11"
+	-- "1101X11"
 	constant rshfa_instr : control_word := (
 		exec  => (
 			alumux_sel     => alumux_imm4,
 			aluop          => alu_sra,
-			shift_imm      => 'x',
-			use_offset11   => 'x',
-			use_pc_adder   => 'x',
+			shift_imm      => 'X',
+			use_offset11   => 'X',
+			use_pc_adder   => 'X'
 		), mem   => logic_mem_control
 		,  wb    => logic_wb_control
 		,  op    => "1101"
-		,  pc    => (others => 'x')
-		,  instr => (others => 'x')
+		,  pc    => (others => 'X')
+		,  instr => (others => 'X')
 	);
 
 	-- "0011XXX"
 	CONSTANT stb_instr : control_word := (
 		exec  => (
-			alumux_sel     => alumux_imm6,
+			alumux_sel     => alumux_idx6,
 			aluop          => ALU_ADD,
 			shift_imm      => '0',
 			use_offset11   => 'X',
-			use_pc_adder   => 'X',
+			use_pc_adder   => 'X'
 		), mem   => (
 			mem_read       => '0',
 			mem_write_byte => '1',
@@ -472,11 +508,11 @@ PACKAGE LC3B_TYPES IS
 	-- "0111XXX"
 	CONSTANT str_instr : control_word := (
 		exec  => (
-			alumux_sel     => alumux_imm6,
+			alumux_sel     => alumux_idx6,
 			aluop          => ALU_ADD,
 			shift_imm      => '1',
 			use_offset11   => 'X',
-			use_pc_adder   => 'X',
+			use_pc_adder   => 'X'
 		), mem   => (
 			mem_read       => '0',
 			mem_write_byte => '0',

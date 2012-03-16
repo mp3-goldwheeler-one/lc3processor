@@ -20,6 +20,7 @@ ENTITY decode_exec_pipe IS
       RESET_L               : IN     STD_LOGIC;
       decode_alumux_sel     : IN     STD_LOGIC_VECTOR (1 DOWNTO 0);
       decode_aluop          : IN     LC3b_aluop;
+      decode_data_out       : IN     pipe_data;
       decode_dr             : IN     LC3B_REG;
       decode_instr          : IN     STD_LOGIC_VECTOR (15 DOWNTO 0);
       decode_load_jump_pc   : IN     STD_LOGIC;
@@ -29,8 +30,6 @@ ENTITY decode_exec_pipe IS
       decode_regwrite       : IN     std_logic;
       decode_set_cc         : IN     std_logic;
       decode_shift_imm      : IN     STD_LOGIC;
-      decode_src_a          : IN     LC3b_word;
-      decode_src_b          : IN     LC3b_word;
       decode_use_offset11   : IN     STD_LOGIC;
       decode_use_pc_adder   : IN     STD_LOGIC;
       decode_write_byte     : IN     std_logic;
@@ -38,6 +37,7 @@ ENTITY decode_exec_pipe IS
       load_decode_exec_pipe : IN     STD_LOGIC;
       exec_alumux_sel       : OUT    LC3b_4mux_sel;
       exec_aluop            : OUT    LC3B_ALUOP;
+      exec_data_in          : OUT    pipe_data;
       exec_dr               : OUT    LC3B_REG;
       exec_instr            : OUT    LC3b_word;
       exec_load_jump_pc     : OUT    STD_LOGIC;
@@ -47,8 +47,6 @@ ENTITY decode_exec_pipe IS
       exec_regwrite         : OUT    STD_LOGIC;
       exec_set_cc           : OUT    std_logic;
       exec_shift_imm        : OUT    STD_LOGIC;
-      exec_src_a            : OUT    LC3b_word;
-      exec_src_b            : OUT    LC3b_word;
       exec_use_offset11     : OUT    std_logic;
       exec_use_pc_adder     : OUT    std_logic;
       exec_write_byte       : OUT    std_logic;
