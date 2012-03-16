@@ -128,7 +128,7 @@ PACKAGE LC3B_TYPES IS
 	CONSTANT alumux_imm5 : LC3B_4MUX_SEL := "10";
 	CONSTANT alumux_idx6 : LC3B_4MUX_SEL := "11";
 
-	TYPE exec_control IS RECORD
+	TYPE exec_control_word IS RECORD
 		alumux_sel   : lc3b_alumux_sel;
 		aluop        : LC3B_ALUOP;
 		shift_imm    : std_logic;
@@ -136,13 +136,13 @@ PACKAGE LC3B_TYPES IS
 		use_pc_adder : std_logic;
 	END RECORD;
 
-	TYPE mem_control IS RECORD
+	TYPE mem_control_word IS RECORD
 		mem_read       : std_logic;
 		mem_write_byte : std_logic;
 		mem_write_word : std_logic;
 	END RECORD;
 
-	TYPE wb_control IS RECORD
+	TYPE wb_control_word IS RECORD
 		set_cc    : std_logic;
 		regwrite  : std_logic;
 	END RECORD;
@@ -169,21 +169,21 @@ PACKAGE LC3B_TYPES IS
 	);
 
 	TYPE control_word IS RECORD
-		exec  : exec_control;
-		mem   : mem_control;
-		wb    : wb_control;
+		exec  : exec_control_word;
+		mem   : mem_control_word;
+		wb    : wb_control_word;
 		op    : LC3b_opcode;
 		pc    : LC3b_word;
 		instr : LC3b_word;
 	END RECORD;
 
-	CONSTANT logic_mem_control : mem_control := (
+	CONSTANT logic_mem_control : mem_control_word := (
 		mem_read       => '0',
 		mem_write_word => '0',
 		mem_write_byte => '0'
 	);
 
-	CONSTANT logic_wb_control : wb_control := (
+	CONSTANT logic_wb_control : wb_control_word := (
 		set_cc   => '1',
 		regwrite => '1'
 	);
@@ -200,7 +200,7 @@ PACKAGE LC3B_TYPES IS
 		idx6         => "XXXXXX",
 		off9         => "XXXXXXXXX",
 		off11        => "XXXXXXXXXXX",
-		load_jump_pc => 'X'
+		load_jump_pc => '0'
 	);
 
 	CONSTANT test_pipe_data : pipe_data := (

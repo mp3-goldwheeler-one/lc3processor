@@ -166,6 +166,6 @@ ARCHITECTURE untitled OF Control_ROM IS
 BEGIN
   PROCESS(opcode, bit11, bit5, bit4)
   BEGIN
-    ctrl_word <= ROM_ENTRIES(integer(opcode & bit11 & bit5 & bit4)) after DELAY_ROM;
+    ctrl_word <= ROM_ENTRIES(to_integer(unsigned((opcode & bit11 & bit5 & bit4)))) after DELAY_ROM;
   END PROCESS;
 END ARCHITECTURE untitled;
