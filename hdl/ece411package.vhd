@@ -188,6 +188,11 @@ PACKAGE LC3B_TYPES IS
 		regwrite => '1'
 	);
 
+  CONSTANT zero_wb_control : wb_control_word := (
+	  set_cc   => '0',
+	  regwrite => '0'
+  );
+
 	CONSTANT default_pipe_data : pipe_data := (
 		aluout       => "XXXXXXXXXXXXXXXX",
 		mem_data_in  => "XXXXXXXXXXXXXXXX",
@@ -229,7 +234,7 @@ PACKAGE LC3B_TYPES IS
 			mem_read       => '0',
 			mem_write_byte => '0',
 			mem_write_word => '0'
-		), wb => logic_wb_control
+		), wb => zero_wb_control
 		,  op    => "1110"
 		,  pc    => (others => 'X')
 		,  instr => (others => 'X')
@@ -496,7 +501,7 @@ PACKAGE LC3B_TYPES IS
 			mem_read       => '0',
 			mem_write_byte => '1',
 			mem_write_word => '0'
-		), wb    => logic_wb_control
+		), wb    => zero_wb_control
 		,  op    => "0011"
 		,  pc    => (others => 'X')
 		,  instr => (others => 'X')
@@ -517,7 +522,7 @@ PACKAGE LC3B_TYPES IS
 			mem_read       => '0',
 			mem_write_byte => '0',
 			mem_write_word => '1'
-		), wb    => logic_wb_control
+		), wb    => zero_wb_control
 		,  op    => "0111"
 		,  pc    => (others => 'X')
 		,  instr => (others => 'X')
