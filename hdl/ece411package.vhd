@@ -198,6 +198,8 @@ PACKAGE LC3B_TYPES IS
 	CONSTANT default_pipe_data : pipe_data := (
 		aluout       => "XXXXXXXXXXXXXXXX",
 		mem_data_in  => "XXXXXXXXXXXXXXXX",
+		sr1          => "XXX",
+		sr2          => "XXX",
 		sr1_val      => "XXXXXXXXXXXXXXXX",
 		sr2_val      => "XXXXXXXXXXXXXXXX",
 		dr_val       => "XXXXXXXXXXXXXXXX",
@@ -213,6 +215,8 @@ PACKAGE LC3B_TYPES IS
 	CONSTANT test_pipe_data : pipe_data := (
 		aluout       => "1010101000101011",
 		mem_data_in  => "XXXXXXXXXXXXXXXX",
+		sr1          => "XXX",
+		sr2          => "XXX",
 		sr1_val      => "1000111010111001",
 		sr2_val      => "XXXXXXXXXXXXXXXX",
 		dr_val       => "XXXXXXXXXXXXXXXX",

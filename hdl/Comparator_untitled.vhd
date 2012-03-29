@@ -25,17 +25,14 @@ END ENTITY Comparator;
 
 --
 ARCHITECTURE untitled OF Comparator IS
-  signal tempout : std_logic;
 BEGIN
   Compare : Process (A, B) is
   begin
     if (A = B) then
-      tempout <= '1';
+      Y <= '1' after Delay;
     else
-      tempout <= '0';
+      Y <= '0' after Delay;
     end if;
   end process;
-  
-  Y <= tempout after Delay;
 END ARCHITECTURE untitled;
 
