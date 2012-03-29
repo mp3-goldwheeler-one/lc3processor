@@ -153,6 +153,8 @@ PACKAGE LC3B_TYPES IS
 		sr1_val      : lc3b_word;
 		sr2_val      : lc3b_word;
 		dr_val       : lc3b_word;
+		sr1          : LC3b_reg;
+		sr2          : LC3b_reg;
 		dr           : lc3b_reg;
 		imm4         : LC3B_IMM4;
 		imm5         : LC3B_IMM5;
