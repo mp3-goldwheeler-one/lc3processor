@@ -63,23 +63,23 @@ VExpander (VariableExpander
 vvMap [
 (vvPair
 variable "HDLDir"
-value "/home/wheele11/Desktop/lc3processor/hdl"
+value "/home/one1/Desktop/lc3processor/hdl"
 )
 (vvPair
 variable "HDSDir"
-value "/home/wheele11/Desktop/lc3processor/hds"
+value "/home/one1/Desktop/lc3processor/hds"
 )
 (vvPair
 variable "SideDataDesignDir"
-value "/home/wheele11/Desktop/lc3processor/hds/@stall@unit/struct.bd.info"
+value "/home/one1/Desktop/lc3processor/hds/@stall@unit/struct.bd.info"
 )
 (vvPair
 variable "SideDataUserDir"
-value "/home/wheele11/Desktop/lc3processor/hds/@stall@unit/struct.bd.user"
+value "/home/one1/Desktop/lc3processor/hds/@stall@unit/struct.bd.user"
 )
 (vvPair
 variable "SourceDir"
-value "/home/wheele11/Desktop/lc3processor/hds"
+value "/home/one1/Desktop/lc3processor/hds"
 )
 (vvPair
 variable "appl"
@@ -95,11 +95,11 @@ value "%(unit)_config"
 )
 (vvPair
 variable "d"
-value "/home/wheele11/Desktop/lc3processor/hds/@stall@unit"
+value "/home/one1/Desktop/lc3processor/hds/@stall@unit"
 )
 (vvPair
 variable "d_logical"
-value "/home/wheele11/Desktop/lc3processor/hds/StallUnit"
+value "/home/one1/Desktop/lc3processor/hds/StallUnit"
 )
 (vvPair
 variable "date"
@@ -143,7 +143,7 @@ value "ews"
 )
 (vvPair
 variable "host"
-value "gelib-057-35.ews.illinois.edu"
+value "gelib-057-06.ews.illinois.edu"
 )
 (vvPair
 variable "language"
@@ -175,11 +175,11 @@ value "March"
 )
 (vvPair
 variable "p"
-value "/home/wheele11/Desktop/lc3processor/hds/@stall@unit/struct.bd"
+value "/home/one1/Desktop/lc3processor/hds/@stall@unit/struct.bd"
 )
 (vvPair
 variable "p_logical"
-value "/home/wheele11/Desktop/lc3processor/hds/StallUnit/struct.bd"
+value "/home/one1/Desktop/lc3processor/hds/StallUnit/struct.bd"
 )
 (vvPair
 variable "project_name"
@@ -219,7 +219,7 @@ value "<TBD>"
 )
 (vvPair
 variable "time"
-value "00:41:57"
+value "17:15:01"
 )
 (vvPair
 variable "unit"
@@ -227,7 +227,7 @@ value "StallUnit"
 )
 (vvPair
 variable "user"
-value "wheele11"
+value "one1"
 )
 (vvPair
 variable "version"
@@ -1352,7 +1352,7 @@ fg "65535,65535,65535"
 lineColor "0,0,32768"
 lineWidth 2
 )
-xt "29000,35000,52000,44000"
+xt "29000,35000,52000,42000"
 )
 oxt "0,0,18000,5000"
 text (MLText
@@ -1364,14 +1364,14 @@ xt "29200,35200,48200,40600"
 st "
 load_decode_exec_pipe <= cache_ready;
 load_exec_mem_pipe <= cache_ready;
-load_fetch_decode_pipe <= load_fde;
+load_fetch_decode_pipe <= load_fd;
 load_mem_wb_pipe <= cache_ready;
-load_pc <= load_fde;
+load_pc <= load_fd;
 load_fwd_pipe <= cache_ready;
 "
 tm "HdlTextMgr"
 wrapOption 3
-visibleHeight 9000
+visibleHeight 7000
 visibleWidth 23000
 )
 )
@@ -1385,7 +1385,7 @@ fg "65535,65535,37120"
 lineColor "0,0,32768"
 lineWidth 2
 )
-xt "21000,35000,29000,41000"
+xt "21000,35000,29000,42000"
 )
 oxt "0,0,8000,10000"
 ttg (MlTextGroup
@@ -1422,7 +1422,7 @@ va (VaSet
 vasetType 1
 fg "49152,49152,49152"
 )
-xt "21250,39250,22750,40750"
+xt "21250,40250,22750,41750"
 iconName "TextFile.png"
 iconMaskName "TextFile.msk"
 ftype 20
@@ -1943,25 +1943,7 @@ st "SIGNAL stall_load_use_l       : std_logic
 "
 )
 )
-*58 (Net
-uid 567,0
-decl (Decl
-n "load_fde"
-t "STD_LOGIC"
-o 12
-suid 22,0
-)
-declText (MLText
-uid 568,0
-va (VaSet
-font "courier,8,0"
-)
-xt "22000,12600,43000,13500"
-st "SIGNAL load_fde               : STD_LOGIC
-"
-)
-)
-*59 (PortIoIn
+*58 (PortIoIn
 uid 683,0
 shape (CompositeShape
 uid 684,0
@@ -2007,7 +1989,7 @@ tm "WireNameMgr"
 )
 )
 )
-*60 (Net
+*59 (Net
 uid 695,0
 decl (Decl
 n "stall_load_use_buffer"
@@ -2022,6 +2004,24 @@ font "courier,8,0"
 )
 xt "22000,4500,39500,5400"
 st "stall_load_use_buffer  : std_logic
+"
+)
+)
+*60 (Net
+uid 723,0
+decl (Decl
+n "load_fd"
+t "STD_LOGIC"
+o 12
+suid 25,0
+)
+declText (MLText
+uid 724,0
+va (VaSet
+font "courier,8,0"
+)
+xt "22000,12600,43000,13500"
+st "SIGNAL load_fd                : STD_LOGIC
 "
 )
 )
@@ -2474,13 +2474,13 @@ uid 564,0
 va (VaSet
 font "courier,8,0"
 )
-xt "27000,27100,31000,28000"
-st "load_fde"
+xt "27000,27100,30500,28000"
+st "load_fd"
 blo "27000,27800"
 tm "WireNameMgr"
 )
 )
-on &58
+on &60
 )
 *73 (Wire
 uid 689,0
@@ -2495,7 +2495,7 @@ pts [
 "4250,31000"
 ]
 )
-start &59
+start &58
 end &43
 sat 32
 eat 32
@@ -2518,7 +2518,7 @@ blo "-4000,30800"
 tm "WireNameMgr"
 )
 )
-on &60
+on &59
 )
 ]
 bg "65535,65535,65535"
@@ -2643,7 +2643,7 @@ cachedDiagramExtent "-12000,0,59000,51000"
 hasePageBreakOrigin 1
 pageBreakOrigin "-79000,0"
 active 1
-lastUid 696,0
+lastUid 726,0
 defaultCommentText (CommentText
 shape (Rectangle
 layer 0
@@ -3688,7 +3688,7 @@ tm "BdDeclarativeTextMgr"
 )
 commonDM (CommonDM
 ldm (LogicalDM
-suid 24,0
+suid 25,0
 usingSuid 1
 emptyRow *106 (LEmptyRow
 )
@@ -3858,18 +3858,6 @@ uid 571,0
 )
 *130 (LeafLogPort
 port (LogicalPort
-m 4
-decl (Decl
-n "load_fde"
-t "STD_LOGIC"
-o 12
-suid 22,0
-)
-)
-uid 573,0
-)
-*131 (LeafLogPort
-port (LogicalPort
 decl (Decl
 n "stall_load_use_buffer"
 t "std_logic"
@@ -3878,6 +3866,18 @@ suid 24,0
 )
 )
 uid 682,0
+)
+*131 (LeafLogPort
+port (LogicalPort
+m 4
+decl (Decl
+n "load_fd"
+t "STD_LOGIC"
+o 12
+suid 25,0
+)
+)
+uid 725,0
 )
 ]
 )
@@ -3997,15 +3997,15 @@ uid 572,0
 )
 *148 (MRCItem
 litem &130
-pos 12
-dimension 20
-uid 574,0
-)
-*149 (MRCItem
-litem &131
 pos 8
 dimension 20
 uid 681,0
+)
+*149 (MRCItem
+litem &131
+pos 12
+dimension 20
+uid 726,0
 )
 ]
 )

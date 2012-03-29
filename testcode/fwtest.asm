@@ -1,25 +1,10 @@
 ORIGIN 0
 SEGMENT CodeSegment:
 START:
+	NOP
 	LDR R1, R0, GOOD
-	NOP
-	NOP
-	NOP
-	NOP
-	NOP
-	NOP
-	NOP
-	NOP
 	STR R1, R0, X
-	NOP
-	NOP
-	NOP
-	NOP
-	NOP
-	NOP
 	LDR R4, R0, X
-	NOP
-	NOP
 	NOP
 LOOP:
 	BRnzp LOOP
