@@ -23,6 +23,7 @@ ENTITY decode_exec_pipe IS
       decode_instr          : IN     STD_LOGIC_VECTOR (15 DOWNTO 0);
       decode_pc             : IN     LC3b_word;
       load_decode_exec_pipe : IN     STD_LOGIC;
+      stall_load_use_buffer : IN     std_logic;
       exec_control          : OUT    control_word;
       exec_control_in       : OUT    exec_control_word;
       exec_data_in          : OUT    pipe_data;
