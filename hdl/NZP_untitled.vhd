@@ -19,6 +19,7 @@ ENTITY NZP IS
       clk      : IN     std_logic;
       wb_cc    : IN     LC3b_cc;
       load_nzp : IN     std_logic;
+      RESET_L  : IN     std_logic;
       n        : OUT    std_logic;
       p        : OUT    std_logic;
       z        : OUT    std_logic
@@ -33,10 +34,12 @@ ARCHITECTURE UNTITLED OF NZP IS
   SIGNAL PRE_NZP : LC3b_cc;
 BEGIN
 	------------------------------
-	VHDL_NZP : PROCESS (CLK, wb_cc)
+	VHDL_NZP : PROCESS (CLK, wb_cc, RESET_L)
 	------------------------------
 	BEGIN
-		IF (CLK'EVENT AND (CLK = '1') AND (CLK'LAST_VALUE = '0')) THEN
+	  IF (RESET_L = '0') THEN
+	    PRE_NZP <= "010";
+	  ELSIF (CLK'EVENT AND (CLK = '1') AND (CLK'LAST_VALUE = '0')) THEN
 			IF (load_nzp = '1') THEN
 				PRE_NZP <= wb_cc;
 			END IF;
