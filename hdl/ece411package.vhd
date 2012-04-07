@@ -19,7 +19,7 @@ PACKAGE LC3B_TYPES IS
 	SUBTYPE LC3B_BYTE      IS STD_LOGIC_VECTOR(7 DOWNTO 0);
 	SUBTYPE LC3B_NIBBLE    IS STD_LOGIC_VECTOR(3 DOWNTO 0);
 	SUBTYPE LC3B_CC        IS STD_LOGIC_VECTOR(2 DOWNTO 0);
-	SUBTYPE LC3B_REG       IS STD_LOGIC_VECTOR(2 DOWNTO 0);
+	SUBTYPE LC3B_REG       IS STD_LOGIC_VECTOR(3 DOWNTO 0);
 	SUBTYPE LC3B_ALUOP     IS STD_LOGIC_VECTOR(2 DOWNTO 0);
 	SUBTYPE LC3B_SHFTOP    IS STD_LOGIC_VECTOR(1 DOWNTO 0);
 	SUBTYPE LC3B_IMM4      IS STD_LOGIC_VECTOR(3 DOWNTO 0);
@@ -198,12 +198,12 @@ PACKAGE LC3B_TYPES IS
 	CONSTANT default_pipe_data : pipe_data := (
 		aluout       => "XXXXXXXXXXXXXXXX",
 		mem_data_in  => "XXXXXXXXXXXXXXXX",
-		sr1          => "XXX",
-		sr2          => "XXX",
+		sr1          => "XXXX",
+		sr2          => "XXXX",
 		sr1_val      => "XXXXXXXXXXXXXXXX",
 		sr2_val      => "XXXXXXXXXXXXXXXX",
 		dr_val       => "XXXXXXXXXXXXXXXX",
-		dr           => "XXX",
+		dr           => "XXXX",
 		imm4         => "XXXX",
 		imm5         => "XXXXX",
 		idx6         => "XXXXXX",
@@ -215,12 +215,12 @@ PACKAGE LC3B_TYPES IS
 	CONSTANT test_pipe_data : pipe_data := (
 		aluout       => "1010101000101011",
 		mem_data_in  => "XXXXXXXXXXXXXXXX",
-		sr1          => "XXX",
-		sr2          => "XXX",
+		sr1          => "XXXX",
+		sr2          => "XXXX",
 		sr1_val      => "1000111010111001",
 		sr2_val      => "XXXXXXXXXXXXXXXX",
 		dr_val       => "XXXXXXXXXXXXXXXX",
-		dr           => "010",
+		dr           => "0010",
 		imm4         => "XXXX",
 		imm5         => "XXXXX",
 		idx6         => "XXXXXX",

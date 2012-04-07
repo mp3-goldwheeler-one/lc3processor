@@ -1,26 +1,22 @@
 ORIGIN 0
 SEGMENT CodeSegment:
+BOOT:
+    BRnzp START
+    NOP
+    NOP
+    NOP
+    NOP
+    NOP
 START:
+    LDR R5, R0, GOOD
+	NOP
+	NOP
+	NOP
+	LDR R1, R0, GOOD
     ADD R1, R1, 2
     ADD R2, R2, -3
     ADD R3, R3, 4
     ADD R4, R4, 5
-	NOP
-	NOP
-	NOP
-	NOP
-	NOP
-	NOP
-    LDR R5, R0, GOOD
-    STR R1, R0, X
-	NOP
-	NOP
-	NOP
-    ADD R7, R7, 6
-	NOP
-	NOP
-    LDR R6, R0, X
-	NOP
 	NOP
 	NOP
 	NOP

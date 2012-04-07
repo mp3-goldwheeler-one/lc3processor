@@ -41,9 +41,9 @@ ARCHITECTURE UNTITLED OF ID IS
 SIGNAL VAL_IR : LC3B_WORD;
 BEGIN
 	OPCODE    <= decode_instr(15 DOWNTO 12);
-	SRCA      <= decode_instr(8 DOWNTO 6);
-	SRCB      <= decode_instr(2 DOWNTO 0);
-	DEST      <= decode_instr(11 DOWNTO 9);
+	SRCA      <= '0' & decode_instr(8 DOWNTO 6);
+	SRCB      <= '0' & decode_instr(2 DOWNTO 0);
+	DEST      <= '0' & decode_instr(11 DOWNTO 9);
 	OFFSET9   <= decode_instr(8 DOWNTO 0);
 	INDEX6    <= decode_instr(5 DOWNTO 0);
 	imm5      <= decode_instr(4 downto 0);
