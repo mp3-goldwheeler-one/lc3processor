@@ -26,9 +26,11 @@ ENTITY PipeDataCombiner IS
       mem_data_in  : IN     lc3b_word;
       off11        : IN     LC3B_OFFSET11;
       off9         : IN     LC3B_OFFSET9;
+      sr1          : IN     LC3b_reg;
+      sr2          : IN     LC3b_reg;
       sr1_val      : IN     lc3b_word;
       sr2_val      : IN     lc3b_word;
-      data_out     : OUT    LC3b_opcode
+      data_out     : OUT    pipe_data
    );
 
 -- Declarations
@@ -40,6 +42,8 @@ ARCHITECTURE untitled OF PipeDataCombiner IS
 BEGIN
 	data_out.aluout       <= aluout;
 	data_out.mem_data_in  <= mem_data_in;
+  data_out.sr1          <= sr1;
+	data_out.sr2          <= sr2;
 	data_out.sr1_val      <= sr1_val;
 	data_out.sr2_val      <= sr2_val;
 	data_out.dr_val       <= dr_val;
@@ -51,4 +55,3 @@ BEGIN
 	data_out.off11        <= off11;
 	data_out.load_jump_pc <= load_jump_pc;
 END ARCHITECTURE untitled;
-

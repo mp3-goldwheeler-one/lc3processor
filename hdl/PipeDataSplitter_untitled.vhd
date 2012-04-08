@@ -16,19 +16,21 @@ USE ece411.LC3b_types.all;
 
 ENTITY PipeDataSplitter IS
    PORT( 
-        data_in      : IN	LC3b_opcode;
-        aluout       : OUT	lc3b_word;
-		mem_data_in  : OUT	lc3b_word;
-		sr1_val      : OUT	lc3b_word;
-		sr2_val      : OUT	lc3b_word;
-		dr_val       : OUT	lc3b_word;
-		dr           : OUT	lc3b_reg;
-		imm4         : OUT	LC3B_IMM4;
-		imm5         : OUT	LC3B_IMM5;
-		idx6         : OUT	LC3B_INDEX6;
-		off9         : OUT	LC3B_OFFSET9;
-		off11        : OUT	LC3B_OFFSET11;
-		load_jump_pc : OUT	std_logic
+      data_in      : IN     pipe_data;
+      aluout       : OUT    lc3b_word;
+      mem_data_in  : OUT    lc3b_word;
+      sr1          : OUT    lc3b_reg;
+      sr2          : OUT    lc3b_reg;
+      sr1_val      : OUT    lc3b_word;
+      sr2_val      : OUT    lc3b_word;
+      dr_val       : OUT    lc3b_word;
+      dr           : OUT    lc3b_reg;
+      imm4         : OUT    LC3B_IMM4;
+      imm5         : OUT    LC3B_IMM5;
+      idx6         : OUT    LC3B_INDEX6;
+      off9         : OUT    LC3B_OFFSET9;
+      off11        : OUT    LC3B_OFFSET11;
+      load_jump_pc : OUT    std_logic
    );
 
 -- Declarations
@@ -41,7 +43,9 @@ BEGIN
 	aluout       <= data_in.aluout;
 	mem_data_in  <= data_in.mem_data_in;
 	sr1_val      <= data_in.sr1_val;
-	sr2_val      <= data_in.sr2_val;
+  sr2_val      <= data_in.sr2_val;
+  sr1          <= data_in.sr1;
+	sr2          <= data_in.sr2;
 	dr_val       <= data_in.dr_val;
 	dr           <= data_in.dr;
 	imm4         <= data_in.imm4;
