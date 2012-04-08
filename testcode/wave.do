@@ -17,52 +17,51 @@ add wave -noupdate -color Aquamarine -format Logic -height 15 -itemcolor Aquamar
 add wave -noupdate -color Aquamarine -format Event -height 15 -itemcolor Aquamarine /cpu/pipelineddatapath/decode/decode_data_in
 add wave -noupdate -color Aquamarine -format Event -height 15 -itemcolor Aquamarine /cpu/pipelineddatapath/decode/decode_data_out
 add wave -noupdate -color Aquamarine -format Event -height 15 -itemcolor Aquamarine /cpu/pipelineddatapath/decode/decode_control_out
-add wave -noupdate -format Literal -height 15 /cpu/pipelineddatapath/uarch_data_in
-add wave -noupdate -format Literal -height 15 /cpu/pipelineddatapath/uarch_control_in
-add wave -noupdate -format Literal -height 15 /cpu/pipelineddatapath/decode_uop_data_out
-add wave -noupdate -format Literal -height 15 -expand /cpu/pipelineddatapath/decode_uop_control_out
+add wave -noupdate -color Aquamarine -format Literal -height 15 -itemcolor Aquamarine /cpu/pipelineddatapath/uarch_data_in
+add wave -noupdate -color Aquamarine -format Literal -height 15 -itemcolor Aquamarine /cpu/pipelineddatapath/uarch_control_in
+add wave -noupdate -color Aquamarine -format Literal -height 15 -itemcolor Aquamarine /cpu/pipelineddatapath/decode_uop_data_out
+add wave -noupdate -color Aquamarine -format Literal -height 15 -itemcolor Aquamarine -expand /cpu/pipelineddatapath/decode_uop_control_out
 add wave -noupdate -divider Exec
-add wave -noupdate -format Logic -height 15 /cpu/pipelineddatapath/pipe2_de/load_decode_exec_pipe
+add wave -noupdate -color Wheat -format Logic -height 15 -itemcolor Wheat /cpu/pipelineddatapath/pipe2_de/load_decode_exec_pipe
 add wave -noupdate -color Wheat -format Literal -height 15 -itemcolor Wheat -radix hexadecimal /cpu/pipelineddatapath/exec_pc
 add wave -noupdate -color Wheat -format Literal -height 15 -itemcolor Wheat -radix hexadecimal /cpu/pipelineddatapath/exec_instr
 add wave -noupdate -color Wheat -format Literal -height 15 -itemcolor Wheat -radix hexadecimal /cpu/pipelineddatapath/exec_target_pc
 add wave -noupdate -color Wheat -format Event -height 15 -itemcolor Wheat /cpu/pipelineddatapath/exec/exec_data_in
 add wave -noupdate -color Wheat -format Event -height 15 -itemcolor Wheat /cpu/pipelineddatapath/exec/exec_data_out
-add wave -noupdate -format Literal -height 15 /cpu/pipelineddatapath/exec_control
+add wave -noupdate -color Wheat -format Literal -height 15 -itemcolor Wheat /cpu/pipelineddatapath/exec_control
 add wave -noupdate -color Wheat -format Event -height 15 -itemcolor Wheat -expand /cpu/pipelineddatapath/exec/exec_control_in
 add wave -noupdate -divider Mem
 add wave -noupdate -color Gold -format Literal -height 15 -itemcolor Gold -radix hexadecimal /cpu/pipelineddatapath/mem_pc
 add wave -noupdate -color Gold -format Literal -height 15 -itemcolor Gold -radix hexadecimal /cpu/pipelineddatapath/mem_instr
 add wave -noupdate -color Gold -format Logic -height 15 -itemcolor Gold -radix hexadecimal /cpu/pipelineddatapath/mem_ready
 add wave -noupdate -color Gold -format Literal -height 15 -itemcolor Gold -radix hexadecimal /cpu/pipelineddatapath/datain
-add wave -noupdate -format Literal -height 15 /cpu/pipelineddatapath/mem_control
-add wave -noupdate -format Literal -height 15 -expand /cpu/pipelineddatapath/mem_data_out
+add wave -noupdate -color Gold -format Literal -height 15 -itemcolor Gold /cpu/pipelineddatapath/mem_control
+add wave -noupdate -color Gold -format Literal -height 15 -itemcolor Gold -expand /cpu/pipelineddatapath/mem_data_out
 add wave -noupdate -divider Forwarding
-add wave -noupdate -format Literal -height 15 /cpu/pipelineddatapath/aforwardpipe/exec_forward_srca_sel
-add wave -noupdate -format Literal -height 15 /cpu/pipelineddatapath/aforwardpipe/exec_forward_srcb_sel
-add wave -noupdate -format Literal -height 15 /cpu/pipelineddatapath/aforwardpipe/mem_foward_sel
-add wave -noupdate -format Logic -height 15 /cpu/pipelineddatapath/aforwardingunit/sr1_stall_load_use
-add wave -noupdate -format Logic -height 15 /cpu/pipelineddatapath/aforwardingunit/sr2_stall_load_use
-add wave -noupdate -format Logic -height 15 /cpu/pipelineddatapath/aforwardingunit/stall_load_use_buffer
+add wave -noupdate -color Thistle -format Literal -height 15 -itemcolor Thistle /cpu/pipelineddatapath/aforwardpipe/exec_forward_srca_sel
+add wave -noupdate -color Thistle -format Literal -height 15 -itemcolor Thistle /cpu/pipelineddatapath/aforwardpipe/exec_forward_srcb_sel
+add wave -noupdate -color Thistle -format Literal -height 15 -itemcolor Thistle /cpu/pipelineddatapath/aforwardpipe/mem_foward_sel
+add wave -noupdate -color Thistle -format Logic -height 15 -itemcolor Thistle /cpu/pipelineddatapath/aforwardingunit/sr1_stall_load_use
+add wave -noupdate -color Thistle -format Logic -height 15 -itemcolor Thistle /cpu/pipelineddatapath/aforwardingunit/sr2_stall_load_use
+add wave -noupdate -color Thistle -format Logic -height 15 -itemcolor Thistle /cpu/pipelineddatapath/aforwardingunit/stall_load_use_buffer
 add wave -noupdate -divider Stall
-add wave -noupdate -format Logic -height 15 /cpu/pipelineddatapath/astall/cache_ready
-add wave -noupdate -format Logic -height 15 /cpu/pipelineddatapath/astall/stall_load_use_buffer
-add wave -noupdate -format Logic -height 15 /cpu/pipelineddatapath/astall/uarch_stall_in_buffer
-add wave -noupdate -format Logic -height 15 /cpu/pipelineddatapath/astall/load_fd
-add wave -noupdate -format Logic -height 15 /cpu/pipelineddatapath/astall/load_pc
-add wave -noupdate -format Logic -height 15 /cpu/pipelineddatapath/astall/load_fetch_decode_pipe
-add wave -noupdate -format Logic -height 15 /cpu/pipelineddatapath/astall/load_decode_exec_pipe
-add wave -noupdate -format Logic -height 15 /cpu/pipelineddatapath/astall/load_exec_mem_pipe
-add wave -noupdate -format Logic -height 15 /cpu/pipelineddatapath/astall/load_mem_wb_pipe
-add wave -noupdate -format Logic -height 15 /cpu/pipelineddatapath/astall/load_fwd_pipe
-add wave -noupdate -format Logic -height 15 /cpu/pipelineddatapath/astall/load_uarch_pipe
+add wave -noupdate -color Coral -format Logic -height 15 -itemcolor Coral /cpu/pipelineddatapath/astall/cache_ready
+add wave -noupdate -color Coral -format Logic -height 15 -itemcolor Coral /cpu/pipelineddatapath/astall/stall_load_use_buffer
+add wave -noupdate -color Coral -format Logic -height 15 -itemcolor Coral /cpu/pipelineddatapath/astall/load_fd
+add wave -noupdate -color Coral -format Logic -height 15 -itemcolor Coral /cpu/pipelineddatapath/astall/load_pc
+add wave -noupdate -color Coral -format Logic -height 15 -itemcolor Coral /cpu/pipelineddatapath/astall/load_fetch_decode_pipe
+add wave -noupdate -color Coral -format Logic -height 15 -itemcolor Coral /cpu/pipelineddatapath/astall/load_decode_exec_pipe
+add wave -noupdate -color Coral -format Logic -height 15 -itemcolor Coral /cpu/pipelineddatapath/astall/load_exec_mem_pipe
+add wave -noupdate -color Coral -format Logic -height 15 -itemcolor Coral /cpu/pipelineddatapath/astall/load_mem_wb_pipe
+add wave -noupdate -color Coral -format Logic -height 15 -itemcolor Coral /cpu/pipelineddatapath/astall/load_fwd_pipe
+add wave -noupdate -color Coral -format Logic -height 15 -itemcolor Coral /cpu/pipelineddatapath/astall/load_uarch_pipe
 add wave -noupdate -divider Writeback
 add wave -noupdate -color {Green Yellow} -format Literal -height 15 -itemcolor {Green Yellow} -radix hexadecimal /cpu/pipelineddatapath/wb_pc
 add wave -noupdate -color {Green Yellow} -format Literal -height 15 -itemcolor {Green Yellow} -radix hexadecimal /cpu/pipelineddatapath/wb_instr
 add wave -noupdate -color {Green Yellow} -format Literal -height 15 -itemcolor {Green Yellow} -radix hexadecimal /cpu/pipelineddatapath/wb_dest
 add wave -noupdate -color {Green Yellow} -format Literal -height 15 -itemcolor {Green Yellow} -radix hexadecimal /cpu/pipelineddatapath/wb_din
 add wave -noupdate -color {Green Yellow} -format Logic -height 15 -itemcolor {Green Yellow} -radix hexadecimal /cpu/pipelineddatapath/wb_rw
-add wave -noupdate -format Literal -height 15 /cpu/pipelineddatapath/wb/wb_control
+add wave -noupdate -color {Green Yellow} -format Literal -height 15 -itemcolor {Green Yellow} /cpu/pipelineddatapath/wb/wb_control
 add wave -noupdate -color {Green Yellow} -format Event -height 15 -itemcolor {Green Yellow} /cpu/pipelineddatapath/wb/wb_data_in
 add wave -noupdate -color {Green Yellow} -format Event -height 15 -itemcolor {Green Yellow} -expand /cpu/pipelineddatapath/wb/wb_control_in
 add wave -noupdate -divider Regfile
@@ -93,14 +92,11 @@ add wave -noupdate -format Event -height 15 -radix hexadecimal /cpu/dram/icache/
 add wave -noupdate -format Event -height 15 -radix hexadecimal /cpu/dram/icache/cache_dp1/way1/waydata/data
 TreeUpdate [SetDefaultTree]
 quietly WaveActivateNextPane
-add wave -noupdate -format Logic -height 15 /cpu/pipelineddatapath/load_fetch_decode_pipe
-add wave -noupdate -format Literal -height 15 /cpu/pipelineddatapath/decode_uop_control_out.op
-add wave -noupdate -format Logic -height 15 /cpu/pipelineddatapath/load_decode_exec_pipe
-add wave -noupdate -format Literal -height 15 /cpu/pipelineddatapath/exec_control.op
-add wave -noupdate -format Logic -height 15 /cpu/pipelineddatapath/load_exec_mem_pipe
-add wave -noupdate -format Literal -height 15 /cpu/pipelineddatapath/mem_control.op
-add wave -noupdate -format Logic -height 15 /cpu/pipelineddatapath/load_mem_wb_pipe
-add wave -noupdate -format Literal -height 15 /cpu/pipelineddatapath/wb_control.op
+add wave -noupdate -color Salmon -format Literal -height 15 -itemcolor Salmon /cpu/pipelineddatapath/fetch_instr
+add wave -noupdate -color Aquamarine -format Literal -height 15 -itemcolor Aquamarine /cpu/pipelineddatapath/decode_uop_control_out.op
+add wave -noupdate -color Wheat -format Literal -height 15 -itemcolor Wheat /cpu/pipelineddatapath/exec_control.op
+add wave -noupdate -color Gold -format Literal -height 15 -itemcolor Gold /cpu/pipelineddatapath/mem_control.op
+add wave -noupdate -color {Green Yellow} -format Literal -height 15 -itemcolor {Green Yellow} /cpu/pipelineddatapath/wb_control.op
 add wave -noupdate -color {Sky Blue} -format Event -height 15 -itemcolor {Sky Blue} -expand /cpu/pipelineddatapath/decode/arf/ram
 TreeUpdate [SetDefaultTree]
 WaveRestoreCursors {{Cursor 1} {1341 ns} 0}
@@ -117,4 +113,4 @@ configure wave -gridperiod 1
 configure wave -griddelta 40
 configure wave -timeline 0
 update
-WaveRestoreZoom {1152 ns} {1488 ns}
+WaveRestoreZoom {0 ns} {336 ns}
