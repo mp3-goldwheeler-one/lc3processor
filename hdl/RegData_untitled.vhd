@@ -16,16 +16,16 @@ USE ece411.LC3b_types.all;
 
 ENTITY RegData IS
    PORT( 
-   	   RESET_L : IN     STD_LOGIC;
-	     A       : IN     pipe_data;
-	     EN      : IN     STD_LOGIC;
-	     CLK     : IN     STD_LOGIC;
-	     F       : OUT    pipe_data
+      RESET_L : IN     STD_LOGIC;
+      A       : IN     pipe_data;
+      EN      : IN     STD_LOGIC;
+      CLK     : IN     std_logic;
+      F       : OUT    pipe_data
    );
 
 -- Declarations
 
-END RegData;
+END RegData ;
 
 --
 ARCHITECTURE untitled OF RegData IS

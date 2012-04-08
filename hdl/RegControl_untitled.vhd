@@ -16,16 +16,16 @@ USE ece411.LC3b_types.all;
 
 ENTITY RegControl IS
    PORT( 
-   	   RESET_L : IN     STD_LOGIC;
-	     A       : IN     control_word;
-	     EN      : IN     STD_LOGIC;
-	     CLK     : IN     STD_LOGIC;
-	     F       : OUT    control_word
+      RESET_L : IN     STD_LOGIC;
+      A       : IN     control_word;
+      EN      : IN     STD_LOGIC;
+      CLK     : IN     std_logic;
+      F       : OUT    control_word
    );
 
 -- Declarations
 
-END RegControl;
+END RegControl ;
 
 --
 ARCHITECTURE untitled OF RegControl IS
