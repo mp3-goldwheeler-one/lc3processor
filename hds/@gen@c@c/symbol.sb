@@ -26,7 +26,7 @@ model (Symbol
 commonDM (CommonDM
 ldm (LogicalDM
 ordering 1
-suid 14,0
+suid 16,0
 usingSuid 1
 emptyRow *1 (LEmptyRow
 )
@@ -68,27 +68,27 @@ tm "EolColHdrMgr"
 *14 (LogPort
 port (LogicalPort
 lang 2
+m 1
 decl (Decl
-n "Input"
-t "LC3b_word"
-o 1
-suid 13,0
+n "nzp"
+t "LC3b_cc"
+o 2
+suid 15,0
 )
 )
-uid 235,0
+uid 286,0
 )
 *15 (LogPort
 port (LogicalPort
 lang 2
-m 1
 decl (Decl
-n "Output"
-t "LC3b_cc"
-o 2
-suid 14,0
+n "WordIn"
+t "LC3b_word"
+o 1
+suid 16,0
 )
 )
-uid 237,0
+uid 288,0
 )
 ]
 )
@@ -144,13 +144,13 @@ uid 92,0
 litem &14
 pos 0
 dimension 20
-uid 236,0
+uid 287,0
 )
 *22 (MRCItem
 litem &15
 pos 1
 dimension 20
-uid 238,0
+uid 289,0
 )
 ]
 )
@@ -229,23 +229,23 @@ VExpander (VariableExpander
 vvMap [
 (vvPair
 variable "HDLDir"
-value "/home/wheele11/Desktop/lc3processor/hdl"
+value "/home/goldste6/ece411/mp3/hdl"
 )
 (vvPair
 variable "HDSDir"
-value "/home/wheele11/Desktop/lc3processor/hds"
+value "/home/goldste6/ece411/mp3/hds"
 )
 (vvPair
 variable "SideDataDesignDir"
-value "/home/wheele11/Desktop/lc3processor/hds/@gen@c@c/symbol.sb.info"
+value "/home/goldste6/ece411/mp3/hds/@gen@c@c/symbol.sb.info"
 )
 (vvPair
 variable "SideDataUserDir"
-value "/home/wheele11/Desktop/lc3processor/hds/@gen@c@c/symbol.sb.user"
+value "/home/goldste6/ece411/mp3/hds/@gen@c@c/symbol.sb.user"
 )
 (vvPair
 variable "SourceDir"
-value "/home/wheele11/Desktop/lc3processor/hds"
+value "/home/goldste6/ece411/mp3/hds"
 )
 (vvPair
 variable "appl"
@@ -261,15 +261,15 @@ value "%(unit)_config"
 )
 (vvPair
 variable "d"
-value "/home/wheele11/Desktop/lc3processor/hds/@gen@c@c"
+value "/home/goldste6/ece411/mp3/hds/@gen@c@c"
 )
 (vvPair
 variable "d_logical"
-value "/home/wheele11/Desktop/lc3processor/hds/GenCC"
+value "/home/goldste6/ece411/mp3/hds/GenCC"
 )
 (vvPair
 variable "date"
-value "03/09/12"
+value "04/06/12"
 )
 (vvPair
 variable "day"
@@ -281,7 +281,7 @@ value "Friday"
 )
 (vvPair
 variable "dd"
-value "09"
+value "06"
 )
 (vvPair
 variable "entity_name"
@@ -309,7 +309,7 @@ value "ews"
 )
 (vvPair
 variable "host"
-value "linux6.ews.illinois.edu"
+value "linux5.ews.illinois.edu"
 )
 (vvPair
 variable "language"
@@ -333,7 +333,7 @@ value "$HDS_PROJECT_DIR/compile"
 )
 (vvPair
 variable "mm"
-value "03"
+value "04"
 )
 (vvPair
 variable "module_name"
@@ -341,19 +341,19 @@ value "GenCC"
 )
 (vvPair
 variable "month"
-value "Mar"
+value "Apr"
 )
 (vvPair
 variable "month_long"
-value "March"
+value "April"
 )
 (vvPair
 variable "p"
-value "/home/wheele11/Desktop/lc3processor/hds/@gen@c@c/symbol.sb"
+value "/home/goldste6/ece411/mp3/hds/@gen@c@c/symbol.sb"
 )
 (vvPair
 variable "p_logical"
-value "/home/wheele11/Desktop/lc3processor/hds/GenCC/symbol.sb"
+value "/home/goldste6/ece411/mp3/hds/GenCC/symbol.sb"
 )
 (vvPair
 variable "project_name"
@@ -373,7 +373,7 @@ value "<TBD>"
 )
 (vvPair
 variable "task_ModelSimPath"
-value "$HDS_HOME/../Modeltech/linux"
+value "<TBD>"
 )
 (vvPair
 variable "task_NC-SimPath"
@@ -393,7 +393,7 @@ value "<TBD>"
 )
 (vvPair
 variable "time"
-value "23:42:23"
+value "22:30:15"
 )
 (vvPair
 variable "unit"
@@ -401,7 +401,7 @@ value "GenCC"
 )
 (vvPair
 variable "user"
-value "wheele11"
+value "goldste6"
 )
 (vvPair
 variable "version"
@@ -428,56 +428,10 @@ optionalChildren [
 uid 8,0
 optionalChildren [
 *32 (CptPort
-uid 225,0
+uid 276,0
 ps "OnEdgeStrategy"
 shape (Triangle
-uid 226,0
-ro 90
-va (VaSet
-vasetType 1
-fg "0,65535,0"
-)
-xt "14250,11625,15000,12375"
-)
-tg (CPTG
-uid 227,0
-ps "CptPortTextPlaceStrategy"
-stg "VerticalLayoutStrategy"
-f (Text
-uid 228,0
-va (VaSet
-font "courier,8,0"
-)
-xt "16000,11550,18500,12450"
-st "Input"
-blo "16000,12250"
-tm "CptPortNameMgr"
-)
-)
-dt (MLText
-uid 229,0
-va (VaSet
-font "courier,8,0"
-)
-xt "44000,1800,58500,2700"
-st "Input  : IN     LC3b_word  ;
-"
-)
-thePort (LogicalPort
-lang 2
-decl (Decl
-n "Input"
-t "LC3b_word"
-o 1
-suid 13,0
-)
-)
-)
-*33 (CptPort
-uid 230,0
-ps "OnEdgeStrategy"
-shape (Triangle
-uid 231,0
+uid 277,0
 ro 90
 va (VaSet
 vasetType 1
@@ -486,38 +440,84 @@ fg "0,65535,0"
 xt "24000,11625,24750,12375"
 )
 tg (CPTG
-uid 232,0
+uid 278,0
 ps "CptPortTextPlaceStrategy"
 stg "RightVerticalLayoutStrategy"
 f (Text
-uid 233,0
+uid 279,0
 va (VaSet
 font "courier,8,0"
 )
-xt "20000,11550,23000,12450"
-st "Output"
+xt "21500,11550,23000,12450"
+st "nzp"
 ju 2
 blo "23000,12250"
 tm "CptPortNameMgr"
 )
 )
 dt (MLText
-uid 234,0
+uid 280,0
 va (VaSet
 font "courier,8,0"
 )
 xt "44000,2700,56500,3600"
-st "Output : OUT    LC3b_cc 
+st "nzp    : OUT    LC3b_cc 
 "
 )
 thePort (LogicalPort
 lang 2
 m 1
 decl (Decl
-n "Output"
+n "nzp"
 t "LC3b_cc"
 o 2
-suid 14,0
+suid 15,0
+)
+)
+)
+*33 (CptPort
+uid 281,0
+ps "OnEdgeStrategy"
+shape (Triangle
+uid 282,0
+ro 90
+va (VaSet
+vasetType 1
+fg "0,65535,0"
+)
+xt "14250,11625,15000,12375"
+)
+tg (CPTG
+uid 283,0
+ps "CptPortTextPlaceStrategy"
+stg "VerticalLayoutStrategy"
+f (Text
+uid 284,0
+va (VaSet
+font "courier,8,0"
+)
+xt "16000,11550,19000,12450"
+st "WordIn"
+blo "16000,12250"
+tm "CptPortNameMgr"
+)
+)
+dt (MLText
+uid 285,0
+va (VaSet
+font "courier,8,0"
+)
+xt "44000,1800,58500,2700"
+st "WordIn : IN     LC3b_word  ;
+"
+)
+thePort (LogicalPort
+lang 2
+decl (Decl
+n "WordIn"
+t "LC3b_word"
+o 1
+suid 16,0
 )
 )
 )
@@ -1203,5 +1203,5 @@ xt "42000,0,42000,0"
 tm "SyDeclarativeTextMgr"
 )
 )
-lastUid 263,0
+lastUid 289,0
 )
