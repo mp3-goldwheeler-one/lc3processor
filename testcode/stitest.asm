@@ -7,10 +7,10 @@ START:
 	; ADD R0, R6, 2
 	; LDR R3, R7, GOOD2
 	; LDI R5, R3, 1
-	; ADD R4, R5, -1
-	; STI R1, R0, X
-	LDR R6, R0, X
-	STR R1, R6, 0
+	ADD R4, R5, -1
+	STI R1, R0, X
+	; LDR R6, R0, X
+	; STR R1, R6, 0
 	NOP
 	NOP
 	NOP

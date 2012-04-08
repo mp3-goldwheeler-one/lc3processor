@@ -598,7 +598,7 @@ PACKAGE LC3B_TYPES IS
 		dec   => (
 			ldi            => '0',
 			sti            => '1',
-			use_uop2        => '1',
+			use_uop2       => '1',
 			use_ghost_reg  => '1',
 			uop_rom_idx    => "0010"
 		),
