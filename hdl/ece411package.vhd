@@ -160,6 +160,9 @@ PACKAGE LC3B_TYPES IS
 	END RECORD;
 
 	TYPE pipe_data IS RECORD
+		pc           : lc3b_word;
+		incr_pc      : lc3b_word;
+		instr        : lc3b_word;
 		aluout       : lc3b_word;
 		mem_data_in  : lc3b_word;
 		sr1_val      : lc3b_word;
@@ -217,6 +220,9 @@ PACKAGE LC3B_TYPES IS
   );
 
 	CONSTANT default_pipe_data : pipe_data := (
+		pc           => "XXXXXXXXXXXXXXXX",
+		incr_pc      => "XXXXXXXXXXXXXXXX",
+		instr        => "0000000000000000",
 		aluout       => "XXXXXXXXXXXXXXXX",
 		mem_data_in  => "XXXXXXXXXXXXXXXX",
 		sr1          => "XXXX",
@@ -234,6 +240,9 @@ PACKAGE LC3B_TYPES IS
 	);
 
 	CONSTANT test_pipe_data : pipe_data := (
+		pc           => "XXXXXXXXXXXXXXXX",
+		incr_pc      => "XXXXXXXXXXXXXXXX",
+		instr        => "XXXXXXXXXXXXXXXX",
 		aluout       => "1010101000101011",
 		mem_data_in  => "XXXXXXXXXXXXXXXX",
 		sr1          => "XXXX",

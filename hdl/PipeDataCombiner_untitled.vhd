@@ -16,6 +16,9 @@ USE ece411.LC3b_types.all;
 
 ENTITY PipeDataCombiner IS
    PORT( 
+      pc           : IN     lc3b_word;
+      incr_pc      : IN     lc3b_word;
+      instr        : IN     lc3b_word;
       aluout       : IN     lc3b_word;
       dr           : IN     LC3b_reg;
       dr_val       : IN     lc3b_word;
@@ -40,6 +43,9 @@ END PipeDataCombiner ;
 --
 ARCHITECTURE untitled OF PipeDataCombiner IS
 BEGIN
+  data_out.pc           <= pc;
+  data_out.incr_pc      <= incr_pc;
+  data_out.instr        <= instr;
 	data_out.aluout       <= aluout;
 	data_out.mem_data_in  <= mem_data_in;
   data_out.sr1          <= sr1;

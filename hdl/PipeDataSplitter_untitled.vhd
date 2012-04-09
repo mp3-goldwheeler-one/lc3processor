@@ -17,6 +17,9 @@ USE ece411.LC3b_types.all;
 ENTITY PipeDataSplitter IS
    PORT( 
       data_in      : IN     pipe_data;
+      pc           : OUT    lc3b_word;
+      incr_pc      : OUT    lc3b_word;
+      instr        : OUT    lc3b_word;
       aluout       : OUT    lc3b_word;
       mem_data_in  : OUT    lc3b_word;
       sr1          : OUT    lc3b_reg;
@@ -40,6 +43,9 @@ END PipeDataSplitter ;
 --
 ARCHITECTURE untitled OF PipeDataSplitter IS
 BEGIN
+  pc           <= data_in.pc;
+  incr_pc      <= data_in.incr_pc;
+  instr        <= data_in.instr;
 	aluout       <= data_in.aluout;
 	mem_data_in  <= data_in.mem_data_in;
 	sr1_val      <= data_in.sr1_val;
