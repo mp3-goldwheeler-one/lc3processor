@@ -11,8 +11,6 @@ START:
 	NOP
 	NOP
 	NOP
-	NOP
-	NOP
 	BRnzp START
 	NOP
 	NOP
