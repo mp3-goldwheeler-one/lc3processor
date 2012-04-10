@@ -24,6 +24,7 @@ ENTITY ID IS
       index6       : OUT    LC3b_index6;
       imm5         : OUT    LC3b_imm5;
       bit5         : OUT    std_logic;
+      bit4         : OUT    std_logic;
       offset9      : OUT    LC3b_offset9;
       trapvec8     : OUT    LC3b_trapvect8;
       offset11     : OUT    LC3b_offset11;
@@ -51,6 +52,7 @@ BEGIN
 	offset11  <= decode_instr(10 downto 0);
 	trapvec8  <= decode_instr(7 downto 0);
 	bit5      <= decode_instr(5);
+	bit4      <= decode_instr(4);
 	direction <= decode_instr(4);
 	bit11     <= decode_instr(11);
 END UNTITLED;
