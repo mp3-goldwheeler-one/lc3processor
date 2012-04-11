@@ -29,6 +29,8 @@ START:
 	NOP
 	; JSR F
 	LEA R5, F
+	NOP
+	NOP
 	JSRR R5
 	; JMP R5
 	NOP

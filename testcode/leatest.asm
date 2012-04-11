@@ -7,6 +7,7 @@ START:
 	NOP
 	NOP
 	LEA R3, X
+	LDR R6, R3, 0
 	NOP
 	NOP
 	NOP
