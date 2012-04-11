@@ -152,6 +152,7 @@ PACKAGE LC3B_TYPES IS
 
 	TYPE mem_control_word IS RECORD
 		mem_read       : std_logic;
+		mem_read_byte  : std_logic;
 		mem_write_byte : std_logic;
 		mem_write_word : std_logic;
 	END RECORD;
@@ -208,6 +209,7 @@ PACKAGE LC3B_TYPES IS
 
 	CONSTANT logic_mem_control : mem_control_word := (
 		mem_read       => '0',
+		mem_read_byte  => '0',
 		mem_write_word => '0',
 		mem_write_byte => '0'
 	);
@@ -272,11 +274,8 @@ PACKAGE LC3B_TYPES IS
 			use_pc_adder   => 'X',
 			srcamux_sel    => 'X',
 			srcbbmux_sel   => 'X'
-		), mem => (
-			mem_read       => '0',
-			mem_write_byte => '0',
-			mem_write_word => '0'
-		), wb => zero_wb_control
+		), mem => logic_mem_control
+		,  wb => zero_wb_control
 		,  op    => "0000"
 		,  pc    => (others => 'X')
 		,  instr => (others => 'X')
@@ -460,6 +459,7 @@ PACKAGE LC3B_TYPES IS
 			srcbbmux_sel   => 'X'
 		), mem => (
 			mem_read       => '1',
+			mem_read_byte  => '1',
 			mem_write_byte => '0',
 			mem_write_word => '0'
 		), wb => logic_wb_control
@@ -488,6 +488,7 @@ PACKAGE LC3B_TYPES IS
 			srcbbmux_sel   => 'X'
 		), mem => (
 			mem_read       => '1',
+			mem_read_byte  => '0',
 			mem_write_byte => '0',
 			mem_write_word => '0'
 		), wb => logic_wb_control
@@ -508,6 +509,7 @@ PACKAGE LC3B_TYPES IS
 			srcbbmux_sel   => 'X'
 		), mem => (
 			mem_read       => '1',
+			mem_read_byte  => '0',
 			mem_write_byte => '0',
 			mem_write_word => '0'
 		), wb => logic_wb_control
@@ -529,6 +531,7 @@ PACKAGE LC3B_TYPES IS
 			srcbbmux_sel   => 'X'
 		), mem => (
 			mem_read       => '1',
+			mem_read_byte  => '0',
 			mem_write_byte => '0',
 			mem_write_word => '0'
 		), wb => logic_wb_control
@@ -649,6 +652,7 @@ PACKAGE LC3B_TYPES IS
 			srcbbmux_sel   => 'X'
 		), mem   => (
 			mem_read       => '0',
+			mem_read_byte  => '0',
 			mem_write_byte => '1',
 			mem_write_word => '0'
 		), wb    => zero_wb_control
@@ -677,6 +681,7 @@ PACKAGE LC3B_TYPES IS
 			srcbbmux_sel   => 'X'
 		), mem => (
 			mem_read       => '1',
+			mem_read_byte  => '0',
 			mem_write_byte => '0',
 			mem_write_word => '0'
 		), wb => logic_wb_control
@@ -697,6 +702,7 @@ PACKAGE LC3B_TYPES IS
 			srcbbmux_sel   => 'X'
 		), mem   => (
 			mem_read       => '0',
+			mem_read_byte  => '0',
 			mem_write_byte => '0',
 			mem_write_word => '1'
 		), wb    => zero_wb_control
@@ -718,6 +724,7 @@ PACKAGE LC3B_TYPES IS
 			srcbbmux_sel   => 'X'
 		), mem   => (
 			mem_read       => '0',
+			mem_read_byte  => '0',
 			mem_write_byte => '0',
 			mem_write_word => '1'
 		), wb    => zero_wb_control
