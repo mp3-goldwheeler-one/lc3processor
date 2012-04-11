@@ -2,17 +2,20 @@ ORIGIN 0
 SEGMENT CodeSegment:
 START:
 	ADD R1, R1, 2
-	ADD R2, R2, -3
+	NOP
+	NOP
+	NOP
+	LEA R2, X
+	LDR R5, R2, 0
 	NOP
 	NOP
 	NOP
 	LEA R3, X
-	LDR R6, R3, 0
-	NOP
+	ADD R6, R3, 1
 	NOP
 	NOP
 	LEA R4, X
-	ADD R5, R4, 1
+	LDR R7, R4, -1
 	NOP
 	NOP
 	BRnzp START
