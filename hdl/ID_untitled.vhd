@@ -30,7 +30,8 @@ ENTITY ID IS
       offset11     : OUT    LC3b_offset11;
       bit11        : OUT    std_logic;
       imm4         : OUT    LC3b_imm4;
-      direction    : OUT    std_logic
+      direction    : OUT    std_logic;
+      nzp          : OUT    LC3b_cc
    );
 
 -- Declarations
@@ -55,4 +56,5 @@ BEGIN
 	bit4      <= decode_instr(4);
 	direction <= decode_instr(4);
 	bit11     <= decode_instr(11);
+	nzp       <= decode_instr(11 downto 9);
 END UNTITLED;

@@ -16,24 +16,27 @@ USE ece411.LC3b_types.all;
 
 ENTITY PipeDataSplitter IS
    PORT( 
-      data_in      : IN     pipe_data;
-      pc           : OUT    lc3b_word;
-      incr_pc      : OUT    lc3b_word;
-      instr        : OUT    lc3b_word;
-      aluout       : OUT    lc3b_word;
-      mem_data_in  : OUT    lc3b_word;
-      sr1          : OUT    lc3b_reg;
-      sr2          : OUT    lc3b_reg;
-      sr1_val      : OUT    lc3b_word;
-      sr2_val      : OUT    lc3b_word;
-      dr_val       : OUT    lc3b_word;
-      dr           : OUT    lc3b_reg;
-      imm4         : OUT    LC3B_IMM4;
-      imm5         : OUT    LC3B_IMM5;
-      idx6         : OUT    LC3B_INDEX6;
-      off9         : OUT    LC3B_OFFSET9;
-      off11        : OUT    LC3B_OFFSET11;
-      load_jump_pc : OUT    std_logic
+      data_in     : IN     pipe_data;
+      pc          : OUT    lc3b_word;
+      incr_pc     : OUT    lc3b_word;
+      instr       : OUT    lc3b_word;
+      aluout      : OUT    lc3b_word;
+      mem_data_in : OUT    lc3b_word;
+      sr1         : OUT    lc3b_reg;
+      sr2         : OUT    lc3b_reg;
+      sr1_val     : OUT    lc3b_word;
+      sr2_val     : OUT    lc3b_word;
+      dr_val      : OUT    lc3b_word;
+      dr          : OUT    lc3b_reg;
+      imm4        : OUT    LC3B_IMM4;
+      imm5        : OUT    LC3B_IMM5;
+      idx6        : OUT    LC3B_INDEX6;
+      off9        : OUT    LC3B_OFFSET9;
+      off11       : OUT    LC3B_OFFSET11;
+      trapvect8   : OUT    LC3B_TRAPVECT8;
+      nzp         : OUT    LC3B_cc;
+      cc          : OUT    LC3B_cc;
+      target_pc   : OUT    LC3B_word
    );
 
 -- Declarations
@@ -59,6 +62,9 @@ BEGIN
 	idx6         <= data_in.idx6;
 	off9         <= data_in.off9;
 	off11        <= data_in.off11;
-	load_jump_pc <= data_in.load_jump_pc;
+	trapvect8    <= data_in.trapvect8;
+	nzp          <= data_in.nzp;
+  cc           <= data_in.cc;
+  target_pc    <= data_in.target_pc;
 END ARCHITECTURE untitled;
 

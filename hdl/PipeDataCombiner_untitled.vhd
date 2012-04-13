@@ -16,24 +16,27 @@ USE ece411.LC3b_types.all;
 
 ENTITY PipeDataCombiner IS
    PORT( 
-      pc           : IN     lc3b_word;
-      incr_pc      : IN     lc3b_word;
-      instr        : IN     lc3b_word;
-      aluout       : IN     lc3b_word;
-      dr           : IN     LC3b_reg;
-      dr_val       : IN     lc3b_word;
-      idx6         : IN     LC3B_INDEX6;
-      imm4         : IN     LC3b_imm4;
-      imm5         : IN     LC3b_imm5;
-      load_jump_pc : IN     STD_LOGIC;
-      mem_data_in  : IN     lc3b_word;
-      off11        : IN     LC3B_OFFSET11;
-      off9         : IN     LC3B_OFFSET9;
-      sr1          : IN     LC3b_reg;
-      sr2          : IN     LC3b_reg;
-      sr1_val      : IN     lc3b_word;
-      sr2_val      : IN     lc3b_word;
-      data_out     : OUT    pipe_data
+      pc          : IN     lc3b_word;
+      incr_pc     : IN     lc3b_word;
+      instr       : IN     lc3b_word;
+      aluout      : IN     lc3b_word;
+      dr          : IN     LC3b_reg;
+      dr_val      : IN     lc3b_word;
+      idx6        : IN     LC3B_INDEX6;
+      imm4        : IN     LC3b_imm4;
+      imm5        : IN     LC3b_imm5;
+      mem_data_in : IN     lc3b_word;
+      off11       : IN     LC3B_OFFSET11;
+      off9        : IN     LC3B_OFFSET9;
+      sr1         : IN     LC3b_reg;
+      sr2         : IN     LC3b_reg;
+      sr1_val     : IN     lc3b_word;
+      sr2_val     : IN     lc3b_word;
+      trapvect8   : IN     lc3b_trapvect8;
+      nzp         : IN     lc3b_cc;
+      cc          : IN     lc3b_cc;
+      target_pc   : IN     lc3b_word;
+      data_out    : OUT    pipe_data
    );
 
 -- Declarations
@@ -59,5 +62,8 @@ BEGIN
 	data_out.idx6         <= idx6;
 	data_out.off9         <= off9;
 	data_out.off11        <= off11;
-	data_out.load_jump_pc <= load_jump_pc;
+	data_out.trapvect8    <= trapvect8;
+	data_out.nzp          <= nzp;
+	data_out.cc           <= cc;
+	data_out.target_pc    <= target_pc;
 END ARCHITECTURE untitled;

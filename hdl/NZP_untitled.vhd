@@ -14,23 +14,21 @@ USE ieee.NUMERIC_STD.all;
 LIBRARY ece411;
 USE ece411.LC3b_types.all;
 
-ENTITY NZP IS
+ENTITY NZPReg IS
    PORT( 
       clk      : IN     std_logic;
       wb_cc    : IN     LC3b_cc;
       load_nzp : IN     std_logic;
       RESET_L  : IN     std_logic;
-      n        : OUT    std_logic;
-      p        : OUT    std_logic;
-      z        : OUT    std_logic
+      cc       : OUT    LC3b_cc
    );
 
 -- Declarations
 
-END NZP ;
+END NZPReg ;
 
 --
-ARCHITECTURE UNTITLED OF NZP IS
+ARCHITECTURE UNTITLED OF NZPReg IS
   SIGNAL PRE_NZP : LC3b_cc;
 BEGIN
 	------------------------------
@@ -45,7 +43,5 @@ BEGIN
 			END IF;
 		END IF;
 	END PROCESS VHDL_NZP;
-	N <= PRE_NZP(2) AFTER DELAY_REG;
-	Z <= PRE_NZP(1) AFTER DELAY_REG;
-	P <= PRE_NZP(0) AFTER DELAY_REG;
+	cc <= PRE_NZP AFTER DELAY_REG;
 END UNTITLED;

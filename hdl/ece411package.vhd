@@ -134,6 +134,7 @@ PACKAGE LC3B_TYPES IS
 	TYPE dec_control_word IS RECORD
 		ldi           : std_logic;
 		sti           : std_logic;
+		jsr           : std_logic;
 		use_uop2      : std_logic;
 		override_dr   : std_logic;
 		dr_override   : LC3b_reg;
@@ -144,10 +145,10 @@ PACKAGE LC3B_TYPES IS
 		alumux_sel    : lc3b_alumux_sel;
 		aluop         : lc3b_aluop;
 		shift_imm     : std_logic;
-		use_offset11  : std_logic;
-		use_pc_adder  : std_logic;
-		srcamux_sel   : std_logic;
+		srcamux_sel   : lc3b_4mux_sel;
 		srcbbmux_sel  : std_logic;
+		br            : std_logic;
+		load_pc       : std_logic;
 	END RECORD;
 
 	TYPE mem_control_word IS RECORD
@@ -155,6 +156,8 @@ PACKAGE LC3B_TYPES IS
 		mem_read_byte  : std_logic;
 		mem_write_byte : std_logic;
 		mem_write_word : std_logic;
+		wbdatamux_sel  : std_logic; -- Now == mem_read
+		trap           : std_logic;
 	END RECORD;
 
 	TYPE wb_control_word IS RECORD
@@ -179,7 +182,10 @@ PACKAGE LC3B_TYPES IS
 		idx6         : LC3B_INDEX6;
 		off9         : LC3B_OFFSET9;
 		off11        : LC3B_OFFSET11;
-		load_jump_pc : std_logic;
+		trapvect8    : LC3B_TRAPVECT8;
+		nzp          : LC3B_cc;
+		cc           : LC3B_cc;
+		target_pc    : LC3b_word;
 	END RECORD;
 
 	constant pipe_data_length : integer := 12;
@@ -201,6 +207,7 @@ PACKAGE LC3B_TYPES IS
 	CONSTANT default_dec_control : dec_control_word := (
 		ldi           => '0',
 		sti           => '0',
+		jsr           => '0',
 		use_uop2      => '0',
 		override_dr   => '0',
 		dr_override   => "XXXX",
@@ -211,7 +218,9 @@ PACKAGE LC3B_TYPES IS
 		mem_read       => '0',
 		mem_read_byte  => '0',
 		mem_write_word => '0',
-		mem_write_byte => '0'
+		mem_write_byte => '0',
+		wbdatamux_sel  => '0',
+		trap           => '0'
 	);
 
 	CONSTANT logic_wb_control : wb_control_word := (
@@ -219,10 +228,10 @@ PACKAGE LC3B_TYPES IS
 		regwrite => '1'
 	);
 
-  CONSTANT zero_wb_control : wb_control_word := (
-	  set_cc   => '0',
-	  regwrite => '0'
-  );
+	CONSTANT zero_wb_control : wb_control_word := (
+		set_cc   => '0',
+		regwrite => '0'
+	);
 
 	CONSTANT default_pipe_data : pipe_data := (
 		pc           => "XXXXXXXXXXXXXXXX",
@@ -241,7 +250,10 @@ PACKAGE LC3B_TYPES IS
 		idx6         => "XXXXXX",
 		off9         => "XXXXXXXXX",
 		off11        => "XXXXXXXXXXX",
-		load_jump_pc => '0'
+		trapvect8    => "XXXXXXXX",
+		nzp          => "XXX",
+		cc           => "XXX",
+		target_pc    => "XXXXXXXXXXXXXXXX"
 	);
 
 	CONSTANT test_pipe_data : pipe_data := (
@@ -261,7 +273,10 @@ PACKAGE LC3B_TYPES IS
 		idx6         => "XXXXXX",
 		off9         => "010101001",
 		off11        => "XXXXXXXXXXX",
-		load_jump_pc => '1'
+		trapvect8    => "XXXXXXXX",
+		nzp          => "XXX",
+		cc           => "XXX",
+		target_pc    => "XXXXXXXXXXXXXXXX"
 	);
 
 	CONSTANT default_control_word : control_word := (
@@ -270,10 +285,10 @@ PACKAGE LC3B_TYPES IS
 			alumux_sel     => "XX",
 			aluop          => "XXX",
 			shift_imm      => 'X',
-			use_offset11   => 'X',
-			use_pc_adder   => 'X',
-			srcamux_sel    => 'X',
-			srcbbmux_sel   => 'X'
+			srcamux_sel    => "XX",
+			srcbbmux_sel   => 'X',
+			br             => '0',
+			load_pc        => '0'
 		), mem => logic_mem_control
 		,  wb => zero_wb_control
 		,  op    => "0000"
@@ -284,15 +299,15 @@ PACKAGE LC3B_TYPES IS
 	-- "Opcode & Bit11 & Bit5 & Bit 4"
 	-- "0001X0X"
 	CONSTANT add_reg_instr : control_word := (
-	    dec   => default_dec_control,
+		dec   => default_dec_control,
 		exec  => (
 			alumux_sel     => alumux_sr2,
 			aluop          => ALU_ADD,
 			shift_imm      => 'X',
-			use_offset11   => 'X',
-			use_pc_adder   => 'X',
-			srcamux_sel    => '0',
-			srcbbmux_sel   => 'X'
+			srcamux_sel    => "00",
+			srcbbmux_sel   => 'X',
+			br             => '0',
+			load_pc        => '0'
 		), mem   => logic_mem_control
 		,  wb    => logic_wb_control
 		,  op    => "0001"
@@ -307,10 +322,10 @@ PACKAGE LC3B_TYPES IS
 			alumux_sel     => alumux_imm5,
 			aluop          => ALU_ADD,
 			shift_imm      => 'X',
-			use_offset11   => 'X',
-			use_pc_adder   => 'X',
-			srcamux_sel    => '0',
-			srcbbmux_sel   => 'X'
+			srcamux_sel    => "00",
+			srcbbmux_sel   => 'X',
+			br             => '0',
+			load_pc        => '0'
 		), mem   => logic_mem_control
 		,  wb    => logic_wb_control
 		,  op    => "0001"
@@ -325,10 +340,10 @@ PACKAGE LC3B_TYPES IS
 			alumux_sel     => alumux_sr2,
 			aluop          => ALU_AND,
 			shift_imm      => 'X',
-			use_offset11   => 'X',
-			use_pc_adder   => 'X',
-			srcamux_sel    => '0',
-			srcbbmux_sel   => 'X'
+			srcamux_sel    => "00",
+			srcbbmux_sel   => 'X',
+			br             => '0',
+			load_pc        => '0'
 		), mem   => logic_mem_control
 		,  wb    => logic_wb_control
 		,  op    => "0101"
@@ -338,15 +353,15 @@ PACKAGE LC3B_TYPES IS
 
 	-- "0101X1X"
 	CONSTANT and_imm_instr : control_word := (
-	    dec   => default_dec_control,
+		dec   => default_dec_control,
 		exec  => (
 			alumux_sel     => alumux_imm5,
 			aluop          => ALU_AND,
 			shift_imm      => 'X',
-			use_offset11   => 'X',
-			use_pc_adder   => 'X',
-			srcamux_sel    => '0',
-			srcbbmux_sel   => 'X'
+			srcamux_sel    => "00",
+			srcbbmux_sel   => 'X',
+			br             => '0',
+			load_pc        => '0'
 		), mem   => logic_mem_control
 		,  wb    => logic_wb_control
 		,  op    => "0101"
@@ -356,15 +371,22 @@ PACKAGE LC3B_TYPES IS
 
 	-- "0000XXX"
 	CONSTANT br_instr : control_word := (
-	    dec   => default_dec_control,
-		exec  => (
+		dec   => (
+			ldi            => '0',
+			sti            => '0',
+			jsr            => '0',
+			use_uop2       => '0',
+			override_dr    => '0',
+			dr_override    => "XXXX",
+			uop_rom_idx    => uop_rom_idx_default
+		), exec  => (
 			alumux_sel     => "XX",
 			aluop          => "XXX",
 			shift_imm      => 'X',
-			use_offset11   => '0',
-			use_pc_adder   => '1',
-			srcamux_sel    => '0',
-			srcbbmux_sel   => 'X'
+			srcamux_sel    => "00",
+			srcbbmux_sel   => 'X',
+			br             => '1',
+			load_pc        => '0'
 		), mem => logic_mem_control
 		,  wb => (
 			set_cc         => '0',
@@ -376,15 +398,15 @@ PACKAGE LC3B_TYPES IS
 
 	-- "1100XXX"
 	CONSTANT jmp_instr : control_word := (
-	    dec   => default_dec_control,
+		dec   => default_dec_control,
 		exec  => (
 			alumux_sel     => "XX",
 			aluop          => "XXX",
 			shift_imm      => 'X',
-			use_offset11   => 'X',
-			use_pc_adder   => '0',
-			srcamux_sel    => '0',
-			srcbbmux_sel   => 'X'
+			srcamux_sel    => "00",
+			srcbbmux_sel   => 'X',
+			br             => '0',
+			load_pc        => '1'
 		), mem => logic_mem_control
 		,  wb => (
 			set_cc         => '0',
@@ -399,6 +421,7 @@ PACKAGE LC3B_TYPES IS
 	    dec   => (
 			ldi            => '0',
 			sti            => '0',
+			jsr            => '1',
 			use_uop2       => '0',
 			override_dr    => '1',
 			dr_override    => "0111",
@@ -407,10 +430,10 @@ PACKAGE LC3B_TYPES IS
 			alumux_sel     => "XX",
 			aluop          => ALU_PASS,
 			shift_imm      => 'X',
-			use_offset11   => '1',
-			use_pc_adder   => '1',
-			srcamux_sel    => '1',
-			srcbbmux_sel   => 'X'
+			srcamux_sel    => "01",
+			srcbbmux_sel   => 'X',
+			br             => '0',
+			load_pc        => '0'
 		), mem => logic_mem_control
 		,  wb => (
 			set_cc         => '0',
@@ -425,6 +448,7 @@ PACKAGE LC3B_TYPES IS
 	    dec   => (
 			ldi            => '0',
 			sti            => '0',
+			jsr            => '0',
 			use_uop2       => '0',
 			override_dr    => '1',
 			dr_override    => "0111",
@@ -433,10 +457,10 @@ PACKAGE LC3B_TYPES IS
 			alumux_sel     => "XX",
 			aluop          => ALU_PASS,
 			shift_imm      => 'X',
-			use_offset11   => 'X',
-			use_pc_adder   => '0',
-			srcamux_sel    => '1',
-			srcbbmux_sel   => 'X'
+			srcamux_sel    => "01",
+			srcbbmux_sel   => 'X',
+			br             => '0',
+			load_pc        => '1'
 		), mem => logic_mem_control
 		,  wb => (
 			set_cc         => '0',
@@ -453,15 +477,17 @@ PACKAGE LC3B_TYPES IS
 			alumux_sel     => alumux_idx6,
 			aluop          => ALU_ADD,
 			shift_imm      => '0',
-			use_offset11   => 'X',
-			use_pc_adder   => 'X',
-			srcamux_sel    => '0',
-			srcbbmux_sel   => 'X'
+			srcamux_sel    => "00",
+			srcbbmux_sel   => 'X',
+			br             => '0',
+			load_pc        => '0'
 		), mem => (
 			mem_read       => '1',
 			mem_read_byte  => '1',
 			mem_write_byte => '0',
-			mem_write_word => '0'
+			mem_write_word => '0',
+			wbdatamux_sel  => '1',
+			trap           => '0'
 		), wb => logic_wb_control
 		,  op    => "0010"
 		,  pc    => (others => 'X')
@@ -473,6 +499,7 @@ PACKAGE LC3B_TYPES IS
 		dec   => (
 			ldi           => '1',
 			sti           => '0',
+			jsr           => '0',
 			use_uop2      => '1',
 			override_dr   => '1',
 			dr_override   => "1000",
@@ -482,15 +509,17 @@ PACKAGE LC3B_TYPES IS
 			alumux_sel     => alumux_idx6,
 			aluop          => ALU_ADD,
 			shift_imm      => '1',
-			use_offset11   => 'X',
-			use_pc_adder   => 'X',
-			srcamux_sel    => '0',
-			srcbbmux_sel   => 'X'
+			srcamux_sel    => "00",
+			srcbbmux_sel   => 'X',
+			br             => '0',
+			load_pc        => '0'
 		), mem => (
 			mem_read       => '1',
 			mem_read_byte  => '0',
 			mem_write_byte => '0',
-			mem_write_word => '0'
+			mem_write_word => '0',
+			wbdatamux_sel  => '1',
+			trap           => '0'
 		), wb => logic_wb_control
 		,  op    => "1010"
 		,  pc    => (others => 'X')
@@ -503,15 +532,17 @@ PACKAGE LC3B_TYPES IS
 			alumux_sel     => alumux_idx6,
 			aluop          => ALU_ADD,
 			shift_imm      => '1',
-			use_offset11   => 'X',
-			use_pc_adder   => 'X',
-			srcamux_sel    => '0',
-			srcbbmux_sel   => 'X'
+			srcamux_sel    => "00",
+			srcbbmux_sel   => 'X',
+			br             => '0',
+			load_pc        => '0'
 		), mem => (
 			mem_read       => '1',
 			mem_read_byte  => '0',
 			mem_write_byte => '0',
-			mem_write_word => '0'
+			mem_write_word => '0',
+			wbdatamux_sel  => '1',
+			trap           => '0'
 		), wb => logic_wb_control
 		,  op    => "1000"
 		,  pc    => (others => 'X')
@@ -525,15 +556,17 @@ PACKAGE LC3B_TYPES IS
 			alumux_sel     => alumux_idx6,
 			aluop          => ALU_ADD,
 			shift_imm      => '1',
-			use_offset11   => 'X',
-			use_pc_adder   => 'X',
-			srcamux_sel    => '0',
-			srcbbmux_sel   => 'X'
+			srcamux_sel    => "00",
+			srcbbmux_sel   => 'X',
+			br             => '0',
+			load_pc        => '0'
 		), mem => (
 			mem_read       => '1',
 			mem_read_byte  => '0',
 			mem_write_byte => '0',
-			mem_write_word => '0'
+			mem_write_word => '0',
+			wbdatamux_sel  => '1',
+			trap           => '0'
 		), wb => logic_wb_control
 		,  op    => "0110"
 		,  pc    => (others => 'X')
@@ -545,6 +578,7 @@ PACKAGE LC3B_TYPES IS
 	    dec   => (
 			ldi           => '0',
 			sti           => '0',
+			jsr           => '0',
 			use_uop2      => '0',
 			override_dr   => '0',
 			dr_override   => "XXXX",
@@ -553,10 +587,10 @@ PACKAGE LC3B_TYPES IS
 			alumux_sel     => alumux_srbb,
 			aluop          => ALU_ADD,
 			shift_imm      => 'X',
-			use_offset11   => 'X',
-			use_pc_adder   => 'X',
-			srcamux_sel    => '1',
-			srcbbmux_sel   => '1'
+			srcamux_sel    => "01",
+			srcbbmux_sel   => '1',
+			br             => '0',
+			load_pc        => '0'
 		), mem   => logic_mem_control
 		,  wb    => logic_wb_control
 		,  op    => "1110"
@@ -571,10 +605,10 @@ PACKAGE LC3B_TYPES IS
 			alumux_sel     => alumux_sr2,
 			aluop          => ALU_NOT,
 			shift_imm      => 'X',
-			use_offset11   => 'X',
-			use_pc_adder   => 'X',
-			srcamux_sel    => '0',
-			srcbbmux_sel   => 'X'
+			srcamux_sel    => "00",
+			srcbbmux_sel   => 'X',
+			br             => '0',
+			load_pc        => '0'
 		), mem   => logic_mem_control
 		,  wb    => logic_wb_control
 		,  op    => "1001"
@@ -592,10 +626,10 @@ PACKAGE LC3B_TYPES IS
 			alumux_sel     => alumux_srbb,
 			aluop          => ALU_SLL,
 			shift_imm      => 'X',
-			use_offset11   => 'X',
-			use_pc_adder   => 'X',
-			srcamux_sel    => '0',
-			srcbbmux_sel   => '0'
+			srcamux_sel    => "00",
+			srcbbmux_sel   => '0',
+			br             => '0',
+			load_pc        => '0'
 		), mem   => logic_mem_control
 		,  wb    => logic_wb_control
 		,  op    => "1101"
@@ -610,10 +644,10 @@ PACKAGE LC3B_TYPES IS
 			alumux_sel     => alumux_srbb,
 			aluop          => ALU_SRL,
 			shift_imm      => 'X',
-			use_offset11   => 'X',
-			use_pc_adder   => 'X',
-			srcamux_sel    => '0',
-			srcbbmux_sel   => '0'
+			srcamux_sel    => "00",
+			srcbbmux_sel   => '0',
+			br             => '0',
+			load_pc        => '0'
 		), mem   => logic_mem_control
 		,  wb    => logic_wb_control
 		,  op    => "1101"
@@ -628,10 +662,10 @@ PACKAGE LC3B_TYPES IS
 			alumux_sel     => alumux_srbb,
 			aluop          => alu_sra,
 			shift_imm      => 'X',
-			use_offset11   => 'X',
-			use_pc_adder   => 'X',
-			srcamux_sel    => '0',
-			srcbbmux_sel   => '0'
+			srcamux_sel    => "00",
+			srcbbmux_sel   => '0',
+			br             => '0',
+			load_pc        => '0'
 		), mem   => logic_mem_control
 		,  wb    => logic_wb_control
 		,  op    => "1101"
@@ -646,15 +680,17 @@ PACKAGE LC3B_TYPES IS
 			alumux_sel     => alumux_idx6,
 			aluop          => ALU_ADD,
 			shift_imm      => '0',
-			use_offset11   => 'X',
-			use_pc_adder   => 'X',
-			srcamux_sel    => '0',
-			srcbbmux_sel   => 'X'
+			srcamux_sel    => "00",
+			srcbbmux_sel   => 'X',
+			br             => '0',
+			load_pc        => '0'
 		), mem   => (
 			mem_read       => '0',
 			mem_read_byte  => '0',
 			mem_write_byte => '1',
-			mem_write_word => '0'
+			mem_write_word => '0',
+			wbdatamux_sel  => '0',
+			trap           => '0'
 		), wb    => zero_wb_control
 		,  op    => "0011"
 		,  pc    => (others => 'X')
@@ -666,6 +702,7 @@ PACKAGE LC3B_TYPES IS
 		dec   => (
 			ldi           => '0',
 			sti           => '1',
+			jsr           => '0',
 			use_uop2      => '1',
 			override_dr   => '1',
 			dr_override   => "1000",
@@ -675,15 +712,17 @@ PACKAGE LC3B_TYPES IS
 			alumux_sel    => alumux_idx6,
 			aluop         => ALU_ADD,
 			shift_imm     => '1',
-			use_offset11  => 'X',
-			use_pc_adder  => 'X',
-			srcamux_sel    => '0',
-			srcbbmux_sel   => 'X'
+			srcamux_sel   => "00",
+			srcbbmux_sel  => 'X',
+			br             => '0',
+			load_pc       => '0'
 		), mem => (
 			mem_read       => '1',
 			mem_read_byte  => '0',
 			mem_write_byte => '0',
-			mem_write_word => '0'
+			mem_write_word => '0',
+			wbdatamux_sel  => '0',
+			trap           => '0'
 		), wb => logic_wb_control
 		,  op    => "1011"
 		,  pc    => (others => 'X')
@@ -696,15 +735,17 @@ PACKAGE LC3B_TYPES IS
 			alumux_sel     => alumux_idx6,
 			aluop          => ALU_ADD,
 			shift_imm      => '1',
-			use_offset11   => 'X',
-			use_pc_adder   => 'X',
-			srcamux_sel    => '0',
-			srcbbmux_sel   => 'X'
+			srcamux_sel    => "00",
+			srcbbmux_sel   => 'X',
+			br             => '0',
+			load_pc        => '0'
 		), mem   => (
 			mem_read       => '0',
 			mem_read_byte  => '0',
 			mem_write_byte => '0',
-			mem_write_word => '1'
+			mem_write_word => '1',
+			wbdatamux_sel  => '0',
+			trap           => '0'
 		), wb    => zero_wb_control
 		,  op    => "1000"
 		,  pc    => (others => 'X')
@@ -718,15 +759,17 @@ PACKAGE LC3B_TYPES IS
 			alumux_sel     => alumux_idx6,
 			aluop          => ALU_ADD,
 			shift_imm      => '1',
-			use_offset11   => 'X',
-			use_pc_adder   => 'X',
-			srcamux_sel    => '0',
-			srcbbmux_sel   => 'X'
+			srcamux_sel    => "00",
+			srcbbmux_sel   => 'X',
+			br             => '0',
+			load_pc        => '0'
 		), mem   => (
 			mem_read       => '0',
 			mem_read_byte  => '0',
 			mem_write_byte => '0',
-			mem_write_word => '1'
+			mem_write_word => '1',
+			wbdatamux_sel  => '0',
+			trap           => '0'
 		), wb    => zero_wb_control
 		,  op    => "0111"
 		,  pc    => (others => 'X')
@@ -734,19 +777,49 @@ PACKAGE LC3B_TYPES IS
 	);
 
 	-- "1111XXX"
-	CONSTANT trap_instr : control_word := default_control_word;
+	CONSTANT trap_instr : control_word := (
+		dec   => (
+			ldi           => '0',
+			sti           => '0',
+			jsr           => '0',
+			use_uop2      => '0',
+			override_dr   => '1',
+			dr_override   => "0111",
+			uop_rom_idx   => "XXXX"
+		), exec  => (
+			alumux_sel     => "XX",
+			aluop          => ALU_PASS,
+			shift_imm      => 'X',
+			srcamux_sel    => "10",
+			srcbbmux_sel   => 'X',
+			br             => '0',
+			load_pc        => '0'
+		), mem => (
+			mem_read       => '1',
+			mem_read_byte  => '0',
+			mem_write_byte => '0',
+			mem_write_word => '0',
+			wbdatamux_sel  => '1',
+			trap           => '1'
+		),  wb => (
+			set_cc         => '0',
+			regwrite       => '1'
+		), op    => "0000"
+		,  pc    => (others => 'X')
+		,  instr => (others => 'X')
+	);
+
 END LC3B_TYPES ;
 
 PACKAGE BODY LC3B_TYPES IS
-
 	PROCEDURE MYDRAMINIT_64K (
 		VARIABLE MEM : OUT MEMORY_ARRAY_64K) IS
 		BEGIN  -- MYDRAMINIT
 
-	    -- USE THE DOIFY.SH SCRIPT TO LOAD PROGRAMS INTO MEMORY, OR 
-	    -- INSERT YOUR MEMORY VECTORS HERE.
-	    -- EXAMPLE: MEM(0) := TO_STDLOGICVECTOR(X"00");
-	    
+		-- USE THE DOIFY.SH SCRIPT TO LOAD PROGRAMS INTO MEMORY, OR
+		-- INSERT YOUR MEMORY VECTORS HERE.
+		-- EXAMPLE: MEM(0) := TO_STDLOGICVECTOR(X"00");
+
 		MEM(0) := TO_STDLOGICVECTOR(X"11");
 		MEM(1) := TO_STDLOGICVECTOR(X"62");
 		MEM(2) := TO_STDLOGICVECTOR(X"12");
@@ -793,5 +866,4 @@ PACKAGE BODY LC3B_TYPES IS
 		MEM(43) := TO_STDLOGICVECTOR(X"60");
 		--MAKE NO CHANGES AFTER THIS LINE.
 	END MYDRAMINIT_64K;
-
 END LC3B_TYPES;
