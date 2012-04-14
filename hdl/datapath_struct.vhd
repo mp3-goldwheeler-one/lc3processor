@@ -84,7 +84,7 @@ ARCHITECTURE struct OF Datapath IS
    SIGNAL exec_insert_bubble     : std_logic;
    SIGNAL exec_load_pc           : std_logic;
    SIGNAL exec_pc                : lc3b_word;
-   SIGNAL exec_target_pc         : LC3B_WORD;
+   SIGNAL exec_target_pc         : LC3b_word;
    SIGNAL fetch_data_out         : pipe_data;
    SIGNAL fetch_ready            : std_logic;
    SIGNAL load_decode_exec_pipe  : STD_LOGIC;
@@ -105,7 +105,7 @@ ARCHITECTURE struct OF Datapath IS
    SIGNAL mem_fw_addr_sel        : std_logic;
    SIGNAL mem_fw_sel             : LC3b_4mux_sel;
    SIGNAL mem_insert_bubble      : std_logic;
-   SIGNAL mem_load_pc            : std_logic;
+   SIGNAL mem_load_pc            : STD_LOGIC;
    SIGNAL mem_pc                 : lc3b_word;
    SIGNAL mem_ready              : STD_LOGIC;
    SIGNAL mem_target_pc          : lc3b_word;
@@ -216,7 +216,7 @@ ARCHITECTURE struct OF Datapath IS
       exec_data_out         : OUT    pipe_data ;
       exec_load_pc          : OUT    std_logic ;
       exec_pc               : OUT    lc3b_word ;
-      exec_target_pc        : OUT    LC3B_WORD 
+      exec_target_pc        : OUT    LC3b_word 
    );
    END COMPONENT;
    COMPONENT exec_mem_pipe
@@ -243,11 +243,11 @@ ARCHITECTURE struct OF Datapath IS
       decode_target_pc     : IN     lc3b_word ;
       exec_load_pc         : IN     std_logic ;
       exec_pc              : IN     lc3b_word ;
-      exec_target_pc       : IN     LC3B_WORD ;
+      exec_target_pc       : IN     LC3b_word ;
       instr_in             : IN     LC3B_WORD ;
       instr_resp_h         : IN     std_logic ;
       load_pc              : IN     std_logic ;
-      mem_load_pc          : IN     std_logic ;
+      mem_load_pc          : IN     STD_LOGIC ;
       mem_pc               : IN     lc3b_word ;
       mem_target_pc        : IN     lc3b_word ;
       target_pc_mux_sel    : IN     LC3B_4mux_sel ;
@@ -276,9 +276,9 @@ ARCHITECTURE struct OF Datapath IS
       decode_target_pc  : IN     lc3b_word ;
       exec_load_pc      : IN     std_logic ;
       exec_pc           : IN     lc3b_word ;
-      exec_target_pc    : IN     LC3B_WORD ;
+      exec_target_pc    : IN     LC3b_word ;
       instr_addr        : IN     LC3b_word ;
-      mem_load_pc       : IN     std_logic ;
+      mem_load_pc       : IN     STD_LOGIC ;
       mem_pc            : IN     lc3b_word ;
       mem_target_pc     : IN     lc3b_word ;
       wb_cc             : IN     LC3b_cc ;
@@ -343,7 +343,7 @@ ARCHITECTURE struct OF Datapath IS
       data_mwritel_l       : OUT    std_logic ;
       mem_cc               : OUT    lc3b_cc ;
       mem_data_out         : OUT    pipe_data ;
-      mem_load_pc          : OUT    std_logic ;
+      mem_load_pc          : OUT    STD_LOGIC ;
       mem_pc               : OUT    lc3b_word ;
       mem_ready            : OUT    STD_LOGIC ;
       mem_target_pc        : OUT    lc3b_word ;
