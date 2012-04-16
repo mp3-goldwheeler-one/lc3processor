@@ -60,78 +60,90 @@ ARCHITECTURE struct OF Datapath IS
    -- Architecture declarations
 
    -- Internal signal declarations
-   SIGNAL decode_control_out     : control_word;
-   SIGNAL decode_data_in         : pipe_data;
-   SIGNAL decode_data_out        : pipe_data;
-   SIGNAL decode_flush           : std_logic;
-   SIGNAL decode_insert_bubble   : std_logic;
-   SIGNAL decode_load_pc         : std_logic;
-   SIGNAL decode_pc              : lc3b_word;
-   SIGNAL decode_target_pc       : lc3b_word;
-   SIGNAL decode_uop_control_out : control_word;
-   SIGNAL decode_uop_data_out    : pipe_data;
-   SIGNAL exec_control           : control_word;
-   SIGNAL exec_control_in        : exec_control_word;
-   SIGNAL exec_data_in           : pipe_data;
-   SIGNAL exec_data_out          : pipe_data;
-   SIGNAL exec_flush             : std_logic;
-   SIGNAL exec_forward_cc_sel    : LC3b_4mux_sel;
-   SIGNAL exec_forward_srca_sel  : LC3b_4mux_sel;
-   SIGNAL exec_forward_srcb_sel  : LC3b_4mux_sel;
-   SIGNAL exec_fw_cc_sel         : LC3b_4mux_sel;
-   SIGNAL exec_fw_src1_sel       : LC3b_4mux_sel;
-   SIGNAL exec_fw_src2_sel       : LC3b_4mux_sel;
-   SIGNAL exec_insert_bubble     : std_logic;
-   SIGNAL exec_load_pc           : std_logic;
-   SIGNAL exec_pc                : lc3b_word;
-   SIGNAL exec_target_pc         : LC3b_word;
-   SIGNAL fetch_data_out         : pipe_data;
-   SIGNAL fetch_ready            : std_logic;
-   SIGNAL load_decode_exec_pipe  : STD_LOGIC;
-   SIGNAL load_exec_mem_pipe     : STD_LOGIC;
-   SIGNAL load_fetch_decode_pipe : STD_LOGIC;
-   SIGNAL load_fwd_pipe          : std_logic;
-   SIGNAL load_mem_wb_pipe       : std_logic;
-   SIGNAL load_pc                : std_logic;
-   SIGNAL load_uarch_pipe        : std_logic;
-   SIGNAL mem_cc                 : lc3b_cc;
-   SIGNAL mem_control            : control_word;
-   SIGNAL mem_control_in         : mem_control_word;
-   SIGNAL mem_data_in            : pipe_data;
-   SIGNAL mem_data_out           : pipe_data;
-   SIGNAL mem_flush              : std_logic;
-   SIGNAL mem_forward_addr_sel   : STD_LOGIC;
-   SIGNAL mem_foward_sel         : LC3B_4MUX_SEL;
-   SIGNAL mem_fw_addr_sel        : std_logic;
-   SIGNAL mem_fw_sel             : LC3b_4mux_sel;
-   SIGNAL mem_insert_bubble      : std_logic;
-   SIGNAL mem_load_pc            : STD_LOGIC;
-   SIGNAL mem_pc                 : lc3b_word;
-   SIGNAL mem_ready              : STD_LOGIC;
-   SIGNAL mem_target_pc          : lc3b_word;
-   SIGNAL stall_load_use         : std_logic;
-   SIGNAL stall_load_use_buffer  : std_logic;
-   SIGNAL target_pc_mux_sel      : LC3B_4mux_sel;
-   SIGNAL uarch_control_in       : control_word;
-   SIGNAL uarch_control_out      : control_word;
-   SIGNAL uarch_data_in          : pipe_data;
-   SIGNAL uarch_data_out         : pipe_data;
-   SIGNAL uarch_flush            : std_logic;
-   SIGNAL uarch_insert_bubble    : std_logic;
-   SIGNAL uarch_sel_in           : STD_LOGIC;
-   SIGNAL uarch_sel_out          : STD_LOGIC;
-   SIGNAL uarch_stall_in         : std_logic;
-   SIGNAL uarch_stall_in_buffer  : std_logic;
-   SIGNAL uop_instr_dr           : LC3b_reg;
-   SIGNAL uop_sr2                : LC3b_reg;
-   SIGNAL uop_sr2_val            : lc3b_word;
-   SIGNAL wb_cc                  : LC3b_cc;
-   SIGNAL wb_control_in          : wb_control_word;
-   SIGNAL wb_data_in             : pipe_data;
-   SIGNAL wb_dest                : LC3B_REG;
-   SIGNAL wb_din                 : LC3B_WORD;
-   SIGNAL wb_load_cc             : std_logic;
-   SIGNAL wb_rw                  : STD_LOGIC;
+   SIGNAL decode_btb_state          : btb_line;
+   SIGNAL decode_conditional        : std_logic;
+   SIGNAL decode_control_out        : control_word;
+   SIGNAL decode_data_in            : pipe_data;
+   SIGNAL decode_data_out           : pipe_data;
+   SIGNAL decode_flush              : std_logic;
+   SIGNAL decode_insert_bubble      : std_logic;
+   SIGNAL decode_load_pc            : std_logic;
+   SIGNAL decode_pc                 : lc3b_word;
+   SIGNAL decode_prediction_correct : STD_LOGIC;
+   SIGNAL decode_taken              : std_logic;
+   SIGNAL decode_target_pc          : lc3b_word;
+   SIGNAL decode_uop_control_out    : control_word;
+   SIGNAL decode_uop_data_out       : pipe_data;
+   SIGNAL exec_btb_state            : btb_line;
+   SIGNAL exec_conditional          : control_word;
+   SIGNAL exec_control              : control_word;
+   SIGNAL exec_control_in           : exec_control_word;
+   SIGNAL exec_data_in              : pipe_data;
+   SIGNAL exec_data_out             : pipe_data;
+   SIGNAL exec_flush                : std_logic;
+   SIGNAL exec_forward_cc_sel       : LC3b_4mux_sel;
+   SIGNAL exec_forward_srca_sel     : LC3b_4mux_sel;
+   SIGNAL exec_forward_srcb_sel     : LC3b_4mux_sel;
+   SIGNAL exec_fw_cc_sel            : LC3b_4mux_sel;
+   SIGNAL exec_fw_src1_sel          : LC3b_4mux_sel;
+   SIGNAL exec_fw_src2_sel          : LC3b_4mux_sel;
+   SIGNAL exec_insert_bubble        : std_logic;
+   SIGNAL exec_load_pc              : std_logic;
+   SIGNAL exec_pc                   : lc3b_word;
+   SIGNAL exec_prediction_correct   : std_logic;
+   SIGNAL exec_taken                : std_logic;
+   SIGNAL exec_target_pc            : LC3b_word;
+   SIGNAL fetch_data_out            : pipe_data;
+   SIGNAL fetch_ready               : std_logic;
+   SIGNAL load_decode_exec_pipe     : STD_LOGIC;
+   SIGNAL load_exec_mem_pipe        : STD_LOGIC;
+   SIGNAL load_fetch_decode_pipe    : STD_LOGIC;
+   SIGNAL load_fwd_pipe             : std_logic;
+   SIGNAL load_mem_wb_pipe          : std_logic;
+   SIGNAL load_pc                   : std_logic;
+   SIGNAL load_uarch_pipe           : std_logic;
+   SIGNAL mem_btb_state             : btb_line;
+   SIGNAL mem_cc                    : lc3b_cc;
+   SIGNAL mem_conditional           : std_logic;
+   SIGNAL mem_control               : control_word;
+   SIGNAL mem_control_in            : mem_control_word;
+   SIGNAL mem_data_in               : pipe_data;
+   SIGNAL mem_data_out              : pipe_data;
+   SIGNAL mem_flush                 : std_logic;
+   SIGNAL mem_forward_addr_sel      : STD_LOGIC;
+   SIGNAL mem_foward_sel            : LC3B_4MUX_SEL;
+   SIGNAL mem_fw_addr_sel           : std_logic;
+   SIGNAL mem_fw_sel                : LC3b_4mux_sel;
+   SIGNAL mem_insert_bubble         : std_logic;
+   SIGNAL mem_load_pc               : STD_LOGIC;
+   SIGNAL mem_pc                    : lc3b_word;
+   SIGNAL mem_prediction_correct    : std_logic;
+   SIGNAL mem_ready                 : STD_LOGIC;
+   SIGNAL mem_taken                 : std_logic;
+   SIGNAL mem_target_pc             : lc3b_word;
+   SIGNAL stall_load_use            : std_logic;
+   SIGNAL stall_load_use_buffer     : std_logic;
+   SIGNAL target_pc_mux_sel         : LC3B_4mux_sel;
+   SIGNAL uarch_control_in          : control_word;
+   SIGNAL uarch_control_out         : control_word;
+   SIGNAL uarch_data_in             : pipe_data;
+   SIGNAL uarch_data_out            : pipe_data;
+   SIGNAL uarch_flush               : std_logic;
+   SIGNAL uarch_insert_bubble       : std_logic;
+   SIGNAL uarch_sel_in              : STD_LOGIC;
+   SIGNAL uarch_sel_out             : STD_LOGIC;
+   SIGNAL uarch_stall_in            : std_logic;
+   SIGNAL uarch_stall_in_buffer     : std_logic;
+   SIGNAL uop_instr_dr              : LC3b_reg;
+   SIGNAL uop_sr2                   : LC3b_reg;
+   SIGNAL uop_sr2_val               : lc3b_word;
+   SIGNAL wb_cc                     : LC3b_cc;
+   SIGNAL wb_control_in             : wb_control_word;
+   SIGNAL wb_data_in                : pipe_data;
+   SIGNAL wb_dest                   : LC3B_REG;
+   SIGNAL wb_din                    : LC3B_WORD;
+   SIGNAL wb_load_cc                : std_logic;
+   SIGNAL wb_rw                     : STD_LOGIC;
 
    -- Implicit buffer signal declarations
    SIGNAL data_addr_internal  : LC3b_word;
@@ -179,10 +191,13 @@ ARCHITECTURE struct OF Datapath IS
       wb_din             : IN     LC3B_WORD ;
       wb_load_cc         : IN     std_logic ;
       wb_rw              : IN     STD_LOGIC ;
+      decode_btb_state   : OUT    btb_line ;
+      decode_conditional : OUT    std_logic ;
       decode_control_out : OUT    control_word ;
       decode_data_out    : OUT    pipe_data ;
       decode_load_pc     : OUT    std_logic ;
       decode_pc          : OUT    lc3b_word ;
+      decode_taken       : OUT    std_logic ;
       decode_target_pc   : OUT    lc3b_word ;
       uop_instr_dr       : OUT    LC3b_reg ;
       uop_sr2            : OUT    LC3b_reg ;
@@ -213,9 +228,12 @@ ARCHITECTURE struct OF Datapath IS
       mem_cc                : IN     lc3b_cc ;
       mem_data_in           : IN     pipe_data ;
       wb_data_in            : IN     pipe_data ;
+      exec_btb_state        : OUT    btb_line ;
+      exec_conditional      : OUT    control_word ;
       exec_data_out         : OUT    pipe_data ;
       exec_load_pc          : OUT    std_logic ;
       exec_pc               : OUT    lc3b_word ;
+      exec_taken            : OUT    std_logic ;
       exec_target_pc        : OUT    LC3b_word 
    );
    END COMPONENT;
@@ -235,27 +253,39 @@ ARCHITECTURE struct OF Datapath IS
    END COMPONENT;
    COMPONENT fetchStage
    PORT (
-      CLK                  : IN     std_logic ;
-      RESET_L              : IN     STD_LOGIC ;
-      decode_insert_bubble : IN     std_logic ;
-      decode_load_pc       : IN     std_logic ;
-      decode_pc            : IN     lc3b_word ;
-      decode_target_pc     : IN     lc3b_word ;
-      exec_load_pc         : IN     std_logic ;
-      exec_pc              : IN     lc3b_word ;
-      exec_target_pc       : IN     LC3b_word ;
-      instr_in             : IN     LC3B_WORD ;
-      instr_resp_h         : IN     std_logic ;
-      load_pc              : IN     std_logic ;
-      mem_load_pc          : IN     STD_LOGIC ;
-      mem_pc               : IN     lc3b_word ;
-      mem_target_pc        : IN     lc3b_word ;
-      target_pc_mux_sel    : IN     LC3B_4mux_sel ;
-      wb_cc                : IN     LC3b_cc ;
-      fetch_data_out       : OUT    pipe_data ;
-      fetch_ready          : OUT    std_logic ;
-      instr_addr           : OUT    LC3b_word ;
-      instr_mread_l        : OUT    std_logic 
+      CLK                       : IN     std_logic ;
+      RESET_L                   : IN     STD_LOGIC ;
+      decode_btb_state          : IN     btb_line ;
+      decode_conditional        : IN     std_logic ;
+      decode_insert_bubble      : IN     std_logic ;
+      decode_load_pc            : IN     std_logic ;
+      decode_pc                 : IN     lc3b_word ;
+      decode_prediction_correct : IN     STD_LOGIC ;
+      decode_taken              : IN     std_logic ;
+      decode_target_pc          : IN     lc3b_word ;
+      exec_btb_state            : IN     btb_line ;
+      exec_conditional          : IN     control_word ;
+      exec_load_pc              : IN     std_logic ;
+      exec_pc                   : IN     lc3b_word ;
+      exec_prediction_correct   : IN     std_logic ;
+      exec_taken                : IN     std_logic ;
+      exec_target_pc            : IN     LC3b_word ;
+      instr_in                  : IN     LC3B_WORD ;
+      instr_resp_h              : IN     std_logic ;
+      load_pc                   : IN     std_logic ;
+      mem_btb_state             : IN     btb_line ;
+      mem_conditional           : IN     std_logic ;
+      mem_load_pc               : IN     STD_LOGIC ;
+      mem_pc                    : IN     lc3b_word ;
+      mem_prediction_correct    : IN     std_logic ;
+      mem_taken                 : IN     std_logic ;
+      mem_target_pc             : IN     lc3b_word ;
+      target_pc_mux_sel         : IN     LC3B_4mux_sel ;
+      wb_cc                     : IN     LC3b_cc ;
+      fetch_data_out            : OUT    pipe_data ;
+      fetch_ready               : OUT    std_logic ;
+      instr_addr                : OUT    LC3b_word ;
+      instr_mread_l             : OUT    std_logic 
    );
    END COMPONENT;
    COMPONENT fetch_decode_pipe
@@ -270,23 +300,35 @@ ARCHITECTURE struct OF Datapath IS
    END COMPONENT;
    COMPONENT flushUnit
    PORT (
-      CLK               : IN     std_logic ;
-      decode_load_pc    : IN     std_logic ;
-      decode_pc         : IN     lc3b_word ;
-      decode_target_pc  : IN     lc3b_word ;
-      exec_load_pc      : IN     std_logic ;
-      exec_pc           : IN     lc3b_word ;
-      exec_target_pc    : IN     LC3b_word ;
-      instr_addr        : IN     LC3b_word ;
-      mem_load_pc       : IN     STD_LOGIC ;
-      mem_pc            : IN     lc3b_word ;
-      mem_target_pc     : IN     lc3b_word ;
-      wb_cc             : IN     LC3b_cc ;
-      decode_flush      : OUT    std_logic ;
-      exec_flush        : OUT    std_logic ;
-      mem_flush         : OUT    std_logic ;
-      target_pc_mux_sel : OUT    LC3B_4mux_sel ;
-      uarch_flush       : OUT    std_logic 
+      CLK                       : IN     std_logic ;
+      decode_btb_state          : IN     btb_line ;
+      decode_conditional        : IN     std_logic ;
+      decode_load_pc            : IN     std_logic ;
+      decode_pc                 : IN     lc3b_word ;
+      decode_taken              : IN     std_logic ;
+      decode_target_pc          : IN     lc3b_word ;
+      exec_btb_state            : IN     btb_line ;
+      exec_conditional          : IN     control_word ;
+      exec_load_pc              : IN     std_logic ;
+      exec_pc                   : IN     lc3b_word ;
+      exec_taken                : IN     std_logic ;
+      exec_target_pc            : IN     LC3b_word ;
+      instr_addr                : IN     LC3b_word ;
+      mem_btb_state             : IN     btb_line ;
+      mem_conditional           : IN     std_logic ;
+      mem_load_pc               : IN     STD_LOGIC ;
+      mem_pc                    : IN     lc3b_word ;
+      mem_taken                 : IN     std_logic ;
+      mem_target_pc             : IN     lc3b_word ;
+      wb_cc                     : IN     LC3b_cc ;
+      decode_flush              : OUT    std_logic ;
+      decode_prediction_correct : OUT    STD_LOGIC ;
+      exec_flush                : OUT    std_logic ;
+      exec_prediction_correct   : OUT    std_logic ;
+      mem_flush                 : OUT    std_logic ;
+      mem_prediction_correct    : OUT    std_logic ;
+      target_pc_mux_sel         : OUT    LC3B_4mux_sel ;
+      uarch_flush               : OUT    std_logic 
    );
    END COMPONENT;
    COMPONENT forward_pipe
@@ -341,11 +383,14 @@ ARCHITECTURE struct OF Datapath IS
       data_mread_l         : OUT    std_logic ;
       data_mwriteh_l       : OUT    std_logic ;
       data_mwritel_l       : OUT    std_logic ;
+      mem_btb_state        : OUT    btb_line ;
       mem_cc               : OUT    lc3b_cc ;
+      mem_conditional      : OUT    std_logic ;
       mem_data_out         : OUT    pipe_data ;
       mem_load_pc          : OUT    STD_LOGIC ;
       mem_pc               : OUT    lc3b_word ;
       mem_ready            : OUT    STD_LOGIC ;
+      mem_taken            : OUT    std_logic ;
       mem_target_pc        : OUT    lc3b_word ;
       wb_cc                : OUT    LC3b_cc ;
       wb_dest              : OUT    LC3B_REG ;
@@ -479,10 +524,13 @@ BEGIN
          wb_din             => wb_din,
          wb_load_cc         => wb_load_cc,
          wb_rw              => wb_rw,
+         decode_btb_state   => decode_btb_state,
+         decode_conditional => decode_conditional,
          decode_control_out => decode_control_out,
          decode_data_out    => decode_data_out,
          decode_load_pc     => decode_load_pc,
          decode_pc          => decode_pc,
+         decode_taken       => decode_taken,
          decode_target_pc   => decode_target_pc,
          uop_instr_dr       => uop_instr_dr,
          uop_sr2            => uop_sr2,
@@ -511,9 +559,12 @@ BEGIN
          mem_cc                => mem_cc,
          mem_data_in           => mem_data_in,
          wb_data_in            => wb_data_in,
+         exec_btb_state        => exec_btb_state,
+         exec_conditional      => exec_conditional,
          exec_data_out         => exec_data_out,
          exec_load_pc          => exec_load_pc,
          exec_pc               => exec_pc,
+         exec_taken            => exec_taken,
          exec_target_pc        => exec_target_pc
       );
    pipe3_em : exec_mem_pipe
@@ -531,27 +582,39 @@ BEGIN
       );
    fetch : fetchStage
       PORT MAP (
-         CLK                  => CLK,
-         RESET_L              => RESET_L,
-         decode_insert_bubble => decode_insert_bubble,
-         decode_load_pc       => decode_load_pc,
-         decode_pc            => decode_pc,
-         decode_target_pc     => decode_target_pc,
-         exec_load_pc         => exec_load_pc,
-         exec_pc              => exec_pc,
-         exec_target_pc       => exec_target_pc,
-         instr_in             => instr_in,
-         instr_resp_h         => instr_resp_h,
-         load_pc              => load_pc,
-         mem_load_pc          => mem_load_pc,
-         mem_pc               => mem_pc,
-         mem_target_pc        => mem_target_pc,
-         target_pc_mux_sel    => target_pc_mux_sel,
-         wb_cc                => wb_cc,
-         fetch_data_out       => fetch_data_out,
-         fetch_ready          => fetch_ready,
-         instr_addr           => instr_addr_internal,
-         instr_mread_l        => instr_mread_l
+         CLK                       => CLK,
+         RESET_L                   => RESET_L,
+         decode_btb_state          => decode_btb_state,
+         decode_conditional        => decode_conditional,
+         decode_insert_bubble      => decode_insert_bubble,
+         decode_load_pc            => decode_load_pc,
+         decode_pc                 => decode_pc,
+         decode_prediction_correct => decode_prediction_correct,
+         decode_taken              => decode_taken,
+         decode_target_pc          => decode_target_pc,
+         exec_btb_state            => exec_btb_state,
+         exec_conditional          => exec_conditional,
+         exec_load_pc              => exec_load_pc,
+         exec_pc                   => exec_pc,
+         exec_prediction_correct   => exec_prediction_correct,
+         exec_taken                => exec_taken,
+         exec_target_pc            => exec_target_pc,
+         instr_in                  => instr_in,
+         instr_resp_h              => instr_resp_h,
+         load_pc                   => load_pc,
+         mem_btb_state             => mem_btb_state,
+         mem_conditional           => mem_conditional,
+         mem_load_pc               => mem_load_pc,
+         mem_pc                    => mem_pc,
+         mem_prediction_correct    => mem_prediction_correct,
+         mem_taken                 => mem_taken,
+         mem_target_pc             => mem_target_pc,
+         target_pc_mux_sel         => target_pc_mux_sel,
+         wb_cc                     => wb_cc,
+         fetch_data_out            => fetch_data_out,
+         fetch_ready               => fetch_ready,
+         instr_addr                => instr_addr_internal,
+         instr_mread_l             => instr_mread_l
       );
    pipe1_fd : fetch_decode_pipe
       PORT MAP (
@@ -564,23 +627,35 @@ BEGIN
       );
    toilet : flushUnit
       PORT MAP (
-         CLK               => CLK,
-         decode_load_pc    => decode_load_pc,
-         decode_pc         => decode_pc,
-         decode_target_pc  => decode_target_pc,
-         exec_load_pc      => exec_load_pc,
-         exec_pc           => exec_pc,
-         exec_target_pc    => exec_target_pc,
-         instr_addr        => instr_addr_internal,
-         mem_load_pc       => mem_load_pc,
-         mem_pc            => mem_pc,
-         mem_target_pc     => mem_target_pc,
-         wb_cc             => wb_cc,
-         decode_flush      => decode_flush,
-         exec_flush        => exec_flush,
-         mem_flush         => mem_flush,
-         target_pc_mux_sel => target_pc_mux_sel,
-         uarch_flush       => uarch_flush
+         CLK                       => CLK,
+         decode_btb_state          => decode_btb_state,
+         decode_conditional        => decode_conditional,
+         decode_load_pc            => decode_load_pc,
+         decode_pc                 => decode_pc,
+         decode_taken              => decode_taken,
+         decode_target_pc          => decode_target_pc,
+         exec_btb_state            => exec_btb_state,
+         exec_conditional          => exec_conditional,
+         exec_load_pc              => exec_load_pc,
+         exec_pc                   => exec_pc,
+         exec_taken                => exec_taken,
+         exec_target_pc            => exec_target_pc,
+         instr_addr                => instr_addr_internal,
+         mem_btb_state             => mem_btb_state,
+         mem_conditional           => mem_conditional,
+         mem_load_pc               => mem_load_pc,
+         mem_pc                    => mem_pc,
+         mem_taken                 => mem_taken,
+         mem_target_pc             => mem_target_pc,
+         wb_cc                     => wb_cc,
+         decode_flush              => decode_flush,
+         decode_prediction_correct => decode_prediction_correct,
+         exec_flush                => exec_flush,
+         exec_prediction_correct   => exec_prediction_correct,
+         mem_flush                 => mem_flush,
+         mem_prediction_correct    => mem_prediction_correct,
+         target_pc_mux_sel         => target_pc_mux_sel,
+         uarch_flush               => uarch_flush
       );
    aForwardPipe : forward_pipe
       PORT MAP (
@@ -632,11 +707,14 @@ BEGIN
          data_mread_l         => data_mread_l,
          data_mwriteh_l       => data_mwriteh_l,
          data_mwritel_l       => data_mwritel_l,
+         mem_btb_state        => mem_btb_state,
          mem_cc               => mem_cc,
+         mem_conditional      => mem_conditional,
          mem_data_out         => mem_data_out,
          mem_load_pc          => mem_load_pc,
          mem_pc               => mem_pc,
          mem_ready            => mem_ready,
+         mem_taken            => mem_taken,
          mem_target_pc        => mem_target_pc,
          wb_cc                => wb_cc,
          wb_dest              => wb_dest,
