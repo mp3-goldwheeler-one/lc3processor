@@ -204,6 +204,16 @@ PACKAGE LC3B_TYPES IS
 		instr : LC3b_word;
 	END RECORD;
 
+	TYPE btb_line IS RECORD
+		target : LC3b_word;
+		state  : std_logic;
+	END RECORD;
+
+	CONSTANT default_btb_line : btb_line := (
+		target => "XXXXXXXXXXXXXXXX",
+		state  => '0'
+	);
+
 	CONSTANT default_dec_control : dec_control_word := (
 		ldi           => '0',
 		sti           => '0',
