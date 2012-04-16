@@ -22,10 +22,10 @@ force /dataout.state  0 @135
 force /mwrite_l 0 @140, 1 @185
 
 force /address x"5674" @215
-force /dataout.target x"89AB" @215
-force /dataout.state  0 @215
+force /dataout.target x"4567" @215
+force /dataout.state  1 @215
 
 force /mread_l 0 @240, 1 @285
-force /mwrite_l 0 @290
+force /mwrite_l 0 @290, 1 @335
 
 run 500

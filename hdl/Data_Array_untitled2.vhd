@@ -14,23 +14,26 @@ USE ieee.NUMERIC_STD.all;
 LIBRARY ece411;
 USE ece411.LC3b_types.all;
 
-ENTITY BTB_Line_Array IS
+ENTITY Data_Array_RW IS
+   GENERIC( 
+      N : Integer
+   );
    PORT( 
       RESET_L    : IN     std_logic;
       DataWrite  : IN     std_logic;
       ReadIndex  : IN     LC3b_c_index;
       WriteIndex : IN     LC3b_c_index;
-      DataIn     : IN     btb_line;
-      DataOut    : OUT    btb_line
+      DataIn     : IN     std_logic_vector (N-1 DOWNTO 0);
+      DataOut    : OUT    std_logic_vector (N-1 DOWNTO 0)
    );
 
 -- Declarations
 
-END BTB_Line_Array ;
+END Data_Array_RW ;
 
 --
-ARCHITECTURE untitled OF BTB_Line_Array IS
-  Type DataArray IS array (7 downto 0) of btb_line;
+ARCHITECTURE untitled OF Data_Array_RW IS
+  Type DataArray IS array (7 downto 0) of std_logic_vector(N-1 downto 0);
   signal Data : DataArray;
 BEGIN
   --------------------------------------------------------------
@@ -49,14 +52,14 @@ BEGIN
   begin
     DataIndex := to_integer(unsigned(WriteIndex));
     if (reset_l = '0') then
-      Data(0) <= default_btb_line;
-      Data(1) <= default_btb_line;
-      Data(2) <= default_btb_line;
-      Data(3) <= default_btb_line;
-      Data(4) <= default_btb_line;
-      Data(5) <= default_btb_line;
-      Data(6) <= default_btb_line;
-      Data(7) <= default_btb_line;
+      Data(0) <= (Others => 'X');
+      Data(1) <= (Others => 'X');
+      Data(2) <= (Others => 'X');
+      Data(3) <= (Others => 'X');
+      Data(4) <= (Others => 'X');
+      Data(5) <= (Others => 'X');
+      Data(6) <= (Others => 'X');
+      Data(7) <= (Others => 'X');
     end if;
     if (dataWrite = '1') then
       Data(DataIndex) <= DataIn;

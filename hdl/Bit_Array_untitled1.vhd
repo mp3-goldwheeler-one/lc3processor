@@ -1,9 +1,9 @@
 --
--- VHDL Architecture ece411.Data_Array.untitled
+-- VHDL Architecture ece411.Bit_Array.untitled
 --
 -- Created:
 --          by - goldste6.UNKNOWN (linux1.ews.illinois.edu)
---          at - 15:53:49 02/07/12
+--          at - 16:23:01 02/07/12
 --
 -- using Mentor Graphics HDL Designer(TM) 2005.3 (Build 75)
 --
@@ -14,23 +14,23 @@ USE ieee.NUMERIC_STD.all;
 LIBRARY ece411;
 USE ece411.LC3b_types.all;
 
-ENTITY BTB_Line_Array IS
+ENTITY Bit_Array_RW IS
    PORT( 
       RESET_L    : IN     std_logic;
       DataWrite  : IN     std_logic;
       ReadIndex  : IN     LC3b_c_index;
       WriteIndex : IN     LC3b_c_index;
-      DataIn     : IN     btb_line;
-      DataOut    : OUT    btb_line
+      DataIn     : IN     std_logic;
+      DataOut    : OUT    std_logic
    );
 
 -- Declarations
 
-END BTB_Line_Array ;
+END Bit_Array_RW ;
 
 --
-ARCHITECTURE untitled OF BTB_Line_Array IS
-  Type DataArray IS array (7 downto 0) of btb_line;
+ARCHITECTURE untitled OF Bit_Array_RW IS
+  Type DataArray IS array (7 downto 0) of std_logic;
   signal Data : DataArray;
 BEGIN
   --------------------------------------------------------------
@@ -49,14 +49,14 @@ BEGIN
   begin
     DataIndex := to_integer(unsigned(WriteIndex));
     if (reset_l = '0') then
-      Data(0) <= default_btb_line;
-      Data(1) <= default_btb_line;
-      Data(2) <= default_btb_line;
-      Data(3) <= default_btb_line;
-      Data(4) <= default_btb_line;
-      Data(5) <= default_btb_line;
-      Data(6) <= default_btb_line;
-      Data(7) <= default_btb_line;
+      Data(0) <= '0';
+      Data(1) <= '0';
+      Data(2) <= '0';
+      Data(3) <= '0';
+      Data(4) <= '0';
+      Data(5) <= '0';
+      Data(6) <= '0';
+      Data(7) <= '0';
     end if;
     if (dataWrite = '1') then
       Data(DataIndex) <= DataIn;

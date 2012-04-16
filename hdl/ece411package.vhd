@@ -131,6 +131,16 @@ PACKAGE LC3B_TYPES IS
 	SUBTYPE uop_rom_sel IS std_logic_vector(3 downto 0);
 	CONSTANT uop_rom_idx_default : uop_rom_sel := "0000";
 
+	TYPE btb_line IS RECORD
+		target : LC3b_word;
+		state  : std_logic;
+	END RECORD;
+
+	CONSTANT default_btb_line : btb_line := (
+		target => "XXXXXXXXXXXXXXXX",
+		state  => '0'
+	);
+
 	TYPE dec_control_word IS RECORD
 		ldi           : std_logic;
 		sti           : std_logic;
@@ -185,7 +195,8 @@ PACKAGE LC3B_TYPES IS
 		trapvect8    : LC3B_TRAPVECT8;
 		nzp          : LC3B_cc;
 		cc           : LC3B_cc;
-		target_pc    : LC3b_word;
+		target_pc    : LC3B_word;
+		btb_data     : btb_line;
 	END RECORD;
 
 	constant pipe_data_length : integer := 12;
@@ -203,16 +214,6 @@ PACKAGE LC3B_TYPES IS
 		pc    : LC3b_word;
 		instr : LC3b_word;
 	END RECORD;
-
-	TYPE btb_line IS RECORD
-		target : LC3b_word;
-		state  : std_logic;
-	END RECORD;
-
-	CONSTANT default_btb_line : btb_line := (
-		target => "XXXXXXXXXXXXXXXX",
-		state  => '0'
-	);
 
 	CONSTANT default_dec_control : dec_control_word := (
 		ldi           => '0',
@@ -263,7 +264,8 @@ PACKAGE LC3B_TYPES IS
 		trapvect8    => "XXXXXXXX",
 		nzp          => "XXX",
 		cc           => "XXX",
-		target_pc    => "XXXXXXXXXXXXXXXX"
+		target_pc    => "XXXXXXXXXXXXXXXX",
+		btb_data     => default_btb_line
 	);
 
 	CONSTANT test_pipe_data : pipe_data := (
@@ -286,7 +288,8 @@ PACKAGE LC3B_TYPES IS
 		trapvect8    => "XXXXXXXX",
 		nzp          => "XXX",
 		cc           => "XXX",
-		target_pc    => "XXXXXXXXXXXXXXXX"
+		target_pc    => "XXXXXXXXXXXXXXXX",
+		btb_data     => default_btb_line
 	);
 
 	CONSTANT default_control_word : control_word := (

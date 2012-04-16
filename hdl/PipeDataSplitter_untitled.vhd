@@ -36,7 +36,8 @@ ENTITY PipeDataSplitter IS
       trapvect8   : OUT    LC3B_TRAPVECT8;
       nzp         : OUT    LC3B_cc;
       cc          : OUT    LC3B_cc;
-      target_pc   : OUT    LC3B_word
+      target_pc   : OUT    LC3B_word;
+      btb_data    : OUT    btb_line
    );
 
 -- Declarations
@@ -66,5 +67,6 @@ BEGIN
 	nzp          <= data_in.nzp;
   cc           <= data_in.cc;
   target_pc    <= data_in.target_pc;
+  btb_data     <= data_in.btb_data;
 END ARCHITECTURE untitled;
 
