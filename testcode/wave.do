@@ -3,20 +3,23 @@ quietly WaveActivateNextPane {} 0
 add wave -noupdate -format Logic /cpu/reset_l
 add wave -noupdate -format Logic -height 15 -radix hexadecimal /cpu/clk
 add wave -noupdate -divider Prediction
-add wave -noupdate -format Logic /cpu/pipelineddatapath/fetch/predictunit/btb/mwrite_l
-add wave -noupdate -format Literal /cpu/pipelineddatapath/fetch/predictunit/btb/readaddress
-add wave -noupdate -format Literal /cpu/pipelineddatapath/fetch/predictunit/btb/writeaddress
+add wave -noupdate -color Pink -format Logic -itemcolor Pink /cpu/pipelineddatapath/fetch/predictunit/btb/mwrite_h
+add wave -noupdate -color Pink -format Literal -itemcolor Pink /cpu/pipelineddatapath/fetch/predictunit/btb/readaddress
+add wave -noupdate -color Pink -format Literal -itemcolor Pink /cpu/pipelineddatapath/fetch/predictunit/btb/writeaddress
 add wave -noupdate -color Pink -format Logic -itemcolor Pink /cpu/pipelineddatapath/fetch/predictunit/miss
 add wave -noupdate -color Pink -format Literal -itemcolor Pink /cpu/pipelineddatapath/fetch/predictunit/next_pc
-add wave -noupdate -format Logic /cpu/pipelineddatapath/fetch/predictunit/btb/writegate
-add wave -noupdate -format Logic /cpu/pipelineddatapath/fetch/predictunit/btb/write0
-add wave -noupdate -format Logic /cpu/pipelineddatapath/fetch/predictunit/btb/write0pg
-add wave -noupdate -format Logic /cpu/pipelineddatapath/fetch/predictunit/btb/write1
-add wave -noupdate -format Logic /cpu/pipelineddatapath/fetch/predictunit/btb/write1pg
+add wave -noupdate -color Pink -format Logic -itemcolor Pink /cpu/pipelineddatapath/fetch/predictunit/btb/writegate
+add wave -noupdate -color Pink -format Logic -itemcolor Pink /cpu/pipelineddatapath/fetch/predictunit/btb/write0
+add wave -noupdate -color Pink -format Logic -itemcolor Pink /cpu/pipelineddatapath/fetch/predictunit/btb/write0pg
+add wave -noupdate -color Pink -format Logic -itemcolor Pink /cpu/pipelineddatapath/fetch/predictunit/btb/write1
+add wave -noupdate -color Pink -format Logic -itemcolor Pink /cpu/pipelineddatapath/fetch/predictunit/btb/write1pg
 add wave -noupdate -color Pink -format Event -itemcolor Pink -expand /cpu/pipelineddatapath/fetch/predictunit/btb/way0/tagarray/data
 add wave -noupdate -color Pink -format Event -itemcolor Pink -expand /cpu/pipelineddatapath/fetch/predictunit/btb/way0/btbarray/data
 add wave -noupdate -color Pink -format Event -itemcolor Pink -expand /cpu/pipelineddatapath/fetch/predictunit/btb/way1/tagarray/data
 add wave -noupdate -color Pink -format Event -itemcolor Pink -expand /cpu/pipelineddatapath/fetch/predictunit/btb/way1/btbarray/data
+add wave -noupdate -format Literal /cpu/pipelineddatapath/fetch/predictunit/writeaddress_pc
+add wave -noupdate -format Literal /cpu/pipelineddatapath/fetch/predictunit/btb_target_store
+add wave -noupdate -format Logic /cpu/pipelineddatapath/fetch/predictunit/br
 add wave -noupdate -color Pink -format Logic -itemcolor Pink /cpu/pipelineddatapath/fetch/predictunit/decode_load_pc
 add wave -noupdate -color Pink -format Literal -itemcolor Pink /cpu/pipelineddatapath/fetch/predictunit/decode_pc
 add wave -noupdate -color Pink -format Literal -itemcolor Pink /cpu/pipelineddatapath/fetch/predictunit/decode_target_pc
@@ -86,7 +89,6 @@ add wave -noupdate -color {Green Yellow} -format Logic -height 15 -itemcolor {Gr
 add wave -noupdate -divider Regfile
 add wave -noupdate -color {Sky Blue} -format Event -height 15 -itemcolor {Sky Blue} -radix hexadecimal /cpu/pipelineddatapath/decode/arf/ram
 add wave -noupdate -divider Caches
-add wave -noupdate -format Literal -height 15 /cpu/dram/arbiter/acontroller/current_state
 add wave -noupdate -format Literal -height 15 -radix hexadecimal /cpu/datain
 add wave -noupdate -format Literal -height 15 -radix hexadecimal /cpu/dataout
 add wave -noupdate -format Literal -height 15 -radix hexadecimal /cpu/data_addr
@@ -118,7 +120,7 @@ add wave -noupdate -color Gold -format Literal -itemcolor Gold /cpu/pipelineddat
 add wave -noupdate -color {Green Yellow} -format Literal -itemcolor {Green Yellow} /cpu/pipelineddatapath/wb_data_in.instr
 add wave -noupdate -color {Sky Blue} -format Event -height 15 -itemcolor {Sky Blue} -expand /cpu/pipelineddatapath/decode/arf/ram
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {1722 ns} 0}
+WaveRestoreCursors {{Cursor 1} {4179 ns} 0}
 configure wave -namecolwidth 461
 configure wave -valuecolwidth 171
 configure wave -justifyvalue left
@@ -132,4 +134,4 @@ configure wave -gridperiod 1
 configure wave -griddelta 40
 configure wave -timeline 0
 update
-WaveRestoreZoom {1606 ns} {1918 ns}
+WaveRestoreZoom {3874 ns} {5070 ns}

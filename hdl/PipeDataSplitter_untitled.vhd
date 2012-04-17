@@ -37,6 +37,7 @@ ENTITY PipeDataSplitter IS
       nzp         : OUT    LC3B_cc;
       cc          : OUT    LC3B_cc;
       target_pc   : OUT    LC3B_word;
+      taken       : OUT    std_logic;
       btb_data    : OUT    btb_line
    );
 
@@ -67,6 +68,7 @@ BEGIN
 	nzp          <= data_in.nzp;
   cc           <= data_in.cc;
   target_pc    <= data_in.target_pc;
+  taken        <= data_in.taken;
   btb_data     <= data_in.btb_data;
 END ARCHITECTURE untitled;
 

@@ -36,6 +36,7 @@ ENTITY PipeDataCombiner IS
       nzp         : IN     lc3b_cc;
       cc          : IN     lc3b_cc;
       target_pc   : IN     lc3b_word;
+      taken       : IN     std_logic;
       btb_data    : IN     btb_line;
       data_out    : OUT    pipe_data
    );
@@ -67,5 +68,6 @@ BEGIN
 	data_out.nzp          <= nzp;
 	data_out.cc           <= cc;
 	data_out.target_pc    <= target_pc;
+  data_out.taken        <= taken;
 	data_out.btb_data     <= btb_data;
 END ARCHITECTURE untitled;

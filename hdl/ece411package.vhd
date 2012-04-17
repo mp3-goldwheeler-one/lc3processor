@@ -158,6 +158,7 @@ PACKAGE LC3B_TYPES IS
 		srcamux_sel   : lc3b_4mux_sel;
 		srcbbmux_sel  : std_logic;
 		br            : std_logic;
+		jsrr_or_jmp   : std_logic;
 		load_pc       : std_logic;
 	END RECORD;
 
@@ -168,6 +169,8 @@ PACKAGE LC3B_TYPES IS
 		mem_write_word : std_logic;
 		wbdatamux_sel  : std_logic; -- Now == mem_read
 		trap           : std_logic;
+		write_btb      : std_logic;
+		unconditional  : std_logic;
 	END RECORD;
 
 	TYPE wb_control_word IS RECORD
@@ -196,6 +199,7 @@ PACKAGE LC3B_TYPES IS
 		nzp          : LC3B_cc;
 		cc           : LC3B_cc;
 		target_pc    : LC3B_word;
+		taken        : std_logic;
 		btb_data     : btb_line;
 	END RECORD;
 
@@ -231,7 +235,31 @@ PACKAGE LC3B_TYPES IS
 		mem_write_word => '0',
 		mem_write_byte => '0',
 		wbdatamux_sel  => '0',
-		trap           => '0'
+		trap           => '0',
+		write_btb      => '0',
+		unconditional  => '0'
+	);
+
+	CONSTANT control_conditional_mem_control : mem_control_word := (
+		mem_read       => '0',
+		mem_read_byte  => '0',
+		mem_write_word => '0',
+		mem_write_byte => '0',
+		wbdatamux_sel  => '0',
+		trap           => '0',
+		write_btb      => '1',
+		unconditional  => '0'
+	);
+
+	CONSTANT control_unconditional_mem_control : mem_control_word := (
+		mem_read       => '0',
+		mem_read_byte  => '0',
+		mem_write_word => '0',
+		mem_write_byte => '0',
+		wbdatamux_sel  => '0',
+		trap           => '0',
+		write_btb      => '1',
+		unconditional  => '1'
 	);
 
 	CONSTANT logic_wb_control : wb_control_word := (
@@ -265,6 +293,7 @@ PACKAGE LC3B_TYPES IS
 		nzp          => "XXX",
 		cc           => "XXX",
 		target_pc    => "XXXXXXXXXXXXXXXX",
+		taken        => 'X',
 		btb_data     => default_btb_line
 	);
 
@@ -289,6 +318,7 @@ PACKAGE LC3B_TYPES IS
 		nzp          => "XXX",
 		cc           => "XXX",
 		target_pc    => "XXXXXXXXXXXXXXXX",
+		taken        => 'X',
 		btb_data     => default_btb_line
 	);
 
@@ -301,6 +331,7 @@ PACKAGE LC3B_TYPES IS
 			srcamux_sel    => "XX",
 			srcbbmux_sel   => 'X',
 			br             => '0',
+			jsrr_or_jmp    => '0',
 			load_pc        => '0'
 		), mem => logic_mem_control
 		,  wb => zero_wb_control
@@ -320,6 +351,7 @@ PACKAGE LC3B_TYPES IS
 			srcamux_sel    => "00",
 			srcbbmux_sel   => 'X',
 			br             => '0',
+			jsrr_or_jmp    => '0',
 			load_pc        => '0'
 		), mem   => logic_mem_control
 		,  wb    => logic_wb_control
@@ -338,6 +370,7 @@ PACKAGE LC3B_TYPES IS
 			srcamux_sel    => "00",
 			srcbbmux_sel   => 'X',
 			br             => '0',
+			jsrr_or_jmp    => '0',
 			load_pc        => '0'
 		), mem   => logic_mem_control
 		,  wb    => logic_wb_control
@@ -356,6 +389,7 @@ PACKAGE LC3B_TYPES IS
 			srcamux_sel    => "00",
 			srcbbmux_sel   => 'X',
 			br             => '0',
+			jsrr_or_jmp    => '0',
 			load_pc        => '0'
 		), mem   => logic_mem_control
 		,  wb    => logic_wb_control
@@ -374,6 +408,7 @@ PACKAGE LC3B_TYPES IS
 			srcamux_sel    => "00",
 			srcbbmux_sel   => 'X',
 			br             => '0',
+			jsrr_or_jmp    => '0',
 			load_pc        => '0'
 		), mem   => logic_mem_control
 		,  wb    => logic_wb_control
@@ -399,8 +434,9 @@ PACKAGE LC3B_TYPES IS
 			srcamux_sel    => "00",
 			srcbbmux_sel   => 'X',
 			br             => '1',
+			jsrr_or_jmp    => '0',
 			load_pc        => '0'
-		), mem => logic_mem_control
+		), mem => control_conditional_mem_control
 		,  wb => (
 			set_cc         => '0',
 			regwrite       => '0'
@@ -419,8 +455,9 @@ PACKAGE LC3B_TYPES IS
 			srcamux_sel    => "00",
 			srcbbmux_sel   => 'X',
 			br             => '0',
+			jsrr_or_jmp    => '1',
 			load_pc        => '1'
-		), mem => logic_mem_control
+		), mem => control_unconditional_mem_control
 		,  wb => (
 			set_cc         => '0',
 			regwrite       => '0'
@@ -446,8 +483,9 @@ PACKAGE LC3B_TYPES IS
 			srcamux_sel    => "01",
 			srcbbmux_sel   => 'X',
 			br             => '0',
+			jsrr_or_jmp    => '0',
 			load_pc        => '0'
-		), mem => logic_mem_control
+		), mem => control_unconditional_mem_control
 		,  wb => (
 			set_cc         => '0',
 			regwrite       => '1'
@@ -473,8 +511,9 @@ PACKAGE LC3B_TYPES IS
 			srcamux_sel    => "01",
 			srcbbmux_sel   => 'X',
 			br             => '0',
+			jsrr_or_jmp    => '1',
 			load_pc        => '1'
-		), mem => logic_mem_control
+		), mem => control_unconditional_mem_control
 		,  wb => (
 			set_cc         => '0',
 			regwrite       => '1'
@@ -493,6 +532,7 @@ PACKAGE LC3B_TYPES IS
 			srcamux_sel    => "00",
 			srcbbmux_sel   => 'X',
 			br             => '0',
+			jsrr_or_jmp    => '0',
 			load_pc        => '0'
 		), mem => (
 			mem_read       => '1',
@@ -500,7 +540,9 @@ PACKAGE LC3B_TYPES IS
 			mem_write_byte => '0',
 			mem_write_word => '0',
 			wbdatamux_sel  => '1',
-			trap           => '0'
+			trap           => '0',
+			write_btb      => '0',
+			unconditional  => '0'
 		), wb => logic_wb_control
 		,  op    => "0010"
 		,  pc    => (others => 'X')
@@ -525,6 +567,7 @@ PACKAGE LC3B_TYPES IS
 			srcamux_sel    => "00",
 			srcbbmux_sel   => 'X',
 			br             => '0',
+			jsrr_or_jmp    => '0',
 			load_pc        => '0'
 		), mem => (
 			mem_read       => '1',
@@ -532,7 +575,9 @@ PACKAGE LC3B_TYPES IS
 			mem_write_byte => '0',
 			mem_write_word => '0',
 			wbdatamux_sel  => '1',
-			trap           => '0'
+			trap           => '0',
+			write_btb      => '0',
+			unconditional  => '0'
 		), wb => logic_wb_control
 		,  op    => "1010"
 		,  pc    => (others => 'X')
@@ -548,6 +593,7 @@ PACKAGE LC3B_TYPES IS
 			srcamux_sel    => "00",
 			srcbbmux_sel   => 'X',
 			br             => '0',
+			jsrr_or_jmp    => '0',
 			load_pc        => '0'
 		), mem => (
 			mem_read       => '1',
@@ -555,7 +601,9 @@ PACKAGE LC3B_TYPES IS
 			mem_write_byte => '0',
 			mem_write_word => '0',
 			wbdatamux_sel  => '1',
-			trap           => '0'
+			trap           => '0',
+			write_btb      => '0',
+			unconditional  => '0'
 		), wb => logic_wb_control
 		,  op    => "1000"
 		,  pc    => (others => 'X')
@@ -572,6 +620,7 @@ PACKAGE LC3B_TYPES IS
 			srcamux_sel    => "00",
 			srcbbmux_sel   => 'X',
 			br             => '0',
+			jsrr_or_jmp    => '0',
 			load_pc        => '0'
 		), mem => (
 			mem_read       => '1',
@@ -579,7 +628,9 @@ PACKAGE LC3B_TYPES IS
 			mem_write_byte => '0',
 			mem_write_word => '0',
 			wbdatamux_sel  => '1',
-			trap           => '0'
+			trap           => '0',
+			write_btb      => '0',
+			unconditional  => '0'
 		), wb => logic_wb_control
 		,  op    => "0110"
 		,  pc    => (others => 'X')
@@ -603,6 +654,7 @@ PACKAGE LC3B_TYPES IS
 			srcamux_sel    => "01",
 			srcbbmux_sel   => '1',
 			br             => '0',
+			jsrr_or_jmp    => '0',
 			load_pc        => '0'
 		), mem   => logic_mem_control
 		,  wb    => logic_wb_control
@@ -621,6 +673,7 @@ PACKAGE LC3B_TYPES IS
 			srcamux_sel    => "00",
 			srcbbmux_sel   => 'X',
 			br             => '0',
+			jsrr_or_jmp    => '0',
 			load_pc        => '0'
 		), mem   => logic_mem_control
 		,  wb    => logic_wb_control
@@ -642,6 +695,7 @@ PACKAGE LC3B_TYPES IS
 			srcamux_sel    => "00",
 			srcbbmux_sel   => '0',
 			br             => '0',
+			jsrr_or_jmp    => '0',
 			load_pc        => '0'
 		), mem   => logic_mem_control
 		,  wb    => logic_wb_control
@@ -660,6 +714,7 @@ PACKAGE LC3B_TYPES IS
 			srcamux_sel    => "00",
 			srcbbmux_sel   => '0',
 			br             => '0',
+			jsrr_or_jmp    => '0',
 			load_pc        => '0'
 		), mem   => logic_mem_control
 		,  wb    => logic_wb_control
@@ -678,6 +733,7 @@ PACKAGE LC3B_TYPES IS
 			srcamux_sel    => "00",
 			srcbbmux_sel   => '0',
 			br             => '0',
+			jsrr_or_jmp    => '0',
 			load_pc        => '0'
 		), mem   => logic_mem_control
 		,  wb    => logic_wb_control
@@ -696,6 +752,7 @@ PACKAGE LC3B_TYPES IS
 			srcamux_sel    => "00",
 			srcbbmux_sel   => 'X',
 			br             => '0',
+			jsrr_or_jmp    => '0',
 			load_pc        => '0'
 		), mem   => (
 			mem_read       => '0',
@@ -703,7 +760,9 @@ PACKAGE LC3B_TYPES IS
 			mem_write_byte => '1',
 			mem_write_word => '0',
 			wbdatamux_sel  => '0',
-			trap           => '0'
+			trap           => '0',
+			write_btb      => '0',
+			unconditional  => '0'
 		), wb    => zero_wb_control
 		,  op    => "0011"
 		,  pc    => (others => 'X')
@@ -728,6 +787,7 @@ PACKAGE LC3B_TYPES IS
 			srcamux_sel   => "00",
 			srcbbmux_sel  => 'X',
 			br             => '0',
+			jsrr_or_jmp    => '0',
 			load_pc       => '0'
 		), mem => (
 			mem_read       => '1',
@@ -735,7 +795,9 @@ PACKAGE LC3B_TYPES IS
 			mem_write_byte => '0',
 			mem_write_word => '0',
 			wbdatamux_sel  => '0',
-			trap           => '0'
+			trap           => '0',
+			write_btb      => '0',
+			unconditional  => '0'
 		), wb => logic_wb_control
 		,  op    => "1011"
 		,  pc    => (others => 'X')
@@ -751,6 +813,7 @@ PACKAGE LC3B_TYPES IS
 			srcamux_sel    => "00",
 			srcbbmux_sel   => 'X',
 			br             => '0',
+			jsrr_or_jmp    => '0',
 			load_pc        => '0'
 		), mem   => (
 			mem_read       => '0',
@@ -758,7 +821,9 @@ PACKAGE LC3B_TYPES IS
 			mem_write_byte => '0',
 			mem_write_word => '1',
 			wbdatamux_sel  => '0',
-			trap           => '0'
+			trap           => '0',
+			write_btb      => '0',
+			unconditional  => '0'
 		), wb    => zero_wb_control
 		,  op    => "1000"
 		,  pc    => (others => 'X')
@@ -775,6 +840,7 @@ PACKAGE LC3B_TYPES IS
 			srcamux_sel    => "00",
 			srcbbmux_sel   => 'X',
 			br             => '0',
+			jsrr_or_jmp    => '0',
 			load_pc        => '0'
 		), mem   => (
 			mem_read       => '0',
@@ -782,7 +848,9 @@ PACKAGE LC3B_TYPES IS
 			mem_write_byte => '0',
 			mem_write_word => '1',
 			wbdatamux_sel  => '0',
-			trap           => '0'
+			trap           => '0',
+			write_btb      => '0',
+			unconditional  => '0'
 		), wb    => zero_wb_control
 		,  op    => "0111"
 		,  pc    => (others => 'X')
@@ -806,6 +874,7 @@ PACKAGE LC3B_TYPES IS
 			srcamux_sel    => "10",
 			srcbbmux_sel   => 'X',
 			br             => '0',
+			jsrr_or_jmp    => '0',
 			load_pc        => '0'
 		), mem => (
 			mem_read       => '1',
@@ -813,7 +882,9 @@ PACKAGE LC3B_TYPES IS
 			mem_write_byte => '0',
 			mem_write_word => '0',
 			wbdatamux_sel  => '1',
-			trap           => '1'
+			trap           => '1',
+			write_btb      => '1',
+			unconditional  => '1'
 		),  wb => (
 			set_cc         => '0',
 			regwrite       => '1'
