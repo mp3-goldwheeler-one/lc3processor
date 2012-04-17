@@ -21,8 +21,8 @@ ENTITY Data_Array_RW IS
    PORT( 
       RESET_L    : IN     std_logic;
       DataWrite  : IN     std_logic;
-      ReadIndex  : IN     LC3b_c_index;
-      WriteIndex : IN     LC3b_c_index;
+      ReadIndex  : IN     LC3B_C_INDEX;
+      WriteIndex : IN     LC3B_C_INDEX;
       DataIn     : IN     std_logic_vector (N-1 DOWNTO 0);
       DataOut    : OUT    std_logic_vector (N-1 DOWNTO 0)
    );
