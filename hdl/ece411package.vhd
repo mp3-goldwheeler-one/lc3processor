@@ -204,6 +204,32 @@ PACKAGE LC3B_TYPES IS
 		btb_data     : btb_line;
 	END RECORD;
 
+  TYPE LC3b_cache_interstage_data IS RECORD
+    Index        : lc3b_c_index;
+    Offset       : lc3b_c_offset;
+    Tag          : lc3b_c_tag;
+    tag0         : lc3b_c_tag;
+    dirty0       : std_logic;
+    valid0       : std_logic;
+    Way0Dataout  : LC3b_OWORD;
+    tag1         : lc3b_c_tag;
+    dirty1       : std_logic;
+    valid1       : std_logic;
+    Way1Dataout  : LC3b_OWORD;
+    evicted      : std_logic;
+  END RECORD;
+  
+  TYPE LC3b_cache_feedback_data IS RECORD
+    WriteTag     : lc3b_c_tag;
+    WriteIndex   : lc3b_c_index;
+    Set_Dirty    : std_logic;
+    WayDataIn    : LC3b_OWORD;
+    write0       : std_logic;
+    write1       : std_logic;
+    LRU_data_in  : std_logic;
+    LRU_write    : std_logic;
+  END RECORD;
+
 	constant pipe_data_length : integer := 12;
 	type pipe_data_sizes_array is array (0 to pipe_data_length - 1) of integer;
 	constant pipe_data_sizes : pipe_data_sizes_array := (
