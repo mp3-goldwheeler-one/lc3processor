@@ -17,7 +17,7 @@ USE ece411.LC3b_types.all;
 ENTITY BTBLineSplitter IS
    PORT( 
       btb_data_in : IN     btb_line;
-      state       : OUT    std_logic;
+      state       : OUT    btb_state_counter;
       target      : OUT    LC3B_WORD
    );
 

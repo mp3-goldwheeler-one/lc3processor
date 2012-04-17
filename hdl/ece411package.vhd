@@ -37,6 +37,7 @@ PACKAGE LC3B_TYPES IS
   SUBTYPE LC3B_C_INDEX   IS STD_LOGIC_VECTOR(2 DOWNTO 0);
   SUBTYPE LC3B_C_TAG     IS STD_LOGIC_VECTOR(8 DOWNTO 0);
   subtype lc3b_alumux_sel  is std_logic_vector(1 downto 0);
+  subtype btb_state_counter is std_logic_vector(1 downto 0);
 
 	TYPE MEMORY_ARRAY_64K IS ARRAY (0 TO 65535) OF LC3B_BYTE;
 	
@@ -133,12 +134,12 @@ PACKAGE LC3B_TYPES IS
 
 	TYPE btb_line IS RECORD
 		target : LC3b_word;
-		state  : std_logic;
+		state  : btb_state_counter;
 	END RECORD;
 
 	CONSTANT default_btb_line : btb_line := (
 		target => "XXXXXXXXXXXXXXXX",
-		state  => '0'
+		state  => "01"
 	);
 
 	TYPE dec_control_word IS RECORD

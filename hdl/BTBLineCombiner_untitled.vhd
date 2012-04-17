@@ -16,7 +16,7 @@ USE ece411.LC3b_types.all;
 
 ENTITY BTBLineCombiner IS
    PORT( 
-      state        : IN     std_logic;
+      state        : IN     btb_state_counter;
       target       : IN     LC3B_WORD;
       btb_data_out : OUT    btb_line
    );
