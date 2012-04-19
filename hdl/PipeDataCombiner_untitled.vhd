@@ -38,6 +38,7 @@ ENTITY PipeDataCombiner IS
       target_pc   : IN     lc3b_word;
       taken       : IN     std_logic;
       btb_data    : IN     btb_line;
+      wb_data     : IN     lc3b_word;
       data_out    : OUT    pipe_data
    );
 
@@ -70,4 +71,5 @@ BEGIN
 	data_out.target_pc    <= target_pc;
   data_out.taken        <= taken;
 	data_out.btb_data     <= btb_data;
+	data_out.wb_data      <= wb_data;
 END ARCHITECTURE untitled;

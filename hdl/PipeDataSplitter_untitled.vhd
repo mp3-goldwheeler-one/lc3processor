@@ -38,6 +38,7 @@ ENTITY PipeDataSplitter IS
       cc          : OUT    LC3B_cc;
       target_pc   : OUT    LC3B_word;
       taken       : OUT    std_logic;
+      wb_data     : OUT    LC3B_word;
       btb_data    : OUT    btb_line
    );
 
@@ -70,5 +71,6 @@ BEGIN
   target_pc    <= data_in.target_pc;
   taken        <= data_in.taken;
   btb_data     <= data_in.btb_data;
+  wb_data      <= data_in.wb_data;
 END ARCHITECTURE untitled;
 

@@ -185,6 +185,7 @@ PACKAGE LC3B_TYPES IS
 		instr        : lc3b_word;
 		aluout       : lc3b_word;
 		mem_data_in  : lc3b_word;
+		wb_data      : lc3b_word;
 		sr1_val      : lc3b_word;
 		sr2_val      : lc3b_word;
 		dr_val       : lc3b_word;
@@ -244,12 +245,6 @@ PACKAGE LC3B_TYPES IS
     LRU_data_in  : std_logic;
     LRU_write    : std_logic;
   END RECORD;
-
-	constant pipe_data_length : integer := 12;
-	type pipe_data_sizes_array is array (0 to pipe_data_length - 1) of integer;
-	constant pipe_data_sizes : pipe_data_sizes_array := (
-		16, 16, 16, 16, 16, 3, 4, 5, 6, 9, 11, 1
-	);
 
 	TYPE control_word IS RECORD
 		dec   : dec_control_word;
@@ -320,6 +315,7 @@ PACKAGE LC3B_TYPES IS
 		instr        => "0000000000000000",
 		aluout       => "XXXXXXXXXXXXXXXX",
 		mem_data_in  => "XXXXXXXXXXXXXXXX",
+		wb_data      => (others => 'X'),
 		sr1          => "XXXX",
 		sr2          => "XXXX",
 		sr1_val      => "XXXXXXXXXXXXXXXX",
@@ -345,6 +341,7 @@ PACKAGE LC3B_TYPES IS
 		instr        => "XXXXXXXXXXXXXXXX",
 		aluout       => "1010101000101011",
 		mem_data_in  => "XXXXXXXXXXXXXXXX",
+		wb_data      => (others => 'X'),
 		sr1          => "XXXX",
 		sr2          => "XXXX",
 		sr1_val      => "1000111010111001",
