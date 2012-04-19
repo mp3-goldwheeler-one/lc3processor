@@ -14,5 +14,7 @@ ln -s ../testcode/mp3-cp1.do
 ln -s ../testcode/mp3-cp2.do
 ln -s ../testcode/mp3-cp3.do
 ln -s ../testcode/semiasynch_ff.do
+ln -s ../testcode/lditest.do
+ln -s ../testcode/stitest.do
 cd ..
 

@@ -3,42 +3,57 @@ quietly WaveActivateNextPane {} 0
 add wave -noupdate -format Logic /cpu/reset_l
 add wave -noupdate -format Logic -height 15 -radix hexadecimal /cpu/clk
 add wave -noupdate -divider Prediction
-add wave -noupdate -color Pink -format Logic -itemcolor Pink /cpu/pipelineddatapath/fetch/predictunit/btb/mwrite_h
-add wave -noupdate -color Pink -format Literal -itemcolor Pink /cpu/pipelineddatapath/fetch/predictunit/btb/readaddress
-add wave -noupdate -color Pink -format Literal -itemcolor Pink /cpu/pipelineddatapath/fetch/predictunit/btb/writeaddress
-add wave -noupdate -color Pink -format Logic -itemcolor Pink /cpu/pipelineddatapath/fetch/predictunit/miss
-add wave -noupdate -color Pink -format Literal -itemcolor Pink /cpu/pipelineddatapath/fetch/predictunit/next_pc
-add wave -noupdate -color Pink -format Logic -itemcolor Pink /cpu/pipelineddatapath/fetch/predictunit/btb/writegate
-add wave -noupdate -color Pink -format Logic -itemcolor Pink /cpu/pipelineddatapath/fetch/predictunit/btb/write0
-add wave -noupdate -color Pink -format Logic -itemcolor Pink /cpu/pipelineddatapath/fetch/predictunit/btb/write0pg
-add wave -noupdate -color Pink -format Logic -itemcolor Pink /cpu/pipelineddatapath/fetch/predictunit/btb/write1
-add wave -noupdate -color Pink -format Logic -itemcolor Pink /cpu/pipelineddatapath/fetch/predictunit/btb/write1pg
-add wave -noupdate -color Pink -format Event -itemcolor Pink -expand /cpu/pipelineddatapath/fetch/predictunit/btb/way0/tagarray/data
-add wave -noupdate -color Pink -format Event -itemcolor Pink -expand /cpu/pipelineddatapath/fetch/predictunit/btb/way0/btbarray/data
-add wave -noupdate -color Pink -format Event -itemcolor Pink -expand /cpu/pipelineddatapath/fetch/predictunit/btb/way1/tagarray/data
-add wave -noupdate -color Pink -format Event -itemcolor Pink -expand /cpu/pipelineddatapath/fetch/predictunit/btb/way1/btbarray/data
-add wave -noupdate -format Literal /cpu/pipelineddatapath/fetch/predictunit/writeaddress_pc
-add wave -noupdate -format Literal /cpu/pipelineddatapath/fetch/predictunit/btb_target_store
-add wave -noupdate -format Logic /cpu/pipelineddatapath/fetch/predictunit/br
-add wave -noupdate -color Pink -format Logic -itemcolor Pink /cpu/pipelineddatapath/fetch/predictunit/decode_load_pc
-add wave -noupdate -color Pink -format Literal -itemcolor Pink /cpu/pipelineddatapath/fetch/predictunit/decode_pc
-add wave -noupdate -color Pink -format Literal -itemcolor Pink /cpu/pipelineddatapath/fetch/predictunit/decode_target_pc
-add wave -noupdate -color Pink -format Logic -itemcolor Pink /cpu/pipelineddatapath/fetch/predictunit/decode_taken
-add wave -noupdate -color Pink -format Logic -itemcolor Pink /cpu/pipelineddatapath/fetch/predictunit/decode_prediction_correct
-add wave -noupdate -color Pink -format Logic -itemcolor Pink /cpu/pipelineddatapath/fetch/predictunit/exec_load_pc
-add wave -noupdate -color Pink -format Literal -itemcolor Pink /cpu/pipelineddatapath/fetch/predictunit/exec_pc
-add wave -noupdate -color Pink -format Literal -itemcolor Pink /cpu/pipelineddatapath/fetch/predictunit/exec_target_pc
-add wave -noupdate -color Pink -format Logic -itemcolor Pink /cpu/pipelineddatapath/fetch/predictunit/exec_taken
-add wave -noupdate -color Pink -format Logic -itemcolor Pink /cpu/pipelineddatapath/fetch/predictunit/exec_prediction_correct
-add wave -noupdate -color Pink -format Logic -itemcolor Pink /cpu/pipelineddatapath/fetch/predictunit/mem_load_pc
-add wave -noupdate -color Pink -format Literal -itemcolor Pink /cpu/pipelineddatapath/fetch/predictunit/mem_pc
-add wave -noupdate -color Pink -format Literal -itemcolor Pink /cpu/pipelineddatapath/fetch/predictunit/mem_target_pc
-add wave -noupdate -color Pink -format Logic -itemcolor Pink /cpu/pipelineddatapath/fetch/predictunit/mem_taken
-add wave -noupdate -color Pink -format Logic -itemcolor Pink /cpu/pipelineddatapath/fetch/predictunit/mem_prediction_correct
-add wave -noupdate -format Literal /cpu/pipelineddatapath/fetch/predictunit/target_pc_mux_sel
-add wave -noupdate -divider Fetch
-add wave -noupdate -color Salmon -format Event -height 15 -itemcolor Salmon /cpu/pipelineddatapath/fetch/fetch_data_out
-add wave -noupdate -color Salmon -format Literal -height 15 -itemcolor Salmon /cpu/pipelineddatapath/fetch/instr_addr
+add wave -noupdate -divider Fetch1
+add wave -noupdate -format Logic /cpu/pipelineddatapath/fetch1/load_pc
+add wave -noupdate -format Literal /cpu/pipelineddatapath/fetch1/next_pc
+add wave -noupdate -format Literal /cpu/pipelineddatapath/fetch1/instr_addr
+add wave -noupdate -format Literal /cpu/pipelineddatapath/fetch1/icache_feedback
+add wave -noupdate -format Literal /cpu/pipelineddatapath/fetch1/target_pc_mux_sel
+add wave -noupdate -format Literal -expand /cpu/pipelineddatapath/fetch1/u_3/way0/waydata/data
+add wave -noupdate -format Literal -expand /cpu/pipelineddatapath/fetch1/u_3/way0/tagbits/data
+add wave -noupdate -format Literal /cpu/pipelineddatapath/fetch1/u_3/way0/validbits/data
+add wave -noupdate -format Literal /cpu/pipelineddatapath/fetch1/u_3/way0/dirtybits/data
+add wave -noupdate -format Literal /cpu/pipelineddatapath/fetch1/u_3/lru/data
+add wave -noupdate -format Literal -expand /cpu/pipelineddatapath/fetch1/u_3/way1/waydata/data
+add wave -noupdate -format Literal -expand /cpu/pipelineddatapath/fetch1/u_3/way1/tagbits/data
+add wave -noupdate -format Literal /cpu/pipelineddatapath/fetch1/u_3/way1/validbits/data
+add wave -noupdate -format Literal /cpu/pipelineddatapath/fetch1/u_3/way1/dirtybits/data
+add wave -noupdate -divider Fetch2
+add wave -noupdate -format Logic /cpu/pipelineddatapath/fetch2/fetch_ready
+add wave -noupdate -format Literal /cpu/pipelineddatapath/fetch2/fetch_instr
+add wave -noupdate -format Literal /cpu/pipelineddatapath/fetch2/instr
+add wave -noupdate -format Logic /cpu/pipelineddatapath/fetch2/f
+add wave -noupdate -format Literal /cpu/pipelineddatapath/fetch2/fetch2_data_in
+add wave -noupdate -format Logic /cpu/pipelineddatapath/fetch2/instr_resp_h
+add wave -noupdate -format Logic /cpu/pipelineddatapath/fetch2/mresp_h
+add wave -noupdate -format Logic /cpu/pipelineddatapath/fetch2/icache_stage2/miss
+add wave -noupdate -format Logic /cpu/pipelineddatapath/fetch2/read_instr_l
+add wave -noupdate -format Logic /cpu/pipelineddatapath/fetch2/icache_stage2/in_load
+add wave -noupdate -format Logic /cpu/pipelineddatapath/fetch2/icache_stage2/pmresp_h
+add wave -noupdate -format Logic /cpu/pipelineddatapath/fetch2/icache_stage2/acachelogic/hit
+add wave -noupdate -format Literal /cpu/pipelineddatapath/fetch2/icache_stage2/l1cachecontroller/current_state
+add wave -noupdate -format Logic /cpu/pipelineddatapath/fetch2/icache_stage2/evict_buffer_valid
+add wave -noupdate -format Logic /cpu/pipelineddatapath/fetch2/icache_stage2/acachelogic/evict_buffer_valid_internal
+add wave -noupdate -format Logic /cpu/pipelineddatapath/fetch2/icache_stage2/acachelogic/u_27/evict_buffer_valid
+add wave -noupdate -format Logic /cpu/pipelineddatapath/fetch2/icache_stage2/acachelogic/u_27/set_evict_buffer_valid
+add wave -noupdate -format Logic /cpu/pipelineddatapath/fetch2/icache_stage2/acachelogic/u_27/reset_l
+add wave -noupdate -format Logic /cpu/pipelineddatapath/fetch2/icache_stage2/acachelogic/present0
+add wave -noupdate -format Logic /cpu/pipelineddatapath/fetch2/icache_stage2/acachelogic/present1
+add wave -noupdate -format Literal /cpu/pipelineddatapath/fetch2/icache_stage2/acachelogic/tag
+add wave -noupdate -format Literal /cpu/pipelineddatapath/fetch2/icache_stage2/acachelogic/tag0
+add wave -noupdate -format Literal /cpu/pipelineddatapath/fetch2/icache_stage2/acachelogic/tag1
+add wave -noupdate -format Literal /cpu/pipelineddatapath/fetch2/icache_stage2/acachelogic/tag0_fw
+add wave -noupdate -format Literal /cpu/pipelineddatapath/fetch2/icache_stage2/acachelogic/tag1_fw
+add wave -noupdate -format Literal /cpu/pipelineddatapath/fetch2/icache_stage2/acachelogic/last_writetag
+add wave -noupdate -format Logic /cpu/pipelineddatapath/fetch2/icache_stage2/acachelogic/valid0_fw
+add wave -noupdate -format Logic /cpu/pipelineddatapath/fetch2/icache_stage2/acachelogic/valid1_fw
+add wave -noupdate -format Logic /cpu/pipelineddatapath/fetch2/icache_stage2/acachelogic/valid0
+add wave -noupdate -format Logic /cpu/pipelineddatapath/fetch2/icache_stage2/acachelogic/valid1
+add wave -noupdate -format Logic /cpu/pipelineddatapath/fetch2/icache_stage2/acachelogic/last_write0
+add wave -noupdate -format Logic /cpu/pipelineddatapath/fetch2/icache_stage2/acachelogic/last_write1
+add wave -noupdate -format Logic /cpu/pipelineddatapath/fetch2/icache_stage2/acachelogic/write0
+add wave -noupdate -format Logic /cpu/pipelineddatapath/fetch2/icache_stage2/acachelogic/write1
+add wave -noupdate -format Logic /cpu/pipelineddatapath/fetch2/icache_stage2/load_cache_fwd_pipe
 add wave -noupdate -divider Decode
 add wave -noupdate -color Aquamarine -format Event -height 15 -itemcolor Aquamarine /cpu/pipelineddatapath/decode/decode_data_in
 add wave -noupdate -color Aquamarine -format Event -height 15 -itemcolor Aquamarine /cpu/pipelineddatapath/decode/decode_data_out
@@ -96,33 +111,30 @@ add wave -noupdate -format Logic -height 15 -radix hexadecimal /cpu/data_mread_l
 add wave -noupdate -format Logic -height 15 -radix hexadecimal /cpu/data_mwriteh_l
 add wave -noupdate -format Logic -height 15 -radix hexadecimal /cpu/data_mwritel_l
 add wave -noupdate -format Logic -height 15 -radix hexadecimal /cpu/data_resp_h
-add wave -noupdate -format Literal -height 15 -radix hexadecimal /cpu/instr_addr
 add wave -noupdate -format Literal -height 15 -radix hexadecimal /cpu/instr_in
 add wave -noupdate -format Logic -height 15 -radix hexadecimal /cpu/instr_mread_l
-add wave -noupdate -format Logic -height 15 -radix hexadecimal /cpu/instr_mwriteh_l
-add wave -noupdate -format Logic -height 15 -radix hexadecimal /cpu/instr_mwritel_l
-add wave -noupdate -format Literal -height 15 -radix hexadecimal /cpu/instr_out
 add wave -noupdate -format Logic -height 15 -radix hexadecimal /cpu/instr_resp_h
 add wave -noupdate -format Event -height 15 -radix hexadecimal -expand /cpu/dram/dcache/cache_dp1/way0/tagbits/data
 add wave -noupdate -format Event -height 15 -radix hexadecimal -expand /cpu/dram/dcache/cache_dp1/way0/waydata/data
 add wave -noupdate -format Event -height 15 -radix hexadecimal /cpu/dram/dcache/cache_dp1/way1/tagbits/data
 add wave -noupdate -format Event -height 15 -radix hexadecimal /cpu/dram/dcache/cache_dp1/way1/waydata/data
-add wave -noupdate -format Event -height 15 -radix hexadecimal -expand /cpu/dram/icache/cache_dp1/way0/tagbits/data
-add wave -noupdate -format Event -height 15 -radix hexadecimal -expand /cpu/dram/icache/cache_dp1/way0/waydata/data
-add wave -noupdate -format Event -height 15 -radix hexadecimal /cpu/dram/icache/cache_dp1/way1/tagbits/data
-add wave -noupdate -format Event -height 15 -radix hexadecimal /cpu/dram/icache/cache_dp1/way1/waydata/data
 TreeUpdate [SetDefaultTree]
 quietly WaveActivateNextPane
-add wave -noupdate -color Salmon -format Literal -itemcolor Salmon /cpu/pipelineddatapath/fetch_data_out.instr
+add wave -noupdate -format Literal /cpu/pipelineddatapath/fetch1/instr_addr
+add wave -noupdate -format Literal /cpu/pipelineddatapath/fetch2/instr_addr
+add wave -noupdate -format Literal /cpu/pipelineddatapath/decode/decode_pc
+add wave -noupdate -format Literal /cpu/pipelineddatapath/exec/exec_pc
+add wave -noupdate -format Literal /cpu/pipelineddatapath/mem/mem_pc
+add wave -noupdate -format Literal /cpu/pipelineddatapath/pipe4_mw/wb_data_in.pc
 add wave -noupdate -color Aquamarine -format Literal -itemcolor Aquamarine /cpu/pipelineddatapath/decode_uop_data_out.instr
 add wave -noupdate -color Wheat -format Literal -itemcolor Wheat /cpu/pipelineddatapath/exec_data_in.instr
 add wave -noupdate -color Gold -format Literal -itemcolor Gold /cpu/pipelineddatapath/mem_data_in.instr
 add wave -noupdate -color {Green Yellow} -format Literal -itemcolor {Green Yellow} /cpu/pipelineddatapath/wb_data_in.instr
 add wave -noupdate -color {Sky Blue} -format Event -height 15 -itemcolor {Sky Blue} -expand /cpu/pipelineddatapath/decode/arf/ram
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {4179 ns} 0}
-configure wave -namecolwidth 461
-configure wave -valuecolwidth 171
+WaveRestoreCursors {{Cursor 1} {29499 ns} 0}
+configure wave -namecolwidth 564
+configure wave -valuecolwidth 255
 configure wave -justifyvalue left
 configure wave -signalnamewidth 0
 configure wave -snapdistance 10
@@ -134,4 +146,4 @@ configure wave -gridperiod 1
 configure wave -griddelta 40
 configure wave -timeline 0
 update
-WaveRestoreZoom {3874 ns} {5070 ns}
+WaveRestoreZoom {29310 ns} {29533 ns}

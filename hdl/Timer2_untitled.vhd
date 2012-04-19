@@ -28,7 +28,7 @@ END Timer2 ;
 --
 ARCHITECTURE untitled OF Timer2 IS
 BEGIN
-    Writegate <= clk'delayed(24ns);
-    LRUgate <= clk'delayed(24ns);
+    Writegate <= clk'delayed(25ns);
+    LRUgate <= clk'delayed(25ns);
 END ARCHITECTURE untitled;
 

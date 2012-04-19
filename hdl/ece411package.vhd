@@ -219,6 +219,21 @@ PACKAGE LC3B_TYPES IS
     evicted      : std_logic;
   END RECORD;
   
+  constant default_interstage_data : LC3B_cache_interstage_data := (
+      Index        => (Others => 'X'),
+      Offset       => (Others => 'X'),
+      Tag          => (Others => 'X'),
+      tag0         => (Others => 'X'),
+      dirty0       => 'X',
+      valid0       => 'X',
+      Way0Dataout  => (Others => 'X'),
+      tag1         => (Others => 'X'),
+      dirty1       => 'X',
+      valid1       => 'X',
+      Way1Dataout  => (Others => 'X'),
+      evicted      => 'X'
+  );
+  
   TYPE LC3b_cache_feedback_data IS RECORD
     WriteTag     : lc3b_c_tag;
     WriteIndex   : lc3b_c_index;
