@@ -11,26 +11,27 @@ USE IEEE.STD_LOGIC_1164.ALL;
 
 PACKAGE LC3B_TYPES IS
 -- DATAPATH SIGNAL WIDTHS
-	SUBTYPE LC3B_PWORD     IS STD_LOGIC_VECTOR(255 DOWNTO 0);  --"POLY" WORD
-	SUBTYPE LC3B_OWORD     IS STD_LOGIC_VECTOR(127 DOWNTO 0);  --OCTAL WORD
-	SUBTYPE LC3B_QWORD     IS STD_LOGIC_VECTOR(63 DOWNTO 0);  --QUAD WORD
-	SUBTYPE LC3B_DWORD     IS STD_LOGIC_VECTOR(31 DOWNTO 0);  --DOUBLE WORD
-	SUBTYPE LC3B_WORD      IS STD_LOGIC_VECTOR(15 DOWNTO 0);
-	SUBTYPE LC3B_BYTE      IS STD_LOGIC_VECTOR(7 DOWNTO 0);
-	SUBTYPE LC3B_NIBBLE    IS STD_LOGIC_VECTOR(3 DOWNTO 0);
-	SUBTYPE LC3B_CC        IS STD_LOGIC_VECTOR(2 DOWNTO 0);
-	SUBTYPE LC3B_REG       IS STD_LOGIC_VECTOR(3 DOWNTO 0);
-	SUBTYPE LC3B_ALUOP     IS STD_LOGIC_VECTOR(2 DOWNTO 0);
-	SUBTYPE LC3B_SHFTOP    IS STD_LOGIC_VECTOR(1 DOWNTO 0);
-	SUBTYPE LC3B_IMM4      IS STD_LOGIC_VECTOR(3 DOWNTO 0);
-	SUBTYPE LC3B_IMM5      IS STD_LOGIC_VECTOR(4 DOWNTO 0);
-	SUBTYPE LC3B_OFFSET9   IS STD_LOGIC_VECTOR(8 DOWNTO 0);
-	SUBTYPE LC3B_OFFSET11  IS STD_LOGIC_VECTOR(10 DOWNTO 0);
-	SUBTYPE LC3B_INDEX6    IS STD_LOGIC_VECTOR(5 DOWNTO 0);
-	SUBTYPE LC3B_TRAPVECT8 IS STD_LOGIC_VECTOR(7 DOWNTO 0);
-	SUBTYPE LC3B_OPCODE    IS STD_LOGIC_VECTOR(3 DOWNTO 0);
-	SUBTYPE LC3B_4MUX_SEL  IS STD_LOGIC_VECTOR(1 DOWNTO 0);
-	SUBTYPE LC3B_8MUX_SEL  IS STD_LOGIC_VECTOR(2 DOWNTO 0);
+	SUBTYPE LC3B_PWORD              IS STD_LOGIC_VECTOR(255 DOWNTO 0);  --"POLY" WORD
+	SUBTYPE LC3B_OWORD              IS STD_LOGIC_VECTOR(127 DOWNTO 0);  --OCTAL WORD
+	SUBTYPE LC3B_QWORD              IS STD_LOGIC_VECTOR(63 DOWNTO 0);  --QUAD WORD
+	SUBTYPE LC3B_DWORD              IS STD_LOGIC_VECTOR(31 DOWNTO 0);  --DOUBLE WORD
+	SUBTYPE LC3B_WORD               IS STD_LOGIC_VECTOR(15 DOWNTO 0);
+	SUBTYPE LC3B_BYTE               IS STD_LOGIC_VECTOR(7 DOWNTO 0);
+	SUBTYPE LC3B_NIBBLE             IS STD_LOGIC_VECTOR(3 DOWNTO 0);
+	SUBTYPE LC3B_CC                 IS STD_LOGIC_VECTOR(2 DOWNTO 0);
+	SUBTYPE LC3B_REG                IS STD_LOGIC_VECTOR(3 DOWNTO 0);
+	SUBTYPE LC3B_ALUOP              IS STD_LOGIC_VECTOR(2 DOWNTO 0);
+	SUBTYPE LC3B_SHFTOP             IS STD_LOGIC_VECTOR(1 DOWNTO 0);
+	SUBTYPE LC3B_IMM4               IS STD_LOGIC_VECTOR(3 DOWNTO 0);
+	SUBTYPE LC3B_IMM5               IS STD_LOGIC_VECTOR(4 DOWNTO 0);
+	SUBTYPE LC3B_OFFSET9            IS STD_LOGIC_VECTOR(8 DOWNTO 0);
+	SUBTYPE LC3B_OFFSET11           IS STD_LOGIC_VECTOR(10 DOWNTO 0);
+	SUBTYPE LC3B_INDEX6             IS STD_LOGIC_VECTOR(5 DOWNTO 0);
+	SUBTYPE LC3B_TRAPVECT8          IS STD_LOGIC_VECTOR(7 DOWNTO 0);
+	SUBTYPE LC3B_OPCODE             IS STD_LOGIC_VECTOR(3 DOWNTO 0);
+  SUBTYPE LC3B_TRISTATE_4MUX_SEL  IS STD_LOGIC_VECTOR(3 downto 0);
+	SUBTYPE LC3B_4MUX_SEL           IS STD_LOGIC_VECTOR(1 DOWNTO 0);
+	SUBTYPE LC3B_8MUX_SEL           IS STD_LOGIC_VECTOR(2 DOWNTO 0);
   SUBTYPE LC3B_3DECODE   IS STD_LOGIC_VECTOR(2 DOWNTO 0);
 --CACHE SIGNALS (ADD MORE TO ME!!)
   SUBTYPE LC3B_C_OFFSET  IS STD_LOGIC_VECTOR(3 DOWNTO 0);
@@ -150,6 +151,8 @@ PACKAGE LC3B_TYPES IS
 		override_dr   : std_logic;
 		dr_override   : LC3b_reg;
 		uop_rom_idx   : uop_rom_sel;
+		sr1_needed    : std_logic;
+		sr2_needed    : std_logic;
 	END RECORD;
 
 	TYPE exec_control_word IS RECORD
@@ -186,6 +189,7 @@ PACKAGE LC3B_TYPES IS
 		aluout       : lc3b_word;
 		mem_data_in  : lc3b_word;
 		wb_data      : lc3b_word;
+		data_addr    : lc3b_word;
 		sr1_val      : lc3b_word;
 		sr2_val      : lc3b_word;
 		dr_val       : lc3b_word;
@@ -263,7 +267,9 @@ PACKAGE LC3B_TYPES IS
 		use_uop2      => '0',
 		override_dr   => '0',
 		dr_override   => "XXXX",
-		uop_rom_idx   => uop_rom_idx_default
+		uop_rom_idx   => uop_rom_idx_default,
+		sr1_needed    => '0',
+		sr2_needed    => '0'
 	);
 
 	CONSTANT logic_mem_control : mem_control_word := (
@@ -316,6 +322,7 @@ PACKAGE LC3B_TYPES IS
 		aluout       => "XXXXXXXXXXXXXXXX",
 		mem_data_in  => "XXXXXXXXXXXXXXXX",
 		wb_data      => (others => 'X'),
+		data_addr    => (others => 'X'),
 		sr1          => "XXXX",
 		sr2          => "XXXX",
 		sr1_val      => "XXXXXXXXXXXXXXXX",
@@ -342,6 +349,7 @@ PACKAGE LC3B_TYPES IS
 		aluout       => "1010101000101011",
 		mem_data_in  => "XXXXXXXXXXXXXXXX",
 		wb_data      => (others => 'X'),
+		data_addr	 => (others => 'X'),
 		sr1          => "XXXX",
 		sr2          => "XXXX",
 		sr1_val      => "1000111010111001",
@@ -382,8 +390,17 @@ PACKAGE LC3B_TYPES IS
 	-- "Opcode & Bit11 & Bit5 & Bit 4"
 	-- "0001X0X"
 	CONSTANT add_reg_instr : control_word := (
-		dec   => default_dec_control,
-		exec  => (
+		dec   => (
+			ldi            => '0',
+			sti            => '0',
+			jsr            => '0',
+			use_uop2       => '0',
+			override_dr    => '0',
+			dr_override    => "XXXX",
+			uop_rom_idx    => uop_rom_idx_default,
+			sr1_needed    => '1',
+			sr2_needed    => '1'
+		), exec  => (
 			alumux_sel     => alumux_sr2,
 			aluop          => ALU_ADD,
 			shift_imm      => 'X',
@@ -401,8 +418,17 @@ PACKAGE LC3B_TYPES IS
 
 	-- "0001X1X"
 	CONSTANT add_imm_instr : control_word := (
-	    dec   => default_dec_control,
-		exec  => (
+		dec   => (
+			ldi            => '0',
+			sti            => '0',
+			jsr            => '0',
+			use_uop2       => '0',
+			override_dr    => '0',
+			dr_override    => "XXXX",
+			uop_rom_idx    => uop_rom_idx_default,
+			sr1_needed    => '1',
+			sr2_needed    => '0'
+		), exec  => (
 			alumux_sel     => alumux_imm5,
 			aluop          => ALU_ADD,
 			shift_imm      => 'X',
@@ -420,8 +446,17 @@ PACKAGE LC3B_TYPES IS
 
 	-- "0101X0X"
 	CONSTANT and_reg_instr : control_word := (
-	    dec   => default_dec_control,
-		exec  => (
+		dec   => (
+			ldi            => '0',
+			sti            => '0',
+			jsr            => '0',
+			use_uop2       => '0',
+			override_dr    => '0',
+			dr_override    => "XXXX",
+			uop_rom_idx    => uop_rom_idx_default,
+			sr1_needed    => '1',
+			sr2_needed    => '1'
+		), exec  => (
 			alumux_sel     => alumux_sr2,
 			aluop          => ALU_AND,
 			shift_imm      => 'X',
@@ -439,8 +474,17 @@ PACKAGE LC3B_TYPES IS
 
 	-- "0101X1X"
 	CONSTANT and_imm_instr : control_word := (
-		dec   => default_dec_control,
-		exec  => (
+		dec   => (
+			ldi            => '0',
+			sti            => '0',
+			jsr            => '0',
+			use_uop2       => '0',
+			override_dr    => '0',
+			dr_override    => "XXXX",
+			uop_rom_idx    => uop_rom_idx_default,
+			sr1_needed    => '1',
+			sr2_needed    => '0'
+		), exec  => (
 			alumux_sel     => alumux_imm5,
 			aluop          => ALU_AND,
 			shift_imm      => 'X',
@@ -458,15 +502,8 @@ PACKAGE LC3B_TYPES IS
 
 	-- "0000XXX"
 	CONSTANT br_instr : control_word := (
-		dec   => (
-			ldi            => '0',
-			sti            => '0',
-			jsr            => '0',
-			use_uop2       => '0',
-			override_dr    => '0',
-			dr_override    => "XXXX",
-			uop_rom_idx    => uop_rom_idx_default
-		), exec  => (
+		dec   => default_dec_control,
+		exec  => (
 			alumux_sel     => "XX",
 			aluop          => "XXX",
 			shift_imm      => 'X',
@@ -486,8 +523,17 @@ PACKAGE LC3B_TYPES IS
 
 	-- "1100XXX"
 	CONSTANT jmp_instr : control_word := (
-		dec   => default_dec_control,
-		exec  => (
+		dec   => (
+			ldi            => '0',
+			sti            => '0',
+			jsr            => '0',
+			use_uop2       => '0',
+			override_dr    => '0',
+			dr_override    => "XXXX",
+			uop_rom_idx    => uop_rom_idx_default,
+			sr1_needed    => '1',
+			sr2_needed    => '0'
+		), exec  => (
 			alumux_sel     => "XX",
 			aluop          => "XXX",
 			shift_imm      => 'X',
@@ -507,14 +553,16 @@ PACKAGE LC3B_TYPES IS
 
 	-- "01001XX"
 	CONSTANT jsr_instr : control_word := (
-	    dec   => (
+		dec   => (
 			ldi            => '0',
 			sti            => '0',
 			jsr            => '1',
 			use_uop2       => '0',
 			override_dr    => '1',
 			dr_override    => "0111",
-			uop_rom_idx    => uop_rom_idx_default
+			uop_rom_idx    => uop_rom_idx_default,
+			sr1_needed    => '0',
+			sr2_needed    => '0'
 		), exec  => (
 			alumux_sel     => "XX",
 			aluop          => ALU_PASS,
@@ -535,14 +583,16 @@ PACKAGE LC3B_TYPES IS
 
 	-- "01000XX"
 	CONSTANT jsrr_instr : control_word := (
-	    dec   => (
+		dec   => (
 			ldi            => '0',
 			sti            => '0',
 			jsr            => '0',
 			use_uop2       => '0',
 			override_dr    => '1',
 			dr_override    => "0111",
-			uop_rom_idx    => uop_rom_idx_default
+			uop_rom_idx    => uop_rom_idx_default,
+			sr1_needed    => '1',
+			sr2_needed    => '0'
 		), exec  => (
 			alumux_sel     => "XX",
 			aluop          => ALU_PASS,
@@ -563,8 +613,17 @@ PACKAGE LC3B_TYPES IS
 
 	-- "0010XXX"
 	CONSTANT ldb_instr : control_word := (
-	    dec   => default_dec_control,
-		exec  => (
+		dec   => (
+			ldi            => '0',
+			sti            => '0',
+			jsr            => '0',
+			use_uop2       => '0',
+			override_dr    => '0',
+			dr_override    => "XXXX",
+			uop_rom_idx    => uop_rom_idx_default,
+			sr1_needed    => '1',
+			sr2_needed    => '0'
+		), exec  => (
 			alumux_sel     => alumux_idx6,
 			aluop          => ALU_ADD,
 			shift_imm      => '0',
@@ -597,7 +656,9 @@ PACKAGE LC3B_TYPES IS
 			use_uop2      => '1',
 			override_dr   => '1',
 			dr_override   => "1000",
-			uop_rom_idx   => "0001"
+			uop_rom_idx   => "0001",
+			sr1_needed    => '1',
+			sr2_needed    => '0'
 		),
 		exec  => (
 			alumux_sel     => alumux_idx6,
@@ -624,8 +685,17 @@ PACKAGE LC3B_TYPES IS
 	);
 
 	CONSTANT ldi2_instr : control_word := (
-		dec   => default_dec_control,
-		exec  => (
+		dec   => (
+			ldi            => '0',
+			sti            => '0',
+			jsr            => '0',
+			use_uop2       => '0',
+			override_dr    => '0',
+			dr_override    => "XXXX",
+			uop_rom_idx    => uop_rom_idx_default,
+			sr1_needed    => '1',
+			sr2_needed    => '0'
+		), exec  => (
 			alumux_sel     => alumux_idx6,
 			aluop          => ALU_ADD,
 			shift_imm      => '1',
@@ -651,8 +721,17 @@ PACKAGE LC3B_TYPES IS
 
 	-- "0110XXX"
 	CONSTANT ldr_instr : control_word := (
-		dec   => default_dec_control,
-		exec  => (
+		dec   => (
+			ldi            => '0',
+			sti            => '0',
+			jsr            => '0',
+			use_uop2       => '0',
+			override_dr    => '0',
+			dr_override    => "XXXX",
+			uop_rom_idx    => uop_rom_idx_default,
+			sr1_needed    => '1',
+			sr2_needed    => '0'
+		), exec  => (
 			alumux_sel     => alumux_idx6,
 			aluop          => ALU_ADD,
 			shift_imm      => '1',
@@ -678,15 +757,8 @@ PACKAGE LC3B_TYPES IS
 
 	-- "1110XXX"
 	CONSTANT lea_instr : control_word := (
-	    dec   => (
-			ldi           => '0',
-			sti           => '0',
-			jsr           => '0',
-			use_uop2      => '0',
-			override_dr   => '0',
-			dr_override   => "XXXX",
-			uop_rom_idx   => "XXXX"
-		), exec  => (
+		dec   => default_dec_control,
+		exec  => (
 			alumux_sel     => alumux_srbb,
 			aluop          => ALU_ADD,
 			shift_imm      => 'X',
@@ -704,8 +776,17 @@ PACKAGE LC3B_TYPES IS
 
 	-- "1001XXX"
 	CONSTANT not_instr : control_word := (
-	    dec   => default_dec_control,
-		exec  => (
+		dec   => (
+			ldi            => '0',
+			sti            => '0',
+			jsr            => '0',
+			use_uop2       => '0',
+			override_dr    => '0',
+			dr_override    => "XXXX",
+			uop_rom_idx    => uop_rom_idx_default,
+			sr1_needed    => '1',
+			sr2_needed    => '0'
+		), exec  => (
 			alumux_sel     => alumux_sr2,
 			aluop          => ALU_NOT,
 			shift_imm      => 'X',
@@ -726,8 +807,17 @@ PACKAGE LC3B_TYPES IS
 
 	-- "1101XX0"
 	CONSTANT lshf_instr : control_word := (
-	    dec   => default_dec_control,
-		exec  => (
+		dec   => (
+			ldi            => '0',
+			sti            => '0',
+			jsr            => '0',
+			use_uop2       => '0',
+			override_dr    => '0',
+			dr_override    => "XXXX",
+			uop_rom_idx    => uop_rom_idx_default,
+			sr1_needed    => '1',
+			sr2_needed    => '0'
+		), exec  => (
 			alumux_sel     => alumux_srbb,
 			aluop          => ALU_SLL,
 			shift_imm      => 'X',
@@ -745,8 +835,17 @@ PACKAGE LC3B_TYPES IS
 
 	-- "1101X01"
 	CONSTANT rshfl_instr : control_word := (
-	    dec   => default_dec_control,
-		exec  => (
+		dec   => (
+			ldi            => '0',
+			sti            => '0',
+			jsr            => '0',
+			use_uop2       => '0',
+			override_dr    => '0',
+			dr_override    => "XXXX",
+			uop_rom_idx    => uop_rom_idx_default,
+			sr1_needed    => '1',
+			sr2_needed    => '0'
+		), exec  => (
 			alumux_sel     => alumux_srbb,
 			aluop          => ALU_SRL,
 			shift_imm      => 'X',
@@ -764,8 +863,17 @@ PACKAGE LC3B_TYPES IS
 
 	-- "1101X11"
 	CONSTANT rshfa_instr : control_word := (
-	    dec   => default_dec_control,
-		exec  => (
+		dec   => (
+			ldi            => '0',
+			sti            => '0',
+			jsr            => '0',
+			use_uop2       => '0',
+			override_dr    => '0',
+			dr_override    => "XXXX",
+			uop_rom_idx    => uop_rom_idx_default,
+			sr1_needed    => '1',
+			sr2_needed    => '0'
+		), exec  => (
 			alumux_sel     => alumux_srbb,
 			aluop          => alu_sra,
 			shift_imm      => 'X',
@@ -783,8 +891,17 @@ PACKAGE LC3B_TYPES IS
 
 	-- "0011XXX"
 	CONSTANT stb_instr : control_word := (
-		dec   => default_dec_control,
-		exec  => (
+		dec   => (
+			ldi            => '0',
+			sti            => '0',
+			jsr            => '0',
+			use_uop2       => '0',
+			override_dr    => '0',
+			dr_override    => "XXXX",
+			uop_rom_idx    => uop_rom_idx_default,
+			sr1_needed    => '1',
+			sr2_needed    => '0'
+		), exec  => (
 			alumux_sel     => alumux_idx6,
 			aluop          => ALU_ADD,
 			shift_imm      => '0',
@@ -817,7 +934,9 @@ PACKAGE LC3B_TYPES IS
 			use_uop2      => '1',
 			override_dr   => '1',
 			dr_override   => "1000",
-			uop_rom_idx   => "0010"
+			uop_rom_idx   => "0010",
+			sr1_needed    => '1',
+			sr2_needed    => '0'
 		),
 		exec  => (
 			alumux_sel    => alumux_idx6,
@@ -844,8 +963,17 @@ PACKAGE LC3B_TYPES IS
 	);
 
 	CONSTANT sti2_instr : control_word := (
-	    dec   => default_dec_control,
-		exec  => (
+		dec   => (
+			ldi            => '0',
+			sti            => '0',
+			jsr            => '0',
+			use_uop2       => '0',
+			override_dr    => '0',
+			dr_override    => "XXXX",
+			uop_rom_idx    => uop_rom_idx_default,
+			sr1_needed    => '1',
+			sr2_needed    => '0'
+		), exec  => (
 			alumux_sel     => alumux_idx6,
 			aluop          => ALU_ADD,
 			shift_imm      => '1',
@@ -871,8 +999,17 @@ PACKAGE LC3B_TYPES IS
 
 	-- "0111XXX"
 	CONSTANT str_instr : control_word := (
-	    dec   => default_dec_control,
-		exec  => (
+		dec   => (
+			ldi            => '0',
+			sti            => '0',
+			jsr            => '0',
+			use_uop2       => '0',
+			override_dr    => '0',
+			dr_override    => "XXXX",
+			uop_rom_idx    => uop_rom_idx_default,
+			sr1_needed    => '1',
+			sr2_needed    => '0'
+		), exec  => (
 			alumux_sel     => alumux_idx6,
 			aluop          => ALU_ADD,
 			shift_imm      => '1',
@@ -905,7 +1042,9 @@ PACKAGE LC3B_TYPES IS
 			use_uop2      => '0',
 			override_dr   => '1',
 			dr_override   => "0111",
-			uop_rom_idx   => "XXXX"
+			uop_rom_idx   => "XXXX",
+			sr1_needed    => '0',
+			sr2_needed    => '0'
 		), exec  => (
 			alumux_sel     => "XX",
 			aluop          => ALU_PASS,

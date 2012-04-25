@@ -7,7 +7,7 @@ USE ece411.LC3b_types.all;
 
 ENTITY CLKgen IS
    PORT( 
-      clk : INOUT  std_logic  := '0'
+      clk : INOUT  std_logic  := '1'
    );
 
 -- Declarations
