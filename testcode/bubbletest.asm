@@ -156,7 +156,7 @@ JMP_TEST:
     AFTER_TRAP:
 	ADD R1, R6, R6				; 0x00E4, R1 <- 0
 	ADD R2, R2, -13				; 0x00E6, R2 <- 0
-	ADD R1, R7, R7				; 0x00E8, R7 <- 0
+	ADD R7, R6, R6				; 0x00E8, R7 <- 0
 	NOP					; 0x00EA
 	NOP					; 0x00EC
 	NOP					; 0x00EE
