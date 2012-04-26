@@ -1,6 +1,6 @@
 
 force /Cache_Arbiter/clk 1 @0, 0 @25 -r 50
-force /Cache_Arbiter/reset_l 0 @0, 1 @5
+force /Cache_Arbiter/reset_l 0 @0, 1 @15
 
 force /Cache_Arbiter/d_pmread_l 1 @0
 force /Cache_Arbiter/d_pmwrite_l 1 @0
