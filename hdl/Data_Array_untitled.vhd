@@ -14,7 +14,10 @@ USE ieee.NUMERIC_STD.all;
 LIBRARY ece411;
 USE ece411.LC3b_types.all;
 ENTITY Data_Array IS
-  Generic (N : Integer);
+  Generic (
+    N : Integer;
+    DELAY : Time := DELAY_256B
+  );
   PORT (
           RESET_L    : IN std_logic;
           DataWrite  : IN std_logic;
@@ -35,7 +38,7 @@ BEGIN
   variable DataIndex : integer;
   begin
     DataIndex := to_integer(unsigned(Index));
-    DataOut <= Data(DataIndex) after DELAY_256B;
+    DataOut <= Data(DataIndex) after DELAY;
   end process ReadFromDataArray;
   
   --------------------------------------------------------------

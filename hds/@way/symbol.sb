@@ -91,7 +91,7 @@ port (LogicalPort
 m 1
 decl (Decl
 n "DataOut"
-t "LC3b_oword"
+t "LC3b_pword"
 o 7
 suid 4,0
 )
@@ -114,7 +114,7 @@ uid 92,0
 port (LogicalPort
 decl (Decl
 n "DataIn"
-t "LC3b_oword"
+t "LC3b_pword"
 o 1
 suid 9,0
 )
@@ -160,7 +160,7 @@ uid 319,0
 port (LogicalPort
 decl (Decl
 n "Index"
-t "LC3b_c_index"
+t "LC3b_l2_c_index"
 o 3
 suid 17,0
 )
@@ -171,8 +171,7 @@ uid 362,0
 port (LogicalPort
 decl (Decl
 n "TagIn"
-t "std_logic_vector"
-b "(8 DOWNTO 0)"
+t "lc3b_l2_c_tag"
 o 6
 suid 18,0
 )
@@ -366,23 +365,23 @@ VExpander (VariableExpander
 vvMap [
 (vvPair
 variable "HDLDir"
-value "/home/goldste6/ece411/mp2.2/hdl"
+value "/home/one1/Desktop/lc3processor/hdl"
 )
 (vvPair
 variable "HDSDir"
-value "/home/goldste6/ece411/mp2.2/hds"
+value "/home/one1/Desktop/lc3processor/hds"
 )
 (vvPair
 variable "SideDataDesignDir"
-value "/home/goldste6/ece411/mp2.2/hds/@way/symbol.sb.info"
+value "/home/one1/Desktop/lc3processor/hds/@way/symbol.sb.info"
 )
 (vvPair
 variable "SideDataUserDir"
-value "/home/goldste6/ece411/mp2.2/hds/@way/symbol.sb.user"
+value "/home/one1/Desktop/lc3processor/hds/@way/symbol.sb.user"
 )
 (vvPair
 variable "SourceDir"
-value "/home/goldste6/ece411/mp2.2/hds"
+value "/home/one1/Desktop/lc3processor/hds"
 )
 (vvPair
 variable "appl"
@@ -398,27 +397,27 @@ value "%(unit)_config"
 )
 (vvPair
 variable "d"
-value "/home/goldste6/ece411/mp2.2/hds/@way"
+value "/home/one1/Desktop/lc3processor/hds/@way"
 )
 (vvPair
 variable "d_logical"
-value "/home/goldste6/ece411/mp2.2/hds/Way"
+value "/home/one1/Desktop/lc3processor/hds/Way"
 )
 (vvPair
 variable "date"
-value "02/09/12"
+value "04/25/12"
 )
 (vvPair
 variable "day"
-value "Thu"
+value "Wed"
 )
 (vvPair
 variable "day_long"
-value "Thursday"
+value "Wednesday"
 )
 (vvPair
 variable "dd"
-value "09"
+value "25"
 )
 (vvPair
 variable "entity_name"
@@ -442,11 +441,11 @@ value "symbol"
 )
 (vvPair
 variable "group"
-value "UNKNOWN"
+value "ews"
 )
 (vvPair
 variable "host"
-value "linux1.ews.illinois.edu"
+value "gelib-057-20.ews.illinois.edu"
 )
 (vvPair
 variable "language"
@@ -470,7 +469,7 @@ value "$HDS_PROJECT_DIR/compile"
 )
 (vvPair
 variable "mm"
-value "02"
+value "04"
 )
 (vvPair
 variable "module_name"
@@ -478,23 +477,23 @@ value "Way"
 )
 (vvPair
 variable "month"
-value "Feb"
+value "Apr"
 )
 (vvPair
 variable "month_long"
-value "February"
+value "April"
 )
 (vvPair
 variable "p"
-value "/home/goldste6/ece411/mp2.2/hds/@way/symbol.sb"
+value "/home/one1/Desktop/lc3processor/hds/@way/symbol.sb"
 )
 (vvPair
 variable "p_logical"
-value "/home/goldste6/ece411/mp2.2/hds/Way/symbol.sb"
+value "/home/one1/Desktop/lc3processor/hds/Way/symbol.sb"
 )
 (vvPair
 variable "project_name"
-value "ece411"
+value "ece411_mp3"
 )
 (vvPair
 variable "series"
@@ -510,7 +509,7 @@ value "<TBD>"
 )
 (vvPair
 variable "task_ModelSimPath"
-value "<TBD>"
+value "$HDS_HOME/../Modeltech/linux"
 )
 (vvPair
 variable "task_NC-SimPath"
@@ -530,7 +529,7 @@ value "<TBD>"
 )
 (vvPair
 variable "time"
-value "00:11:04"
+value "03:17:24"
 )
 (vvPair
 variable "unit"
@@ -538,7 +537,7 @@ value "Way"
 )
 (vvPair
 variable "user"
-value "goldste6"
+value "one1"
 )
 (vvPair
 variable "version"
@@ -574,7 +573,7 @@ va (VaSet
 vasetType 1
 fg "0,65535,0"
 )
-xt "14250,6625,15000,7375"
+xt "14250,16625,15000,17375"
 )
 tg (CPTG
 uid 95,0
@@ -585,9 +584,9 @@ uid 96,0
 va (VaSet
 font "courier,8,0"
 )
-xt "16000,6550,19500,7450"
+xt "16000,16550,19500,17450"
 st "RESET_L"
-blo "16000,7250"
+blo "16000,17250"
 tm "CptPortNameMgr"
 )
 )
@@ -597,8 +596,7 @@ va (VaSet
 font "courier,8,0"
 )
 xt "44000,4500,63500,5400"
-st "RESET_L          : IN     std_logic  ;
-"
+st "RESET_L          : IN     std_logic  ;"
 )
 thePort (LogicalPort
 decl (Decl
@@ -619,7 +617,7 @@ va (VaSet
 vasetType 1
 fg "0,65535,0"
 )
-xt "14250,7625,15000,8375"
+xt "14250,18625,15000,19375"
 )
 tg (CPTG
 uid 100,0
@@ -630,9 +628,9 @@ uid 101,0
 va (VaSet
 font "courier,8,0"
 )
-xt "16000,7550,20500,8450"
+xt "16000,18550,20500,19450"
 st "DataWrite"
-blo "16000,8250"
+blo "16000,19250"
 tm "CptPortNameMgr"
 )
 )
@@ -642,8 +640,7 @@ va (VaSet
 font "courier,8,0"
 )
 xt "44000,2700,63500,3600"
-st "DataWrite        : IN     std_logic  ;
-"
+st "DataWrite        : IN     std_logic  ;"
 )
 thePort (LogicalPort
 decl (Decl
@@ -664,7 +661,7 @@ va (VaSet
 vasetType 1
 fg "0,65535,0"
 )
-xt "39000,6625,39750,7375"
+xt "31000,16625,31750,17375"
 )
 tg (CPTG
 uid 110,0
@@ -675,10 +672,10 @@ uid 111,0
 va (VaSet
 font "courier,8,0"
 )
-xt "34500,6550,38000,7450"
+xt "26500,16550,30000,17450"
 st "DataOut"
 ju 2
-blo "38000,7250"
+blo "30000,17250"
 tm "CptPortNameMgr"
 )
 )
@@ -688,14 +685,13 @@ va (VaSet
 font "courier,8,0"
 )
 xt "44000,7200,64000,8100"
-st "DataOut          : OUT    LC3b_oword  ;
-"
+st "DataOut          : OUT    LC3b_pword  ;"
 )
 thePort (LogicalPort
 m 1
 decl (Decl
 n "DataOut"
-t "LC3b_oword"
+t "LC3b_pword"
 o 7
 suid 4,0
 )
@@ -711,7 +707,7 @@ va (VaSet
 vasetType 1
 fg "0,65535,0"
 )
-xt "39000,8625,39750,9375"
+xt "31000,18625,31750,19375"
 )
 tg (CPTG
 uid 120,0
@@ -722,10 +718,10 @@ uid 121,0
 va (VaSet
 font "courier,8,0"
 )
-xt "34500,8550,38000,9450"
+xt "26500,18550,30000,19450"
 st "Present"
 ju 2
-blo "38000,9250"
+blo "30000,19250"
 tm "CptPortNameMgr"
 )
 )
@@ -735,8 +731,7 @@ va (VaSet
 font "courier,8,0"
 )
 xt "44000,9000,63500,9900"
-st "Present          : OUT    std_logic  ;
-"
+st "Present          : OUT    std_logic  ;"
 )
 thePort (LogicalPort
 m 1
@@ -758,7 +753,7 @@ va (VaSet
 vasetType 1
 fg "0,65535,0"
 )
-xt "14250,10625,15000,11375"
+xt "14250,20625,15000,21375"
 )
 tg (CPTG
 uid 153,0
@@ -769,9 +764,9 @@ uid 154,0
 va (VaSet
 font "courier,8,0"
 )
-xt "16000,10550,19000,11450"
+xt "16000,20550,19000,21450"
 st "DataIn"
-blo "16000,11250"
+blo "16000,21250"
 tm "CptPortNameMgr"
 )
 )
@@ -781,13 +776,12 @@ va (VaSet
 font "courier,8,0"
 )
 xt "44000,1800,64000,2700"
-st "DataIn           : IN     LC3b_oword  ;
-"
+st "DataIn           : IN     LC3b_pword  ;"
 )
 thePort (LogicalPort
 decl (Decl
 n "DataIn"
-t "LC3b_oword"
+t "LC3b_pword"
 o 1
 suid 9,0
 )
@@ -803,7 +797,7 @@ va (VaSet
 vasetType 1
 fg "0,65535,0"
 )
-xt "14250,11625,15000,12375"
+xt "14250,21625,15000,22375"
 )
 tg (CPTG
 uid 217,0
@@ -814,9 +808,9 @@ uid 218,0
 va (VaSet
 font "courier,8,0"
 )
-xt "16000,11550,20000,12450"
+xt "16000,21550,20000,22450"
 st "SetDirty"
-blo "16000,12250"
+blo "16000,22250"
 tm "CptPortNameMgr"
 )
 )
@@ -826,8 +820,7 @@ va (VaSet
 font "courier,8,0"
 )
 xt "44000,5400,63500,6300"
-st "SetDirty         : IN     std_logic  ;
-"
+st "SetDirty         : IN     std_logic  ;"
 )
 thePort (LogicalPort
 decl (Decl
@@ -848,7 +841,7 @@ va (VaSet
 vasetType 1
 fg "0,65535,0"
 )
-xt "39000,9625,39750,10375"
+xt "31000,19625,31750,20375"
 )
 tg (CPTG
 uid 265,0
@@ -859,10 +852,10 @@ uid 266,0
 va (VaSet
 font "courier,8,0"
 )
-xt "35500,9550,38000,10450"
+xt "27500,19550,30000,20450"
 st "Dirty"
 ju 2
-blo "38000,10250"
+blo "30000,20250"
 tm "CptPortNameMgr"
 )
 )
@@ -872,8 +865,7 @@ va (VaSet
 font "courier,8,0"
 )
 xt "44000,8100,63500,9000"
-st "Dirty            : OUT    std_logic  ;
-"
+st "Dirty            : OUT    std_logic  ;"
 )
 thePort (LogicalPort
 m 1
@@ -895,7 +887,7 @@ va (VaSet
 vasetType 1
 fg "0,65535,0"
 )
-xt "39000,11625,39750,12375"
+xt "31000,20625,31750,21375"
 )
 tg (CPTG
 uid 322,0
@@ -906,10 +898,10 @@ uid 323,0
 va (VaSet
 font "courier,8,0"
 )
-xt "29500,11550,38000,12450"
+xt "21500,20550,30000,21450"
 st "WriteBackAddress"
 ju 2
-blo "38000,12250"
+blo "30000,21250"
 tm "CptPortNameMgr"
 )
 )
@@ -919,8 +911,7 @@ va (VaSet
 font "courier,8,0"
 )
 xt "44000,9900,62500,10800"
-st "WriteBackAddress : OUT    LC3b_word 
-"
+st "WriteBackAddress : OUT    LC3b_word "
 )
 thePort (LogicalPort
 m 1
@@ -942,7 +933,7 @@ va (VaSet
 vasetType 1
 fg "0,65535,0"
 )
-xt "14250,12625,15000,13375"
+xt "14250,22625,15000,23375"
 )
 tg (CPTG
 uid 367,0
@@ -953,9 +944,9 @@ uid 368,0
 va (VaSet
 font "courier,8,0"
 )
-xt "16000,12550,18500,13450"
+xt "16000,22550,18500,23450"
 st "Index"
-blo "16000,13250"
+blo "16000,23250"
 tm "CptPortNameMgr"
 )
 )
@@ -964,14 +955,13 @@ uid 369,0
 va (VaSet
 font "courier,8,0"
 )
-xt "44000,3600,65000,4500"
-st "Index            : IN     LC3b_c_index  ;
-"
+xt "44000,3600,66500,4500"
+st "Index            : IN     LC3b_l2_c_index  ;"
 )
 thePort (LogicalPort
 decl (Decl
 n "Index"
-t "LC3b_c_index"
+t "LC3b_l2_c_index"
 o 3
 suid 17,0
 )
@@ -987,7 +977,7 @@ va (VaSet
 vasetType 1
 fg "0,65535,0"
 )
-xt "14250,13625,15000,14375"
+xt "14250,23625,15000,24375"
 )
 tg (CPTG
 uid 372,0
@@ -998,9 +988,9 @@ uid 373,0
 va (VaSet
 font "courier,8,0"
 )
-xt "16000,13550,23000,14450"
-st "TagIn : (8:0)"
-blo "16000,14250"
+xt "16000,23550,18500,24450"
+st "TagIn"
+blo "16000,24250"
 tm "CptPortNameMgr"
 )
 )
@@ -1009,15 +999,13 @@ uid 374,0
 va (VaSet
 font "courier,8,0"
 )
-xt "44000,6300,73000,7200"
-st "TagIn            : IN     std_logic_vector (8 DOWNTO 0) ;
-"
+xt "44000,6300,65500,7200"
+st "TagIn            : IN     lc3b_l2_c_tag  ;"
 )
 thePort (LogicalPort
 decl (Decl
 n "TagIn"
-t "std_logic_vector"
-b "(8 DOWNTO 0)"
+t "lc3b_l2_c_tag"
 o 6
 suid 18,0
 )
@@ -1025,14 +1013,13 @@ suid 18,0
 )
 ]
 shape (Rectangle
-uid 9,0
 va (VaSet
 vasetType 1
 fg "0,65535,0"
 lineColor "0,32896,0"
 lineWidth 2
 )
-xt "15000,6000,39000,26000"
+xt "15000,16000,31000,26000"
 )
 biTextGroup (BiTextGroup
 uid 10,0
@@ -1043,18 +1030,18 @@ uid 11,0
 va (VaSet
 font "courier,8,1"
 )
-xt "24750,15100,27750,16000"
+xt "25750,22100,28750,23000"
 st "ece411"
-blo "24750,15800"
+blo "25750,22800"
 )
 second (Text
 uid 12,0
 va (VaSet
 font "courier,8,1"
 )
-xt "24750,16000,26250,16900"
+xt "25750,23000,27250,23900"
 st "Way"
-blo "24750,16700"
+blo "25750,23700"
 )
 )
 gi *58 (GenericInterface
@@ -1106,7 +1093,7 @@ fg "0,0,32768"
 bg "0,0,32768"
 font "courier,8,0"
 )
-xt "32200,50050,45700,50950"
+xt "32200,50050,43700,50950"
 st "
 by %user on %dd %month %year
 "
@@ -1265,7 +1252,7 @@ fg "0,0,32768"
 bg "0,0,32768"
 font "courier,8,0"
 )
-xt "53200,46050,56200,46950"
+xt "53200,46050,58700,46950"
 st "
 %project_name
 "
@@ -1704,6 +1691,6 @@ xt "42000,0,42000,0"
 tm "SyDeclarativeTextMgr"
 )
 )
-lastUid 422,0
+lastUid 458,0
 okToSyncOnLoad 1
 )

@@ -15,11 +15,14 @@ LIBRARY ece411;
 USE ece411.LC3b_types.all;
 
 ENTITY Bit_Array_RW IS
+   GENERIC(
+     DELAY : Time := DELAY_256B
+   );
    PORT( 
       RESET_L    : IN     std_logic;
       DataWrite  : IN     std_logic;
-      ReadIndex  : IN     LC3b_C_INDEX;
-      WriteIndex : IN     LC3B_C_INDEX;
+      ReadIndex  : IN     LC3b_c_index;
+      WriteIndex : IN     LC3b_c_index;
       DataIn     : IN     std_logic;
       DataOut    : OUT    std_logic
    );
@@ -39,7 +42,7 @@ BEGIN
   variable DataIndex : integer;
   begin
     DataIndex := to_integer(unsigned(ReadIndex));
-    DataOut <= Data(DataIndex) after DELAY_256B;
+    DataOut <= Data(DataIndex) after DELAY;
   end process ReadFromDataArray;
   
   --------------------------------------------------------------

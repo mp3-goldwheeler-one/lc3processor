@@ -14,52 +14,48 @@ USE ieee.NUMERIC_STD.all;
 LIBRARY ece411;
 USE ece411.LC3b_types.all;
 
-ENTITY Data_Array_RW IS
-   GENERIC( 
-      N : Integer
-   );
+ENTITY Data_Array_L2 IS
    PORT( 
-      RESET_L    : IN     std_logic;
+      reset_l    : IN     std_logic;
       DataWrite  : IN     std_logic;
-      ReadIndex  : IN     LC3B_C_INDEX;
-      WriteIndex : IN     LC3B_C_INDEX;
-      DataIn     : IN     std_logic_vector (N-1 DOWNTO 0);
-      DataOut    : OUT    std_logic_vector (N-1 DOWNTO 0)
+      Index      : IN     lc3b_c_index;
+      DataIn     : IN     LRU_8_Line;
+      DataOut    : OUT    LRU_8_Line
    );
 
 -- Declarations
 
-END Data_Array_RW ;
+END Data_Array_L2 ;
 
 --
-ARCHITECTURE untitled OF Data_Array_RW IS
-  Type DataArray IS array (7 downto 0) of std_logic_vector(N-1 downto 0);
+ARCHITECTURE untitled OF Data_Array_L2 IS
+  Type DataArray IS array (7 downto 0) of LRU_8_Line;
   signal Data : DataArray;
 BEGIN
   --------------------------------------------------------------
-  ReadFromDataArray : Process (Data, ReadIndex)
+  ReadFromDataArray : Process (Data, Index)
   --------------------------------------------------------------
   variable DataIndex : integer;
   begin
-    DataIndex := to_integer(unsigned(ReadIndex));
+    DataIndex := to_integer(unsigned(Index));
     DataOut <= Data(DataIndex) after DELAY_256B;
   end process ReadFromDataArray;
   
   --------------------------------------------------------------
-  WriteToDataArray : Process (Reset_l, WriteIndex, DataWrite, DataIn)
+  WriteToDataArray : Process (Reset_l, Index, DataWrite, DataIn)
   --------------------------------------------------------------
   variable DataIndex : integer;
   begin
-    DataIndex := to_integer(unsigned(WriteIndex));
+    DataIndex := to_integer(unsigned(Index));
     if (reset_l = '0') then
-      Data(0) <= (Others => 'X');
-      Data(1) <= (Others => 'X');
-      Data(2) <= (Others => 'X');
-      Data(3) <= (Others => 'X');
-      Data(4) <= (Others => 'X');
-      Data(5) <= (Others => 'X');
-      Data(6) <= (Others => 'X');
-      Data(7) <= (Others => 'X');
+      Data(0) <= "000001010011100101110111";
+      Data(1) <= "000001010011100101110111";
+      Data(2) <= "000001010011100101110111";
+      Data(3) <= "000001010011100101110111";
+      Data(4) <= "000001010011100101110111";
+      Data(5) <= "000001010011100101110111";
+      Data(6) <= "000001010011100101110111";
+      Data(7) <= "000001010011100101110111";
     end if;
     if (dataWrite = '1') then
       Data(DataIndex) <= DataIn;
