@@ -39,7 +39,7 @@ BEGIN
   variable DataIndex : integer;
   begin
     DataIndex := to_integer(unsigned(ReadIndex));
-    DataOut <= Data(DataIndex) after DELAY_256B;
+    DataOut <= Data(DataIndex) after DELAY_128B;
   end process ReadFromDataArray;
   
   --------------------------------------------------------------

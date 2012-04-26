@@ -16,7 +16,8 @@ USE ece411.LC3b_types.all;
 
 ENTITY Data_Array_RW IS
    GENERIC( 
-      N : Integer
+      N : Integer;
+      Delay : Time := DELAY_256B
    );
    PORT( 
       RESET_L    : IN     std_logic;
@@ -42,7 +43,7 @@ BEGIN
   variable DataIndex : integer;
   begin
     DataIndex := to_integer(unsigned(ReadIndex));
-    DataOut <= Data(DataIndex) after DELAY_256B;
+    DataOut <= Data(DataIndex) after DELAY;
   end process ReadFromDataArray;
   
   --------------------------------------------------------------
