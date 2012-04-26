@@ -73,7 +73,8 @@ ARCHITECTURE struct OF L1Way IS
    END COMPONENT;
    COMPONENT Data_Array_RW
    GENERIC (
-      N : Integer
+      N     : Integer;
+      Delay : Time
    );
    PORT (
       DataIn     : IN     std_logic_vector (N-1 DOWNTO 0);
@@ -96,6 +97,9 @@ BEGIN
 
    -- Instance port mappings.
    DirtyBits : Bit_Array_RW
+      GENERIC MAP (
+         Delay => DELAY_256B
+      )
       PORT MAP (
          RESET_L    => RESET_L,
          DataWrite  => DataWrite,
@@ -105,6 +109,9 @@ BEGIN
          DataOut    => Dirty
       );
    ValidBits : Bit_Array_RW
+      GENERIC MAP (
+         Delay => DELAY_256B
+      )
       PORT MAP (
          RESET_L    => RESET_L,
          DataWrite  => DataWrite,
@@ -115,7 +122,8 @@ BEGIN
       );
    TagBits : Data_Array_RW
       GENERIC MAP (
-         N => 9
+         N     => 9,
+         Delay => DELAY_256B
       )
       PORT MAP (
          RESET_L    => RESET_L,
@@ -127,7 +135,8 @@ BEGIN
       );
    WayData : Data_Array_RW
       GENERIC MAP (
-         N => 128
+         N     => 128,
+         Delay => DELAY_256B
       )
       PORT MAP (
          RESET_L    => RESET_L,

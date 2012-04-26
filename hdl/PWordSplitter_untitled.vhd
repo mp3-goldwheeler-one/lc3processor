@@ -16,7 +16,7 @@ USE ece411.LC3b_types.all;
 
 ENTITY PWordSplitter IS
    PORT( 
-      PWordIn : IN     LC3b_oword;
+      PWordIn : IN     LC3b_pword;
       oword0  : OUT    LC3b_oword;
       oword1  : OUT    LC3b_oword
    );
@@ -28,7 +28,7 @@ END PWordSplitter ;
 --
 ARCHITECTURE untitled OF PWordSplitter IS
 BEGIN
-  oword0 <= PWordIn(255 downto 128);
-  oword1 <= PWordIn(127 downto 0);
+  oword1 <= PWordIn(255 downto 128);
+  oword0 <= PWordIn(127 downto 0);
 END ARCHITECTURE untitled;
 

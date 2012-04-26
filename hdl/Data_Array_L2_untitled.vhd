@@ -18,7 +18,7 @@ ENTITY Data_Array_L2 IS
    PORT( 
       reset_l    : IN     std_logic;
       DataWrite  : IN     std_logic;
-      Index      : IN     lc3b_c_index;
+      Index      : IN     lc3b_l2_c_index;
       DataIn     : IN     LRU_8_Line;
       DataOut    : OUT    LRU_8_Line
    );
@@ -38,7 +38,7 @@ BEGIN
   variable DataIndex : integer;
   begin
     DataIndex := to_integer(unsigned(Index));
-    DataOut <= Data(DataIndex) after DELAY_256B;
+    DataOut <= Data(DataIndex) after DELAY_2KB;
   end process ReadFromDataArray;
   
   --------------------------------------------------------------

@@ -67,9 +67,10 @@ tm "EolColHdrMgr"
 )
 *14 (LogPort
 port (LogicalPort
+lang 2
 decl (Decl
-n "DATAIN"
-t "LC3b_word"
+n "DataIn"
+t "LRU_8_Line"
 o 4
 suid 1,0
 )
@@ -78,10 +79,11 @@ uid 118,0
 )
 *15 (LogPort
 port (LogicalPort
+lang 2
 m 1
 decl (Decl
-n "Dataout"
-t "LC3b_word"
+n "DataOut"
+t "LRU_8_Line"
 o 5
 suid 2,0
 )
@@ -114,9 +116,10 @@ uid 124,0
 )
 *18 (LogPort
 port (LogicalPort
+lang 2
 decl (Decl
 n "reset_l"
-t "STD_LOGIC"
+t "std_logic"
 o 1
 suid 5,0
 )
@@ -288,11 +291,11 @@ value "/home/one1/Desktop/lc3processor/hds"
 )
 (vvPair
 variable "SideDataDesignDir"
-value "/home/one1/Desktop/lc3processor/hds/@data_@array_@l2/interface.info"
+value "/home/one1/Desktop/lc3processor/hds/@data_@array_@l2/symbol.sb.info"
 )
 (vvPair
 variable "SideDataUserDir"
-value "/home/one1/Desktop/lc3processor/hds/@data_@array_@l2/interface.user"
+value "/home/one1/Desktop/lc3processor/hds/@data_@array_@l2/symbol.sb.user"
 )
 (vvPair
 variable "SourceDir"
@@ -304,7 +307,7 @@ value "HDL Designer"
 )
 (vvPair
 variable "arch_name"
-value "interface"
+value "symbol"
 )
 (vvPair
 variable "config"
@@ -344,15 +347,15 @@ value "<TBD>"
 )
 (vvPair
 variable "f"
-value "interface"
+value "symbol.sb"
 )
 (vvPair
 variable "f_logical"
-value "interface"
+value "symbol.sb"
 )
 (vvPair
 variable "f_noext"
-value "interface"
+value "symbol"
 )
 (vvPair
 variable "group"
@@ -392,11 +395,11 @@ value "April"
 )
 (vvPair
 variable "p"
-value "/home/one1/Desktop/lc3processor/hds/@data_@array_@l2/interface"
+value "/home/one1/Desktop/lc3processor/hds/@data_@array_@l2/symbol.sb"
 )
 (vvPair
 variable "p_logical"
-value "/home/one1/Desktop/lc3processor/hds/Data_Array_L2/interface"
+value "/home/one1/Desktop/lc3processor/hds/Data_Array_L2/symbol.sb"
 )
 (vvPair
 variable "project_name"
@@ -436,7 +439,7 @@ value "<TBD>"
 )
 (vvPair
 variable "time"
-value "18:41:11"
+value "23:26:48"
 )
 (vvPair
 variable "unit"
@@ -452,7 +455,7 @@ value "2005.3 (Build 75)"
 )
 (vvPair
 variable "view"
-value "interface"
+value "symbol"
 )
 (vvPair
 variable "year"
@@ -492,7 +495,7 @@ va (VaSet
 font "courier,8,0"
 )
 xt "16000,6550,19000,7450"
-st "DATAIN"
+st "DataIn"
 blo "16000,7250"
 tm "CptPortNameMgr"
 )
@@ -502,11 +505,15 @@ uid 97,0
 va (VaSet
 font "courier,8,0"
 )
+xt "44000,4500,60500,5400"
+st "DataIn    : IN     LRU_8_Line  ;
+"
 )
 thePort (LogicalPort
+lang 2
 decl (Decl
-n "DATAIN"
-t "LC3b_word"
+n "DataIn"
+t "LRU_8_Line"
 o 4
 suid 1,0
 )
@@ -534,7 +541,7 @@ va (VaSet
 font "courier,8,0"
 )
 xt "18500,6550,22000,7450"
-st "Dataout"
+st "DataOut"
 ju 2
 blo "22000,7250"
 tm "CptPortNameMgr"
@@ -545,12 +552,16 @@ uid 102,0
 va (VaSet
 font "courier,8,0"
 )
+xt "44000,5400,59500,6300"
+st "DataOut   : OUT    LRU_8_Line 
+"
 )
 thePort (LogicalPort
+lang 2
 m 1
 decl (Decl
-n "Dataout"
-t "LC3b_word"
+n "DataOut"
+t "LRU_8_Line"
 o 5
 suid 2,0
 )
@@ -588,6 +599,9 @@ uid 107,0
 va (VaSet
 font "courier,8,0"
 )
+xt "44000,2700,60000,3600"
+st "DataWrite : IN     std_logic  ;
+"
 )
 thePort (LogicalPort
 lang 2
@@ -631,6 +645,9 @@ uid 112,0
 va (VaSet
 font "courier,8,0"
 )
+xt "44000,3600,63000,4500"
+st "Index     : IN     lc3b_l2_c_index  ;
+"
 )
 thePort (LogicalPort
 lang 2
@@ -674,11 +691,15 @@ uid 117,0
 va (VaSet
 font "courier,8,0"
 )
+xt "44000,1800,60000,2700"
+st "reset_l   : IN     std_logic  ;
+"
 )
 thePort (LogicalPort
+lang 2
 decl (Decl
 n "reset_l"
-t "STD_LOGIC"
+t "std_logic"
 o 1
 suid 5,0
 )
@@ -1055,7 +1076,7 @@ fg "0,0,32768"
 bg "0,0,32768"
 font "courier,8,0"
 )
-xt "32200,49050,47700,49950"
+xt "32200,49050,46200,49950"
 st "
 %library/%unit/%view
 "
@@ -1334,9 +1355,9 @@ uid 4,0
 va (VaSet
 font "courier,8,1"
 )
-xt "42000,1800,44500,2700"
+xt "42000,6300,44500,7200"
 st "User:"
-blo "42000,2500"
+blo "42000,7000"
 )
 internalLabel (Text
 uid 6,0
@@ -1353,7 +1374,7 @@ uid 5,0
 va (VaSet
 font "courier,8,0"
 )
-xt "44000,2700,44000,2700"
+xt "44000,7200,44000,7200"
 tm "SyDeclarativeTextMgr"
 )
 internalText (MLText
@@ -1366,5 +1387,5 @@ xt "42000,0,42000,0"
 tm "SyDeclarativeTextMgr"
 )
 )
-lastUid 127,0
+lastUid 139,0
 )

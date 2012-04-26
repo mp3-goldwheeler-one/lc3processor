@@ -3,13 +3,20 @@ quietly WaveActivateNextPane {} 0
 add wave -noupdate -format Logic /cpu/reset_l
 add wave -noupdate -format Logic -height 15 -radix hexadecimal /cpu/clk
 add wave -noupdate -divider Prediction
+add wave -noupdate -color Goldenrod -format Literal -itemcolor Goldenrod -expand /cpu/pipelineddatapath/fetch1/predictunit/btb/lru/data
+add wave -noupdate -color Goldenrod -format Logic -itemcolor Goldenrod /cpu/pipelineddatapath/fetch1/predictunit/btb/present0
+add wave -noupdate -color Goldenrod -format Logic -itemcolor Goldenrod /cpu/pipelineddatapath/fetch1/predictunit/btb/present1
+add wave -noupdate -color Goldenrod -format Logic -itemcolor Goldenrod /cpu/pipelineddatapath/fetch1/predictunit/btb/mread_l
+add wave -noupdate -color Goldenrod -format Logic -itemcolor Goldenrod /cpu/pipelineddatapath/fetch1/predictunit/btb/mwrite_h
+add wave -noupdate -color Goldenrod -format Literal -itemcolor Goldenrod -expand /cpu/pipelineddatapath/fetch1/predictunit/btb/way0/btbarray/data
+add wave -noupdate -color Goldenrod -format Literal -itemcolor Goldenrod -expand /cpu/pipelineddatapath/fetch1/predictunit/btb/way1/btbarray/data
 add wave -noupdate -divider Fetch1
 add wave -noupdate -format Logic /cpu/pipelineddatapath/fetch1/load_pc
 add wave -noupdate -format Literal /cpu/pipelineddatapath/fetch1/next_pc
 add wave -noupdate -format Literal /cpu/pipelineddatapath/fetch1/instr_addr
 add wave -noupdate -format Literal /cpu/pipelineddatapath/fetch1/icache_feedback
 add wave -noupdate -format Literal /cpu/pipelineddatapath/fetch1/target_pc_mux_sel
-add wave -noupdate -format Literal /cpu/pipelineddatapath/fetch1/u_3/way0/waydata/data
+add wave -noupdate -format Literal -expand /cpu/pipelineddatapath/fetch1/u_3/way0/waydata/data
 add wave -noupdate -format Literal /cpu/pipelineddatapath/fetch1/exec_target_pc
 add wave -noupdate -format Literal /cpu/pipelineddatapath/fetch1/u_3/way0/tagbits/data
 add wave -noupdate -format Literal /cpu/pipelineddatapath/fetch1/u_3/way0/validbits/data
@@ -22,6 +29,10 @@ add wave -noupdate -format Literal /cpu/pipelineddatapath/fetch1/u_3/way1/validb
 add wave -noupdate -format Literal /cpu/pipelineddatapath/fetch1/u_3/way1/dirtybits/data
 add wave -noupdate -divider Fetch2
 add wave -noupdate -format Logic /cpu/pipelineddatapath/fetch2/fetch_ready
+add wave -noupdate -format Literal /cpu/pipelineddatapath/fetch2/icache_stage2/acachelogic/decodeoffset
+add wave -noupdate -format Literal /cpu/pipelineddatapath/fetch2/icache_stage2/acachelogic/cacheline_out
+add wave -noupdate -format Literal /cpu/pipelineddatapath/fetch2/icache_stage2/acachelogic/way_data_sel
+add wave -noupdate -format Literal /cpu/pipelineddatapath/fetch2/icache_stage2/acachelogic/dataoword
 add wave -noupdate -format Literal /cpu/pipelineddatapath/fetch2/fetch_instr
 add wave -noupdate -format Literal /cpu/pipelineddatapath/fetch2/instr
 add wave -noupdate -format Logic /cpu/pipelineddatapath/fetch2/f
@@ -128,6 +139,40 @@ add wave -noupdate -format Logic -height 15 -radix hexadecimal /cpu/data_resp_h
 add wave -noupdate -format Literal -height 15 -radix hexadecimal /cpu/instr_in
 add wave -noupdate -format Logic -height 15 -radix hexadecimal /cpu/instr_mread_l
 add wave -noupdate -format Logic -height 15 -radix hexadecimal /cpu/instr_resp_h
+add wave -noupdate -divider L2
+add wave -noupdate -format Logic /cpu/dram/l2/in_idlehit
+add wave -noupdate -format Logic /cpu/dram/l2/in_load
+add wave -noupdate -format Logic /cpu/dram/l2/in_writeback
+add wave -noupdate -format Logic /cpu/dram/l2/evict_buffer_valid
+add wave -noupdate -format Logic /cpu/dram/l2/miss
+add wave -noupdate -format Literal /cpu/dram/l2/datain
+add wave -noupdate -format Literal /cpu/dram/l2/dataout
+add wave -noupdate -format Logic /cpu/dram/l2/mread_l
+add wave -noupdate -format Logic /cpu/dram/l2/mwrite_l
+add wave -noupdate -format Logic /cpu/dram/l2/mresp_h
+add wave -noupdate -format Literal /cpu/dram/l2/l2datapath/pmdatain_aligned
+add wave -noupdate -format Logic /cpu/dram/l2/l2datapath/pmresp_h_aligned
+add wave -noupdate -format Logic /cpu/dram/l2/l2datapath/write
+add wave -noupdate -format Logic /cpu/dram/l2/l2datapath/write0
+add wave -noupdate -format Logic /cpu/dram/l2/l2datapath/write1
+add wave -noupdate -format Logic /cpu/dram/l2/l2datapath/write2
+add wave -noupdate -format Literal /cpu/dram/l2/cache_cont/current_state
+add wave -noupdate -format Logic /cpu/dram/l2/l2datapath/lrugate
+add wave -noupdate -format Logic /cpu/dram/l2/l2datapath/mem_access
+add wave -noupdate -format Literal /cpu/dram/l2/address
+add wave -noupdate -format Literal /cpu/dram/l2/l2datapath/way0dataout
+add wave -noupdate -format Literal /cpu/dram/l2/l2datapath/datapword
+add wave -noupdate -format Literal /cpu/dram/l2/l2datapath/lru_way
+add wave -noupdate -format Event /cpu/dram/l2/l2datapath/way0/waydata/data
+add wave -noupdate -format Event /cpu/dram/l2/l2datapath/way1/waydata/data
+add wave -noupdate -format Event /cpu/dram/l2/l2datapath/way2/waydata/data
+add wave -noupdate -divider {Physical Mem}
+add wave -noupdate -format Literal /cpu/dram/l2/pmdatain
+add wave -noupdate -format Literal /cpu/dram/l2/pmdataout
+add wave -noupdate -format Literal /cpu/dram/l2/pmaddress
+add wave -noupdate -format Logic /cpu/dram/l2/pmread_l
+add wave -noupdate -format Logic /cpu/dram/l2/pmresp_h
+add wave -noupdate -format Logic /cpu/dram/l2/pmwrite_l
 TreeUpdate [SetDefaultTree]
 quietly WaveActivateNextPane
 add wave -noupdate -format Literal /cpu/pipelineddatapath/fetch1/instr_addr
@@ -144,9 +189,9 @@ add wave -noupdate -format Literal /cpu/pipelineddatapath/mem2_data_in.instr
 add wave -noupdate -color {Green Yellow} -format Literal -itemcolor {Green Yellow} /cpu/pipelineddatapath/wb_data_in.instr
 add wave -noupdate -color {Sky Blue} -format Event -height 15 -itemcolor {Sky Blue} -expand /cpu/pipelineddatapath/decode/arf/ram
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {13660 ns} 0}
-configure wave -namecolwidth 642
-configure wave -valuecolwidth 243
+WaveRestoreCursors {{Cursor 1} {3164 ns} 0}
+configure wave -namecolwidth 518
+configure wave -valuecolwidth 178
 configure wave -justifyvalue left
 configure wave -signalnamewidth 0
 configure wave -snapdistance 10
@@ -158,4 +203,4 @@ configure wave -gridperiod 1
 configure wave -griddelta 40
 configure wave -timeline 0
 update
-WaveRestoreZoom {13558 ns} {13607 ns}
+WaveRestoreZoom {3041 ns} {3761 ns}

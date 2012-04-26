@@ -17,8 +17,8 @@ USE ece411.LC3b_types.all;
 ENTITY Timer2 IS
    PORT( 
       CLK       : IN     std_logic;
-      LRUgate   : OUT    STD_LOGIC;
-      writegate : OUT    std_logic
+      LRUgate   : buffer STD_LOGIC;
+      writegate : buffer std_logic
    );
 
 -- Declarations
@@ -28,7 +28,20 @@ END Timer2 ;
 --
 ARCHITECTURE untitled OF Timer2 IS
 BEGIN
-    Writegate <= clk'delayed(HALF_CLOCK_PERIOD);
-    LRUgate <= clk'delayed(HALF_CLOCK_PERIOD);
+  do_timer1 : process
+  begin
+    Writegate <= '0';
+    wait for 14ns;
+    Writegate <= '1';
+    wait until clk = '1';
+  end process;
+  
+  do_timer2 : process
+  begin
+    LRUgate <= '0';
+    wait for 16ns;
+    LRUgate <= '1';
+    wait until clk = '1';
+  end process;  
 END ARCHITECTURE untitled;
 

@@ -19,7 +19,7 @@ ENTITY PWordMux2 IS
       A   : IN     LC3b_pword;
       B   : IN     LC3b_pword;
       Sel : IN     std_logic;
-      Y   : OUT    std_logic
+      Y   : OUT    LC3b_pword
    );
 
 -- Declarations

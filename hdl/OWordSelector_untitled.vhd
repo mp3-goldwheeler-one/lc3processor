@@ -17,7 +17,7 @@ USE ece411.LC3b_types.all;
 ENTITY OWordSelector IS
    PORT( 
       Input   : IN     LC3b_pword;
-      Offset  : IN     LC3b_C_Offset;
+      Offset  : IN     LC3b_L2_C_Offset;
       Output  : OUT    LC3b_oword
    );
 
@@ -28,14 +28,14 @@ END OWordSelector ;
 --
 ARCHITECTURE untitled OF OWordSelector IS
 BEGIN
-  Update : PROCESS (Input, Offset, Output) is
+  Update : PROCESS (Input, Offset) is
     variable state : LC3b_oword;
   BEGIN
     case Offset is
       when '0' =>
-        state := Input(255 downto 128);
-      when '1' =>
         state := Input(127 downto 0);
+      when '1' =>
+        state := Input(255 downto 128);
       when others =>
         state := (OTHERS => 'X');
     end case;
