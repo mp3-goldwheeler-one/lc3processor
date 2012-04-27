@@ -343,7 +343,7 @@ ARCHITECTURE struct OF Datapath IS
       mem_prediction_correct    : IN     std_logic ;
       mem_taken                 : IN     std_logic ;
       mem_target_pc             : IN     lc3b_word ;
-      target_pc_mux_sel         : IN     LC3B_TRISTATE_4mux_sel ;
+      target_pc_mux_sel         : IN     LC3B_tristate_4mux_sel ;
       wb_cc                     : IN     LC3b_cc ;
       fetch1_data_out           : OUT    pipe_data ;
       icache_ReadIndex          : OUT    lc3b_c_index ;

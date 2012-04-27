@@ -24,6 +24,6 @@ END DelayedOne ;
 --
 ARCHITECTURE untitled OF DelayedOne IS
 BEGIN
-  output <= '0', '1' after DELAY_MP22_MEM;
+  output <= '0', '1' after DELAY_256B_MEM;
 END ARCHITECTURE untitled;
 

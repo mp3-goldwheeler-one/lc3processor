@@ -17,10 +17,10 @@ USE ece411.LC3b_types.all;
 ENTITY Physical_Memory IS
    PORT( 
       PMADDRESS : IN     LC3B_WORD;
-      PMDATAOUT : IN     LC3B_OWORD;
+      PMDATAOUT : IN     LC3B_PWORD;
       PMREAD_L  : IN     STD_LOGIC;
       PMWRITE_L : IN     STD_LOGIC;
-      PMDATAIN  : OUT    LC3B_OWORD;
+      PMDATAIN  : OUT    LC3B_PWORD;
       PMRESP_H  : OUT    std_logic;
       RESET_L   : IN     STD_LOGIC;
       CLK       : IN     std_logic

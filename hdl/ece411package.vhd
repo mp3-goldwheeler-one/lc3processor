@@ -36,11 +36,21 @@ PACKAGE LC3B_TYPES IS
 	SUBTYPE LC3B_8MUX_SEL           IS STD_LOGIC_VECTOR(2 DOWNTO 0);
   SUBTYPE LC3B_3DECODE   IS STD_LOGIC_VECTOR(2 DOWNTO 0);
 --CACHE SIGNALS (ADD MORE TO ME!!)
-  SUBTYPE LC3B_C_OFFSET  IS STD_LOGIC_VECTOR(3 DOWNTO 0);
-  SUBTYPE LC3B_C_INDEX   IS STD_LOGIC_VECTOR(2 DOWNTO 0);
-  SUBTYPE LC3B_C_TAG     IS STD_LOGIC_VECTOR(8 DOWNTO 0);
-  subtype lc3b_alumux_sel  is std_logic_vector(1 downto 0);
-  subtype btb_state_counter is std_logic_vector(1 downto 0);
+    SUBTYPE LC3B_C_OFFSET  IS STD_LOGIC_VECTOR(3 DOWNTO 0);
+    SUBTYPE LC3B_C_INDEX   IS STD_LOGIC_VECTOR(2 DOWNTO 0);
+    SUBTYPE LC3B_C_TAG     IS STD_LOGIC_VECTOR(8 DOWNTO 0);
+
+    SUBTYPE LC3B_L2_C_OFFSET IS STD_LOGIC;
+    SUBTYPE LC3B_L2_C_INDEX  IS STD_LOGIC_VECTOR(2 DOWNTO 0);
+    SUBTYPE LC3B_L2_C_TAG    IS STD_LOGIC_VECTOR(7 DOWNTO 0);
+
+    subtype lc3b_alumux_sel  is std_logic_vector(1 downto 0);
+    subtype btb_state_counter is std_logic_vector(1 downto 0);
+    subtype LRU_4_Line is std_logic_vector(7 downto 0);
+    subtype LRU_4_Section is std_logic_vector(1 downto 0);
+    
+  subtype LRU_8_Line is std_logic_vector(23 downto 0);
+  subtype LRU_8_Section is std_logic_vector(2 downto 0);
 
 	TYPE MEMORY_ARRAY_64K IS ARRAY (0 TO 65535) OF LC3B_BYTE;
 	
@@ -85,7 +95,7 @@ PACKAGE LC3B_TYPES IS
 
 	-- TIME DELAYS **********
 	-- CHANGED FOR FALL 2009: ALU, ADDER, SHIFTER DELAYS
-	CONSTANT HALF_CLOCK_PERIOD  : TIME := 16 NS;
+	CONSTANT HALF_CLOCK_PERIOD  : TIME := 19 NS;
 	CONSTANT CLOCK_PERIOD       : TIME := (HALF_CLOCK_PERIOD + HALF_CLOCK_PERIOD);
 	CONSTANT DELAY_LOGIC2       : TIME := 1 NS;
 	CONSTANT DELAY_LOGIC3       : TIME := 2 NS;
@@ -209,6 +219,7 @@ PACKAGE LC3B_TYPES IS
 		target_pc    : LC3B_word;
 		taken        : std_logic;
 		btb_data     : btb_line;
+		btb_way      : LRU_4_Section;
 	END RECORD;
 
   TYPE LC3b_cache_interstage_data IS RECORD
@@ -341,7 +352,8 @@ PACKAGE LC3B_TYPES IS
 		cc           => "XXX",
 		target_pc    => "XXXXXXXXXXXXXXXX",
 		taken        => 'X',
-		btb_data     => default_btb_line
+		btb_data     => default_btb_line,
+		btb_way      => "XX"
 	);
 
 	CONSTANT test_pipe_data : pipe_data := (
@@ -368,7 +380,8 @@ PACKAGE LC3B_TYPES IS
 		cc           => "XXX",
 		target_pc    => "XXXXXXXXXXXXXXXX",
 		taken        => 'X',
-		btb_data     => default_btb_line
+		btb_data     => default_btb_line,
+		btb_way      => "XX"
 	);
 
 	CONSTANT default_control_word : control_word := (
