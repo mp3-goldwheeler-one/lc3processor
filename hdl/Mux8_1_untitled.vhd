@@ -52,9 +52,9 @@ BEGIN
     WHEN "101" => 
 	    TEMP <= F;
     WHEN "110" => 
-	    TEMP <= H;
-    WHEN "111" => 
 	    TEMP <= G;
+    WHEN "111" => 
+	    TEMP <= H;
 		WHEN OTHERS =>
 			TEMP <= 'X';
 		END CASE;

@@ -129,6 +129,10 @@ ARCHITECTURE struct OF Datapath IS
    SIGNAL mem1_flush                 : std_logic;
    SIGNAL mem1_flush_l               : std_logic;
    SIGNAL mem1_insert_bubble         : LC3B_TRISTATE_2MUX_SEL;
+   SIGNAL mem1_sr1_forward_sel       : STD_LOGIC_VECTOR(1 DOWNTO 0);
+   SIGNAL mem1_sr1_fw_sel            : LC3b_TRISTATE_2MUX_SEL;
+   SIGNAL mem1_sr2_forward_sel       : STD_LOGIC_VECTOR(1 DOWNTO 0);
+   SIGNAL mem1_sr2_fw_sel            : LC3b_TRISTATE_2MUX_SEL;
    SIGNAL mem2_cc                    : lc3b_cc;
    SIGNAL mem2_control               : control_word;
    SIGNAL mem2_control_in            : mem_control_word;
@@ -437,6 +441,8 @@ ARCHITECTURE struct OF Datapath IS
       exec_fw_src1_sel        : IN     LC3b_TRISTATE_4mux_sel ;
       exec_fw_src2_sel        : IN     LC3b_TRISTATE_4mux_sel ;
       load_fwd_pipe           : IN     std_logic ;
+      mem1_sr1_forward_sel    : IN     STD_LOGIC_VECTOR (1 DOWNTO 0);
+      mem1_sr2_forward_sel    : IN     STD_LOGIC_VECTOR (1 DOWNTO 0);
       mem2_fw_sel             : IN     std_logic ;
       stall_load_use_1cycle   : IN     STD_LOGIC ;
       stall_load_use_2cycle   : IN     STD_LOGIC ;
@@ -444,6 +450,8 @@ ARCHITECTURE struct OF Datapath IS
       exec_forward_cc_sel     : OUT    LC3b_TRISTATE_4mux_sel ;
       exec_forward_srca_sel   : OUT    LC3b_TRISTATE_4mux_sel ;
       exec_forward_srcb_sel   : OUT    LC3b_TRISTATE_4mux_sel ;
+      mem1_sr1_fw_sel         : OUT    LC3b_TRISTATE_2MUX_SEL ;
+      mem1_sr2_fw_sel         : OUT    LC3b_TRISTATE_2MUX_SEL ;
       mem2_foward_sel         : OUT    std_logic ;
       stall_load_use_buffer   : OUT    STD_LOGIC ;
       stall_load_use_buffer_l : OUT    STD_LOGIC 
@@ -464,6 +472,8 @@ ARCHITECTURE struct OF Datapath IS
       exec_fw_cc_sel         : OUT    LC3b_TRISTATE_4mux_sel ;
       exec_fw_src1_sel       : OUT    LC3b_TRISTATE_4mux_sel ;
       exec_fw_src2_sel       : OUT    LC3b_TRISTATE_4mux_sel ;
+      mem1_sr1_forward_sel   : OUT    STD_LOGIC_VECTOR (1 DOWNTO 0);
+      mem1_sr2_forward_sel   : OUT    STD_LOGIC_VECTOR (1 DOWNTO 0);
       mem2_fw_sel            : OUT    std_logic ;
       stall_load_use_1cycle  : OUT    STD_LOGIC ;
       stall_load_use_2cycle  : OUT    STD_LOGIC 
@@ -502,6 +512,9 @@ ARCHITECTURE struct OF Datapath IS
       dcache_feedback           : IN     LC3b_cache_feedback_data ;
       mem1_control_in           : IN     mem_control_word ;
       mem1_data_in              : IN     pipe_data ;
+      mem1_sr1_fw_sel           : IN     LC3b_TRISTATE_2MUX_SEL ;
+      mem1_sr2_fw_sel           : IN     LC3b_TRISTATE_2MUX_SEL ;
+      wb_data_in                : IN     pipe_data ;
       dcache_ReadIndex          : OUT    LC3b_C_INDEX ;
       dcache_interstage_data_in : OUT    LC3b_cache_interstage_data ;
       mem1_cc                   : OUT    LC3b_CC ;
@@ -869,6 +882,8 @@ BEGIN
          exec_fw_src1_sel        => exec_fw_src1_sel,
          exec_fw_src2_sel        => exec_fw_src2_sel,
          load_fwd_pipe           => load_fwd_pipe,
+         mem1_sr1_forward_sel    => mem1_sr1_forward_sel,
+         mem1_sr2_forward_sel    => mem1_sr2_forward_sel,
          mem2_fw_sel             => mem2_fw_sel,
          stall_load_use_1cycle   => stall_load_use_1cycle,
          stall_load_use_2cycle   => stall_load_use_2cycle,
@@ -876,6 +891,8 @@ BEGIN
          exec_forward_cc_sel     => exec_forward_cc_sel,
          exec_forward_srca_sel   => exec_forward_srca_sel,
          exec_forward_srcb_sel   => exec_forward_srcb_sel,
+         mem1_sr1_fw_sel         => mem1_sr1_fw_sel,
+         mem1_sr2_fw_sel         => mem1_sr2_fw_sel,
          mem2_foward_sel         => mem2_foward_sel,
          stall_load_use_buffer   => stall_load_use_buffer,
          stall_load_use_buffer_l => stall_load_use_buffer_l
@@ -895,6 +912,8 @@ BEGIN
          exec_fw_cc_sel         => exec_fw_cc_sel,
          exec_fw_src1_sel       => exec_fw_src1_sel,
          exec_fw_src2_sel       => exec_fw_src2_sel,
+         mem1_sr1_forward_sel   => mem1_sr1_forward_sel,
+         mem1_sr2_forward_sel   => mem1_sr2_forward_sel,
          mem2_fw_sel            => mem2_fw_sel,
          stall_load_use_1cycle  => stall_load_use_1cycle,
          stall_load_use_2cycle  => stall_load_use_2cycle
@@ -930,6 +949,9 @@ BEGIN
          dcache_feedback           => dcache_feedback,
          mem1_control_in           => mem1_control_in,
          mem1_data_in              => mem1_data_in,
+         mem1_sr1_fw_sel           => mem1_sr1_fw_sel,
+         mem1_sr2_fw_sel           => mem1_sr2_fw_sel,
+         wb_data_in                => wb_data_in,
          dcache_ReadIndex          => dcache_ReadIndex,
          dcache_interstage_data_in => dcache_interstage_data_in,
          mem1_cc                   => mem1_cc,

@@ -50,12 +50,15 @@ ARCHITECTURE struct OF L2_Cache IS
    -- Architecture declarations
 
    -- Internal signal declarations
-   SIGNAL PMRESP_H_aligned   : STD_LOGIC;
+   SIGNAL LRUgate            : std_logic;
    SIGNAL evict_buffer_valid : std_logic;
    SIGNAL in_idlehit         : std_logic;
+   SIGNAL in_idlehit2        : std_logic;
    SIGNAL in_load            : std_logic;
-   SIGNAL in_writeback       : std_logic;
+   SIGNAL in_load_resp       : std_logic;
+   SIGNAL mem_access         : std_logic;
    SIGNAL miss               : std_logic;
+   SIGNAL process_hit        : std_logic;
 
 
    -- Component Declarations
@@ -65,34 +68,41 @@ ARCHITECTURE struct OF L2_Cache IS
       PMRESP_H           : IN     std_logic ;
       RESET_L            : IN     std_logic ;
       evict_buffer_valid : IN     std_logic ;
+      mem_access         : IN     std_logic ;
       miss               : IN     std_logic ;
+      LRUgate            : OUT    std_logic ;
       PMREAD_L           : OUT    std_logic ;
-      PMWRITE_L          : OUT    std_logic ;
       in_idlehit         : OUT    std_logic ;
+      in_idlehit2        : OUT    std_logic ;
       in_load            : OUT    std_logic ;
-      in_writeback       : OUT    std_logic 
+      in_load_resp       : OUT    std_logic ;
+      process_hit        : OUT    std_logic 
    );
    END COMPONENT;
    COMPONENT L2_Cache_Datapath
    PORT (
       Address            : IN     LC3b_word ;
       Dataout            : IN     LC3b_oword ;
+      LRUgate            : IN     STD_LOGIC ;
       MREAD_L            : IN     std_logic ;
       MWRITE_L           : IN     std_logic ;
       PMDATAIN           : IN     LC3B_PWORD ;
       PMRESP_H           : IN     STD_LOGIC ;
       clk                : IN     std_logic ;
-      in_idlehit         : IN     std_logic ;
+      in_idlehit         : IN     STD_LOGIC ;
+      in_idlehit2        : IN     std_logic ;
       in_load            : IN     std_logic ;
-      in_writeback       : IN     std_logic ;
+      in_load_resp       : IN     std_logic ;
+      process_hit        : IN     std_logic ;
       reset_l            : IN     STD_LOGIC ;
       DATAIN             : OUT    LC3b_oword ;
       MRESP_H            : OUT    std_logic ;
       PMADDRESS          : OUT    LC3B_WORD ;
       PMDATAOUT          : OUT    LC3B_PWORD ;
-      PMRESP_H_aligned   : OUT    STD_LOGIC ;
+      PMWRITE_L          : OUT    STD_LOGIC ;
       evict_buffer_valid : OUT    std_logic ;
-      miss               : OUT    std_logic 
+      miss               : OUT    std_logic ;
+      mem_access         : BUFFER std_logic 
    );
    END COMPONENT;
 
@@ -109,36 +119,43 @@ BEGIN
    Cache_Cont : Cache_Controller_L2
       PORT MAP (
          CLK                => CLK,
-         PMRESP_H           => PMRESP_H_aligned,
+         PMRESP_H           => PMRESP_H,
          RESET_L            => RESET_L,
          evict_buffer_valid => evict_buffer_valid,
+         mem_access         => mem_access,
          miss               => miss,
+         LRUgate            => LRUgate,
          PMREAD_L           => PMREAD_L,
-         PMWRITE_L          => PMWRITE_L,
          in_idlehit         => in_idlehit,
+         in_idlehit2        => in_idlehit2,
          in_load            => in_load,
-         in_writeback       => in_writeback
+         in_load_resp       => in_load_resp,
+         process_hit        => process_hit
       );
    L2Datapath : L2_Cache_Datapath
       PORT MAP (
          Address            => ADDRESS,
          Dataout            => Dataout,
+         LRUgate            => LRUgate,
          MREAD_L            => MREAD_L,
          MWRITE_L           => MWRITE_L,
          PMDATAIN           => PMDATAIN,
          PMRESP_H           => PMRESP_H,
          clk                => CLK,
          in_idlehit         => in_idlehit,
+         in_idlehit2        => in_idlehit2,
          in_load            => in_load,
-         in_writeback       => in_writeback,
+         in_load_resp       => in_load_resp,
+         process_hit        => process_hit,
          reset_l            => RESET_L,
          DATAIN             => DATAIN,
          MRESP_H            => MRESP_H,
          PMADDRESS          => PMADDRESS,
          PMDATAOUT          => PMDATAOUT,
-         PMRESP_H_aligned   => PMRESP_H_aligned,
+         PMWRITE_L          => PMWRITE_L,
          evict_buffer_valid => evict_buffer_valid,
-         miss               => miss
+         miss               => miss,
+         mem_access         => mem_access
       );
 
 END struct;

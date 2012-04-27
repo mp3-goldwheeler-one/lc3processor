@@ -15,12 +15,15 @@ ENTITY Cache_Controller_L2 IS
       PMRESP_H           : IN     std_logic;
       RESET_L            : IN     std_logic;
       evict_buffer_valid : IN     std_logic;
+      mem_access         : IN     std_logic;
       miss               : IN     std_logic;
+      LRUgate            : OUT    std_logic;
       PMREAD_L           : OUT    std_logic;
-      PMWRITE_L          : OUT    std_logic;
       in_idlehit         : OUT    std_logic;
+      in_idlehit2        : OUT    std_logic;
       in_load            : OUT    std_logic;
-      in_writeback       : OUT    std_logic
+      in_load_resp       : OUT    std_logic;
+      process_hit        : OUT    std_logic
    );
 
 -- Declarations
@@ -42,9 +45,11 @@ USE ece411.LC3b_types.all;
 ARCHITECTURE fsm OF Cache_Controller_L2 IS
 
    TYPE STATE_TYPE IS (
-      WRITE_BACK,
       IDLE_HIT,
-      LOAD
+      LOAD,
+      IDLE_HIT2,
+      HIT_RESP,
+      LOAD_RESP
    );
  
    -- State vector declaration
@@ -76,33 +81,36 @@ BEGIN
       PMRESP_H,
       current_state,
       evict_buffer_valid,
+      mem_access,
       miss
    )
    -----------------------------------------------------------------
    BEGIN
       CASE current_state IS
-         WHEN WRITE_BACK => 
-            IF (PMRESP_H = '1') THEN 
-               next_state <= IDLE_HIT;
-            ELSE
-               next_state <= WRITE_BACK;
-            END IF;
          WHEN IDLE_HIT => 
-            IF (miss = '1') THEN 
-               next_state <= LOAD;
+            IF (mem_access = '1') THEN 
+               next_state <= IDLE_HIT2;
             ELSE
                next_state <= IDLE_HIT;
             END IF;
          WHEN LOAD => 
-            IF (PMRESP_H = '1' and
-                evict_buffer_valid = '1') THEN 
-               next_state <= WRITE_BACK;
-            ELSIF (PMRESP_H = '1' and
-                   evict_buffer_valid = '0') THEN 
-               next_state <= IDLE_HIT;
+            IF (PMRESP_H = '1') THEN 
+               next_state <= LOAD_RESP;
             ELSE
                next_state <= LOAD;
             END IF;
+         WHEN IDLE_HIT2 => 
+            IF (miss = '0') THEN 
+               next_state <= HIT_RESP;
+            ELSIF (miss = '1' and evict_buffer_valid = '0') THEN 
+               next_state <= LOAD;
+            ELSE
+               next_state <= IDLE_HIT2;
+            END IF;
+         WHEN HIT_RESP => 
+            next_state <= IDLE_HIT;
+         WHEN LOAD_RESP => 
+            next_state <= IDLE_HIT;
          WHEN OTHERS =>
             next_state <= IDLE_HIT;
       END CASE;
@@ -115,22 +123,30 @@ BEGIN
    -----------------------------------------------------------------
    BEGIN
       -- Default Assignment
+      LRUgate <= '0';
       PMREAD_L <= '1';
-      PMWRITE_L <= '1';
       in_idlehit <= '0';
+      in_idlehit2 <= '0';
       in_load <= '0';
-      in_writeback <= '0';
+      in_load_resp <= '0';
+      process_hit <= '0';
 
       -- Combined Actions
       CASE current_state IS
-         WHEN WRITE_BACK => 
-            in_writeback <= '1';
-            PMWRITE_L <= '0';
          WHEN IDLE_HIT => 
             in_idlehit <= '1';
          WHEN LOAD => 
             in_load <= '1';
             PMREAD_L <= '0' after 2ns;
+         WHEN IDLE_HIT2 => 
+            in_idlehit  <= '1';
+            in_idlehit2 <= '1';
+         WHEN HIT_RESP => 
+            LRUgate <= '1' after 1 ns;
+            in_idlehit <= '1';
+            process_hit <= '1';
+         WHEN LOAD_RESP => 
+            in_load_resp <= '1';
          WHEN OTHERS =>
             NULL;
       END CASE;

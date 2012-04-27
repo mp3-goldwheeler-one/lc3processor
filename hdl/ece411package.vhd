@@ -1068,7 +1068,7 @@ PACKAGE LC3B_TYPES IS
 			mem_read_byte  => '0',
 			mem_write_byte => '0',
 			mem_write_word => '0',
-			wbdatamux_sel  => '0',
+			wbdatamux_sel  => '1',
 			trap           => '0',
 			write_btb      => '0',
 			unconditional  => '0'

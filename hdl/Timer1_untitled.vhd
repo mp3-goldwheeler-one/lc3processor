@@ -27,6 +27,6 @@ END BTB_Timer ;
 --
 ARCHITECTURE untitled OF BTB_Timer IS
 BEGIN
-  Writegate <= (clk'delayed(10ns));
+  Writegate <= (clk'delayed(6ns));
 END ARCHITECTURE untitled;
 

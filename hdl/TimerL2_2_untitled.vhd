@@ -14,21 +14,18 @@ USE ieee.NUMERIC_STD.all;
 LIBRARY ece411;
 USE ece411.LC3b_types.all;
 
-ENTITY Timer_L2 IS
+ENTITY TimerL2_2 IS
    PORT( 
-      clk        : IN     std_logic;
-    --  mem_access : IN     std_logic;
-    --  LRUgate    : OUT    STD_LOGIC;
-    --  missgate   : OUT    std_logic;
-      writegate  : OUT    std_logic
+      clk          : IN     std_logic;
+      lruwritegate : OUT    std_logic
    );
 
 -- Declarations
 
-END Timer_L2 ;
+END TimerL2_2 ;
 
 --
-ARCHITECTURE untitled OF Timer_L2 IS
+ARCHITECTURE untitled OF TimerL2_2 IS
 BEGIN
   --do_LRUGate : process
   --begin
@@ -42,9 +39,9 @@ BEGIN
 
   do_writegate : process
   begin
-    writegate <= '0';
+    lruwritegate <= '0';
     wait for HALF_CLOCK_PERIOD;
-    writegate <= '1';
+    lruwritegate <= '1';
     wait for HALF_CLOCK_PERIOD;
   end process;
 

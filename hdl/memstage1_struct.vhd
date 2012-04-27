@@ -16,6 +16,9 @@ ENTITY memStage1 IS
       dcache_feedback           : IN     LC3b_cache_feedback_data;
       mem1_control_in           : IN     mem_control_word;
       mem1_data_in              : IN     pipe_data;
+      mem1_sr1_fw_sel           : IN     LC3b_TRISTATE_2MUX_SEL;
+      mem1_sr2_fw_sel           : IN     LC3b_TRISTATE_2MUX_SEL;
+      wb_data_in                : IN     pipe_data;
       dcache_ReadIndex          : OUT    LC3b_C_INDEX;
       dcache_interstage_data_in : OUT    LC3b_cache_interstage_data;
       mem1_cc                   : OUT    LC3b_CC;
@@ -62,13 +65,16 @@ ARCHITECTURE struct OF memStage1 IS
    SIGNAL off11       : LC3B_OFFSET11;
    SIGNAL off9        : LC3B_OFFSET9;
    SIGNAL sr1         : lc3b_reg;
+   SIGNAL sr1_fw      : lc3b_word;
    SIGNAL sr1_val     : lc3b_word;
    SIGNAL sr2         : lc3b_reg;
+   SIGNAL sr2_fw      : lc3b_word;
    SIGNAL sr2_val     : lc3b_word;
    SIGNAL taken       : std_logic;
    SIGNAL target_pc   : lc3b_word;
    SIGNAL trapvect8   : LC3B_TRAPVECT8;
    SIGNAL wb_data     : lc3b_word;
+   SIGNAL wb_wb_data  : std_logic_vector(15 DOWNTO 0);
 
    -- Implicit buffer signal declarations
    SIGNAL dcache_ReadIndex_internal : LC3b_C_INDEX;
@@ -148,6 +154,17 @@ ARCHITECTURE struct OF memStage1 IS
       ReadIndex       : BUFFER lc3b_c_index 
    );
    END COMPONENT;
+   COMPONENT TristateMux2_N
+   GENERIC (
+      n : integer
+   );
+   PORT (
+      A   : IN     std_logic_vector (n-1 DOWNTO 0);
+      B   : IN     std_logic_vector (n-1 DOWNTO 0);
+      sel : IN     LC3b_TRISTATE_2MUX_SEL ;
+      F   : OUT    std_logic_vector (n-1 DOWNTO 0)
+   );
+   END COMPONENT;
 
    -- Optional embedded configurations
    -- pragma synthesis_off
@@ -155,10 +172,15 @@ ARCHITECTURE struct OF memStage1 IS
    FOR ALL : PipeDataCombiner USE ENTITY ece411.PipeDataCombiner;
    FOR ALL : PipeDataSplitter USE ENTITY ece411.PipeDataSplitter;
    FOR ALL : Pipelined_L1_Stage1 USE ENTITY ece411.Pipelined_L1_Stage1;
+   FOR ALL : TristateMux2_N USE ENTITY ece411.TristateMux2_N;
    -- pragma synthesis_on
 
 
 BEGIN
+   -- Architecture concurrent statements
+   -- HDL Embedded Text Block 1 eb1
+   wb_wb_data <= wb_data_in.wb_data;
+
 
    -- Instance port mappings.
    theGenCC : GenCC
@@ -183,8 +205,8 @@ BEGIN
          off9        => off9,
          sr1         => sr1,
          sr2         => sr2,
-         sr1_val     => sr1_val,
-         sr2_val     => sr2_val,
+         sr1_val     => sr1_fw,
+         sr2_val     => sr2_fw,
          trapvect8   => trapvect8,
          nzp         => nzp,
          cc          => cc,
@@ -229,6 +251,26 @@ BEGIN
          feedback        => dcache_feedback,
          interstage_data => dcache_interstage_data_in,
          ReadIndex       => dcache_ReadIndex_internal
+      );
+   U_1 : TristateMux2_N
+      GENERIC MAP (
+         n => 16
+      )
+      PORT MAP (
+         A   => sr1_val,
+         B   => wb_wb_data,
+         sel => mem1_sr1_fw_sel,
+         F   => sr1_fw
+      );
+   U_2 : TristateMux2_N
+      GENERIC MAP (
+         n => 16
+      )
+      PORT MAP (
+         A   => sr2_val,
+         B   => wb_wb_data,
+         sel => mem1_sr2_fw_sel,
+         F   => sr2_fw
       );
 
    -- Implicit buffered output assignments
