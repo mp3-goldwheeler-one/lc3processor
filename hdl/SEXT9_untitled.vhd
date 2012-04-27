@@ -16,17 +16,10 @@ USE ece411.LC3b_types.all;
 
 ENTITY SEXT9 IS
    PORT( 
-      in9        : IN     LC3b_offset9;
-      output     : OUT    LC3b_word
+      in9    : IN     std_logic_vector (8 DOWNTO 0);
+      output : OUT    std_logic_vector (15 DOWNTO 0)
    );
 
 -- Declarations
 
 END SEXT9 ;
-
---
-ARCHITECTURE untitled OF SEXT9 IS
-BEGIN
-  output <= in9(8) & in9(8) & in9(8) & in9(8) & in9(8) & in9(8) & in9 & '0'  after DELAY_MUX2;
-END ARCHITECTURE untitled;
-

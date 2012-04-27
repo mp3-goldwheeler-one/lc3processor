@@ -148,7 +148,7 @@ PACKAGE LC3B_TYPES IS
 	TYPE dec_control_word IS RECORD
 		ldi           : std_logic;
 		sti           : std_logic;
-		jsr           : std_logic;
+		jsr           : LC3B_TRISTATE_2MUX_SEL;
 		use_uop2      : std_logic;
 		override_dr   : std_logic;
 		dr_override   : LC3b_reg;
@@ -265,7 +265,7 @@ PACKAGE LC3B_TYPES IS
 	CONSTANT default_dec_control : dec_control_word := (
 		ldi           => '0',
 		sti           => '0',
-		jsr           => '0',
+		jsr           => "01",
 		use_uop2      => '0',
 		override_dr   => '0',
 		dr_override   => "XXXX",
@@ -388,6 +388,105 @@ PACKAGE LC3B_TYPES IS
 		,  pc    => (others => 'X')
 		,  instr => (others => 'X')
 	);
+	
+	CONSTANT undefined_dec_control : dec_control_word := (
+	  ldi           => 'X',
+	  sti           => 'X',
+	  jsr           => "XX",
+	  use_uop2      => 'X',
+	  override_dr   => 'X',
+	  dr_override   => "XXXX",
+	  uop_rom_idx   => "XXXX",
+	  sr1_needed    => 'X',
+	  sr2_needed    => 'X'
+  );
+	
+	CONSTANT hiz_dec_control : dec_control_word := (
+    ldi           => 'Z',
+    sti           => 'Z',
+    jsr           => "ZZ",
+    use_uop2      => 'Z',
+    override_dr   => 'Z',
+    dr_override   => "ZZZZ",
+    uop_rom_idx   => "ZZZZ",
+    sr1_needed    => 'Z',
+    sr2_needed    => 'Z'
+  );
+  
+  CONSTANT undefined_exec_control : exec_control_word := (
+    alumux_sel     => (Others => 'X'),
+    aluop          => "XXX",
+    shift_imm      => 'X',
+    srcamux_sel    => "XX",
+    srcbbmux_sel   => 'X',
+    br             => 'X',
+    jsrr_or_jmp    => 'X',
+    load_pc        => 'X'
+  );
+
+  CONSTANT hiz_exec_control : exec_control_word := (
+    alumux_sel     => (Others => 'Z'),
+    aluop          => "ZZZ",
+    shift_imm      => 'Z',
+    srcamux_sel    => "ZZ",
+    srcbbmux_sel   => 'Z',
+    br             => 'Z',
+    jsrr_or_jmp    => 'Z',
+    load_pc        => 'Z'
+  );
+  
+  	CONSTANT undefined_mem_control : mem_control_word := (
+		  mem_read       => 'X',
+		  mem_read_byte  => 'X',
+		  mem_write_word => 'X',
+		  mem_write_byte => 'X',
+		  wbdatamux_sel  => 'X',
+		  trap           => 'X',
+		  write_btb      => 'X',
+		  unconditional  => 'X'
+	  );
+	  
+  CONSTANT hiz_mem_control : mem_control_word := (
+    mem_read       => 'Z',
+    mem_read_byte  => 'Z',
+    mem_write_word => 'Z',
+    mem_write_byte => 'Z',
+    wbdatamux_sel  => 'Z',
+    trap           => 'Z',
+	  write_btb      => 'Z',
+    unconditional  => 'Z'
+  );
+
+	CONSTANT undefined_wb_control : wb_control_word := (
+	  set_cc   => 'X',
+	  regwrite => 'X'
+  );
+  
+	CONSTANT hiz_wb_control : wb_control_word := (
+    set_cc   => 'Z',
+    regwrite => 'Z'
+  );
+	
+	CONSTANT hiz_control_word : control_word := (
+		dec   => hiz_dec_control,
+		exec  => hiz_exec_control,
+		mem   => hiz_mem_control,
+		wb    => hiz_wb_control
+		,  op    => (others => 'Z')
+		,  pc    => (others => 'Z')
+		,  instr => (others => 'Z')
+	);
+	
+	CONSTANT undefined_control_word : control_word := (
+	  dec   => undefined_dec_control,
+	  exec  => undefined_exec_control,
+	  mem   => undefined_mem_control,
+	  wb    => undefined_wb_control
+	  ,  op    => (others => 'X')
+	  ,  pc    => (others => 'X')
+	  ,  instr => (others => 'X')
+  );
+
 
 	-- "Opcode & Bit11 & Bit5 & Bit 4"
 	-- "0001X0X"
@@ -395,7 +494,7 @@ PACKAGE LC3B_TYPES IS
 		dec   => (
 			ldi            => '0',
 			sti            => '0',
-			jsr            => '0',
+			jsr            => "01",
 			use_uop2       => '0',
 			override_dr    => '0',
 			dr_override    => "XXXX",
@@ -423,7 +522,7 @@ PACKAGE LC3B_TYPES IS
 		dec   => (
 			ldi            => '0',
 			sti            => '0',
-			jsr            => '0',
+			jsr            => "01",
 			use_uop2       => '0',
 			override_dr    => '0',
 			dr_override    => "XXXX",
@@ -451,7 +550,7 @@ PACKAGE LC3B_TYPES IS
 		dec   => (
 			ldi            => '0',
 			sti            => '0',
-			jsr            => '0',
+			jsr            => "01",
 			use_uop2       => '0',
 			override_dr    => '0',
 			dr_override    => "XXXX",
@@ -479,7 +578,7 @@ PACKAGE LC3B_TYPES IS
 		dec   => (
 			ldi            => '0',
 			sti            => '0',
-			jsr            => '0',
+			jsr            => "01",
 			use_uop2       => '0',
 			override_dr    => '0',
 			dr_override    => "XXXX",
@@ -528,7 +627,7 @@ PACKAGE LC3B_TYPES IS
 		dec   => (
 			ldi            => '0',
 			sti            => '0',
-			jsr            => '0',
+			jsr            => "01",
 			use_uop2       => '0',
 			override_dr    => '0',
 			dr_override    => "XXXX",
@@ -558,7 +657,7 @@ PACKAGE LC3B_TYPES IS
 		dec   => (
 			ldi            => '0',
 			sti            => '0',
-			jsr            => '1',
+			jsr            => "10",
 			use_uop2       => '0',
 			override_dr    => '1',
 			dr_override    => "0111",
@@ -588,7 +687,7 @@ PACKAGE LC3B_TYPES IS
 		dec   => (
 			ldi            => '0',
 			sti            => '0',
-			jsr            => '0',
+			jsr            => "01",
 			use_uop2       => '0',
 			override_dr    => '1',
 			dr_override    => "0111",
@@ -618,7 +717,7 @@ PACKAGE LC3B_TYPES IS
 		dec   => (
 			ldi            => '0',
 			sti            => '0',
-			jsr            => '0',
+			jsr            => "01",
 			use_uop2       => '0',
 			override_dr    => '0',
 			dr_override    => "XXXX",
@@ -654,7 +753,7 @@ PACKAGE LC3B_TYPES IS
 		dec   => (
 			ldi           => '1',
 			sti           => '0',
-			jsr           => '0',
+			jsr           => "01",
 			use_uop2      => '1',
 			override_dr   => '1',
 			dr_override   => "1000",
@@ -690,7 +789,7 @@ PACKAGE LC3B_TYPES IS
 		dec   => (
 			ldi            => '0',
 			sti            => '0',
-			jsr            => '0',
+			jsr            => "01",
 			use_uop2       => '0',
 			override_dr    => '0',
 			dr_override    => "XXXX",
@@ -726,7 +825,7 @@ PACKAGE LC3B_TYPES IS
 		dec   => (
 			ldi            => '0',
 			sti            => '0',
-			jsr            => '0',
+			jsr            => "01",
 			use_uop2       => '0',
 			override_dr    => '0',
 			dr_override    => "XXXX",
@@ -781,7 +880,7 @@ PACKAGE LC3B_TYPES IS
 		dec   => (
 			ldi            => '0',
 			sti            => '0',
-			jsr            => '0',
+			jsr            => "01",
 			use_uop2       => '0',
 			override_dr    => '0',
 			dr_override    => "XXXX",
@@ -812,7 +911,7 @@ PACKAGE LC3B_TYPES IS
 		dec   => (
 			ldi            => '0',
 			sti            => '0',
-			jsr            => '0',
+			jsr            => "01",
 			use_uop2       => '0',
 			override_dr    => '0',
 			dr_override    => "XXXX",
@@ -840,7 +939,7 @@ PACKAGE LC3B_TYPES IS
 		dec   => (
 			ldi            => '0',
 			sti            => '0',
-			jsr            => '0',
+			jsr            => "01",
 			use_uop2       => '0',
 			override_dr    => '0',
 			dr_override    => "XXXX",
@@ -868,7 +967,7 @@ PACKAGE LC3B_TYPES IS
 		dec   => (
 			ldi            => '0',
 			sti            => '0',
-			jsr            => '0',
+			jsr            => "01",
 			use_uop2       => '0',
 			override_dr    => '0',
 			dr_override    => "XXXX",
@@ -896,7 +995,7 @@ PACKAGE LC3B_TYPES IS
 		dec   => (
 			ldi            => '0',
 			sti            => '0',
-			jsr            => '0',
+			jsr            => "01",
 			use_uop2       => '0',
 			override_dr    => '0',
 			dr_override    => "XXXX",
@@ -932,7 +1031,7 @@ PACKAGE LC3B_TYPES IS
 		dec   => (
 			ldi           => '0',
 			sti           => '1',
-			jsr           => '0',
+			jsr           => "01",
 			use_uop2      => '1',
 			override_dr   => '1',
 			dr_override   => "1000",
@@ -968,7 +1067,7 @@ PACKAGE LC3B_TYPES IS
 		dec   => (
 			ldi            => '0',
 			sti            => '0',
-			jsr            => '0',
+			jsr            => "01",
 			use_uop2       => '0',
 			override_dr    => '0',
 			dr_override    => "XXXX",
@@ -1004,7 +1103,7 @@ PACKAGE LC3B_TYPES IS
 		dec   => (
 			ldi            => '0',
 			sti            => '0',
-			jsr            => '0',
+			jsr            => "01",
 			use_uop2       => '0',
 			override_dr    => '0',
 			dr_override    => "XXXX",
@@ -1040,7 +1139,7 @@ PACKAGE LC3B_TYPES IS
 		dec   => (
 			ldi           => '0',
 			sti           => '0',
-			jsr           => '0',
+			jsr           => "01",
 			use_uop2      => '0',
 			override_dr   => '1',
 			dr_override   => "0111",
