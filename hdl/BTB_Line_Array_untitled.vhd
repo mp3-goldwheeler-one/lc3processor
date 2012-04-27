@@ -16,7 +16,7 @@ USE ece411.LC3b_types.all;
 
 ENTITY BTB_Line_Array IS
   GENERIC( 
-     DELAY : Time := DELAY_256B
+     DELAY : Time := DELAY_128B
   );
    PORT( 
       RESET_L    : IN     std_logic;

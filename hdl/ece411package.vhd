@@ -95,7 +95,7 @@ PACKAGE LC3B_TYPES IS
 
 	-- TIME DELAYS **********
 	-- CHANGED FOR FALL 2009: ALU, ADDER, SHIFTER DELAYS
-	CONSTANT HALF_CLOCK_PERIOD  : TIME := 19 NS;
+	CONSTANT HALF_CLOCK_PERIOD  : TIME := 16 NS;
 	CONSTANT CLOCK_PERIOD       : TIME := (HALF_CLOCK_PERIOD + HALF_CLOCK_PERIOD);
 	CONSTANT DELAY_LOGIC2       : TIME := 1 NS;
 	CONSTANT DELAY_LOGIC3       : TIME := 2 NS;
@@ -146,13 +146,15 @@ PACKAGE LC3B_TYPES IS
 	CONSTANT uop_rom_idx_default : uop_rom_sel := "0000";
 
 	TYPE btb_line IS RECORD
-		target : LC3b_word;
-		state  : btb_state_counter;
+		target        : LC3b_word;
+        write_btb_way : std_logic;
+		state         : btb_state_counter;
 	END RECORD;
 
 	CONSTANT default_btb_line : btb_line := (
-		target => "XXXXXXXXXXXXXXXX",
-		state  => "01"
+		target        => "XXXXXXXXXXXXXXXX",
+        write_btb_way => '0',
+		state         => "01"
 	);
 
 	TYPE dec_control_word IS RECORD

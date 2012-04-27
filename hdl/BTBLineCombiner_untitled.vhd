@@ -16,9 +16,10 @@ USE ece411.LC3b_types.all;
 
 ENTITY BTBLineCombiner IS
    PORT( 
-      state        : IN     btb_state_counter;
-      target       : IN     LC3B_WORD;
-      btb_data_out : OUT    btb_line
+      state            : IN     btb_state_counter;
+      target           : IN     LC3B_WORD;
+      write_btb_way    : IN     std_logic;
+      btb_data_out     : OUT    btb_line
    );
 
 -- Declarations
@@ -28,7 +29,8 @@ END BTBLineCombiner ;
 --
 ARCHITECTURE untitled OF BTBLineCombiner IS
 BEGIN
-  btb_data_out.state  <= state;
-  btb_data_out.target <= target;
+  btb_data_out.state         <= state;
+  btb_data_out.write_btb_way <= write_btb_way;
+  btb_data_out.target        <= target;
 END ARCHITECTURE untitled;
 

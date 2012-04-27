@@ -11,15 +11,17 @@ USE ece411.LC3b_types.all;
 
 ENTITY BTB_Datapath IS
    PORT( 
-      DataOut      : IN     btb_line;
-      MREAD_L      : IN     std_logic;
-      MWRITE_H     : IN     std_logic;
-      ReadAddress  : IN     LC3b_word;
-      WriteAddress : IN     LC3b_word;
-      clk          : IN     std_logic;
-      reset_l      : IN     std_logic;
-      DATAIN       : OUT    btb_line;
-      miss         : OUT    std_logic
+      DataOut           : IN     btb_line;
+      MREAD_L           : IN     std_logic;
+      MWRITE_H          : IN     std_logic;
+      ReadAddress       : IN     LC3b_word;
+      WriteAddress      : IN     LC3b_word;
+      clk               : IN     std_logic;
+      reset_l           : IN     std_logic;
+      DATAIN            : OUT    btb_line;
+      hit               : OUT    std_logic;
+      miss              : OUT    std_logic;
+      write_btb_way_out : OUT    STD_LOGIC
    );
 
 -- Declarations
@@ -46,29 +48,35 @@ ARCHITECTURE struct OF BTB_Datapath IS
    -- Architecture declarations
 
    -- Internal signal declarations
-   SIGNAL ProtoHit    : std_logic;
-   SIGNAL Protomiss   : std_logic;
-   SIGNAL ReadIndex   : lc3b_c_index;
-   SIGNAL ReadTag     : std_logic_vector(11 DOWNTO 0);
-   SIGNAL Way0Dataout : btb_line;
-   SIGNAL Way1Dataout : btb_line;
-   SIGNAL WriteIndex  : lc3b_c_index;
-   SIGNAL WriteTag    : std_logic_vector(11 DOWNTO 0);
-   SIGNAL Y           : std_logic;
-   SIGNAL evicted     : std_logic;
-   SIGNAL hit         : std_logic;
-   SIGNAL load0       : std_logic;
-   SIGNAL load1       : std_logic;
-   SIGNAL mem_access  : std_logic;
-   SIGNAL present0    : std_logic;
-   SIGNAL present1    : std_logic;
-   SIGNAL write0      : std_logic;
-   SIGNAL write0pg    : std_logic;
-   SIGNAL write1      : std_logic;
-   SIGNAL write1pg    : std_logic;
-   SIGNAL writegate   : std_logic;
-   SIGNAL writehit0   : std_logic;
-   SIGNAL writehit1   : std_logic;
+   SIGNAL F               : STD_LOGIC;
+   SIGNAL MWRITE_L        : STD_LOGIC;
+   SIGNAL ProtoHit        : std_logic;
+   SIGNAL Protomiss       : std_logic;
+   SIGNAL ReadIndex       : lc3b_c_index;
+   SIGNAL ReadTag         : std_logic_vector(11 DOWNTO 0);
+   SIGNAL Way0Dataout     : btb_line;
+   SIGNAL Way1Dataout     : btb_line;
+   SIGNAL WriteIndex      : lc3b_c_index;
+   SIGNAL WriteTag        : std_logic_vector(11 DOWNTO 0);
+   SIGNAL Y               : std_logic;
+   SIGNAL load0           : std_logic;
+   SIGNAL load1           : std_logic;
+   SIGNAL lru_way         : std_logic;
+   SIGNAL mem_access      : std_logic;
+   SIGNAL present0        : std_logic;
+   SIGNAL present1        : std_logic;
+   SIGNAL write0          : std_logic;
+   SIGNAL write0pg        : std_logic;
+   SIGNAL write1          : std_logic;
+   SIGNAL write1pg        : std_logic;
+   SIGNAL write_btb_way   : std_logic;
+   SIGNAL write_btb_way_l : std_logic;
+   SIGNAL writegate       : std_logic;
+   SIGNAL writehit0       : std_logic;
+   SIGNAL writehit1       : std_logic;
+
+   -- Implicit buffer signal declarations
+   SIGNAL hit_internal : std_logic;
 
 
    -- Component Declarations
@@ -126,17 +134,19 @@ ARCHITECTURE struct OF BTB_Datapath IS
       Y : OUT    std_logic 
    );
    END COMPONENT;
-   COMPONENT NOT1
-   PORT (
-      A : IN     std_logic ;
-      Y : OUT    std_logic 
-   );
-   END COMPONENT;
    COMPONENT OR2
    PORT (
       A : IN     std_logic ;
       B : IN     std_logic ;
       Y : OUT    std_logic 
+   );
+   END COMPONENT;
+   COMPONENT MUX2_1
+   PORT (
+      A   : IN     STD_LOGIC ;
+      B   : IN     STD_LOGIC ;
+      SEL : IN     STD_LOGIC ;
+      F   : OUT    STD_LOGIC 
    );
    END COMPONENT;
 
@@ -147,20 +157,24 @@ ARCHITECTURE struct OF BTB_Datapath IS
    FOR ALL : BTB_Timer USE ENTITY ece411.BTB_Timer;
    FOR ALL : BTB_Way USE ENTITY ece411.BTB_Way;
    FOR ALL : Bit_Array_RW USE ENTITY ece411.Bit_Array_RW;
+   FOR ALL : MUX2_1 USE ENTITY mp3lib.MUX2_1;
    FOR ALL : NAND2 USE ENTITY ece411.NAND2;
-   FOR ALL : NOT1 USE ENTITY ece411.NOT1;
    FOR ALL : OR2 USE ENTITY ece411.OR2;
    -- pragma synthesis_on
 
 
 BEGIN
+   -- Architecture concurrent statements
+   -- HDL Embedded Text Block 1 eb1
+   write_btb_way <= DATAOUT.write_btb_way;
+
 
    -- Instance port mappings.
    U_3 : ENTITY ece411.AND2
       PORT MAP (
          A => ProtoHit,
          B => mem_access,
-         Y => hit
+         Y => hit_internal
       );
    U_5 : ENTITY ece411.AND2
       PORT MAP (
@@ -242,30 +256,30 @@ BEGIN
       );
    LRU : Bit_Array_RW
       GENERIC MAP (
-         DELAY => DELAY_256B
+         DELAY => DELAY_128B
       )
       PORT MAP (
          RESET_L    => reset_l,
-         DataWrite  => MWRITE_H,
+         DataWrite  => F,
          ReadIndex  => ReadIndex,
          WriteIndex => WriteIndex,
-         DataIn     => present0,
-         DataOut    => evicted
+         DataIn     => write_btb_way,
+         DataOut    => lru_way
       );
    U_2 : NAND2
       PORT MAP (
          A => MREAD_L,
-         B => MWRITE_H,
+         B => MWRITE_L,
          Y => mem_access
       );
-   U_4 : NOT1
+   U_4 : ENTITY ece411.NOT1
       PORT MAP (
          A => ProtoHit,
          Y => Protomiss
       );
-   U_14 : NOT1
+   U_14 : ENTITY ece411.NOT1
       PORT MAP (
-         A => evicted,
+         A => lru_way,
          Y => Y
       );
    U_0 : OR2
@@ -278,17 +292,17 @@ BEGIN
       PORT MAP (
          A => writehit1,
          B => load1,
-         Y => write1pg
+         Y => OPEN
       );
    U_15 : OR2
       PORT MAP (
          A => writehit0,
          B => load0,
-         Y => write0pg
+         Y => OPEN
       );
    U_1 : ENTITY mp3lib.AND2
       PORT MAP (
-         A => evicted,
+         A => lru_way,
          B => MWRITE_H,
          F => load0
       );
@@ -298,5 +312,43 @@ BEGIN
          B => MWRITE_H,
          F => load1
       );
+   U_8 : ENTITY mp3lib.AND2
+      PORT MAP (
+         A => MWRITE_H,
+         B => writegate,
+         F => F
+      );
+   U_10 : ENTITY mp3lib.AND2
+      PORT MAP (
+         A => write_btb_way_l,
+         B => MWRITE_H,
+         F => write0pg
+      );
+   U_13 : ENTITY mp3lib.AND2
+      PORT MAP (
+         A => write_btb_way,
+         B => MWRITE_H,
+         F => write1pg
+      );
+   U_18 : MUX2_1
+      PORT MAP (
+         A   => lru_way,
+         B   => present1,
+         SEL => hit_internal,
+         F   => write_btb_way_out
+      );
+   U_7 : ENTITY mp3lib.NOT1
+      PORT MAP (
+         A => MWRITE_H,
+         F => MWRITE_L
+      );
+   U_12 : ENTITY mp3lib.NOT1
+      PORT MAP (
+         A => write_btb_way,
+         F => write_btb_way_l
+      );
+
+   -- Implicit buffered output assignments
+   hit <= hit_internal;
 
 END struct;

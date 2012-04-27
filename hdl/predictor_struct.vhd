@@ -42,9 +42,9 @@ ENTITY Predictor IS
       mem_taken                 : IN     std_logic;
       mem_target_pc             : IN     lc3b_word;
       target_pc_mux_sel         : IN     LC3B_tristate_4mux_sel;
+      btb_state                 : OUT    btb_line;
       incr_pc                   : OUT    LC3B_WORD;
-      next_pc                   : OUT    LC3B_WORD;
-      btb_state                 : BUFFER btb_line
+      next_pc                   : OUT    LC3B_WORD
    );
 
 -- Declarations
@@ -71,24 +71,34 @@ ARCHITECTURE struct OF Predictor IS
    -- Architecture declarations
 
    -- Internal signal declarations
-   SIGNAL F                  : STD_LOGIC;
-   SIGNAL F1                 : STD_LOGIC;
-   SIGNAL F2                 : STD_LOGIC;
-   SIGNAL F3                 : STD_LOGIC;
-   SIGNAL F4                 : STD_LOGIC;
-   SIGNAL F5                 : STD_LOGIC;
-   SIGNAL btb_data_out       : btb_line;
-   SIGNAL btb_new_state      : btb_state_counter;
-   SIGNAL btb_new_state_high : STD_LOGIC;
-   SIGNAL btb_new_state_low  : STD_LOGIC;
-   SIGNAL btb_state_high     : std_logic;
-   SIGNAL btb_state_low      : std_logic;
-   SIGNAL btb_state_low_not  : std_logic;
-   SIGNAL miss               : std_logic;
-   SIGNAL predict_branch     : STD_LOGIC;
-   SIGNAL target_pc          : LC3B_WORD;
-   SIGNAL two_16             : LC3B_WORD;
-   SIGNAL zero               : std_logic;
+   SIGNAL F                   : STD_LOGIC;
+   SIGNAL F1                  : STD_LOGIC;
+   SIGNAL F2                  : STD_LOGIC;
+   SIGNAL F3                  : STD_LOGIC;
+   SIGNAL F4                  : STD_LOGIC;
+   SIGNAL F5                  : STD_LOGIC;
+   SIGNAL F6                  : STD_LOGIC;
+   SIGNAL btb_data_out        : btb_line;
+   SIGNAL btb_muxed_state_out : btb_state_counter;
+   SIGNAL btb_new_state       : btb_state_counter;
+   SIGNAL btb_new_state_high  : STD_LOGIC;
+   SIGNAL btb_new_state_low   : STD_LOGIC;
+   SIGNAL btb_state_buffer    : btb_line;
+   SIGNAL btb_state_high      : std_logic;
+   SIGNAL btb_state_low       : std_logic;
+   SIGNAL btb_state_low_not   : std_logic;
+   SIGNAL btb_state_out       : btb_state_counter;
+   SIGNAL btb_target_out      : LC3B_WORD;
+   SIGNAL default_state       : std_logic_vector(1 DOWNTO 0);
+   SIGNAL hit                 : std_logic;
+   SIGNAL miss                : std_logic;
+   SIGNAL predict_branch      : STD_LOGIC;
+   SIGNAL state_sel           : LC3b_TRISTATE_2MUX_SEL;
+   SIGNAL target_pc           : LC3B_WORD;
+   SIGNAL two_16              : LC3B_WORD;
+   SIGNAL write_btb_way       : std_logic;
+   SIGNAL write_btb_way_out   : STD_LOGIC;
+   SIGNAL zero                : std_logic;
 
    -- Implicit buffer signal declarations
    SIGNAL incr_pc_internal : LC3B_WORD;
@@ -97,9 +107,10 @@ ARCHITECTURE struct OF Predictor IS
    -- Component Declarations
    COMPONENT BTBLineCombiner
    PORT (
-      state        : IN     btb_state_counter ;
-      target       : IN     LC3B_WORD ;
-      btb_data_out : OUT    btb_line 
+      state         : IN     btb_state_counter ;
+      target        : IN     LC3B_WORD ;
+      write_btb_way : IN     std_logic ;
+      btb_data_out  : OUT    btb_line 
    );
    END COMPONENT;
    COMPONENT BTBLineSplitter
@@ -111,15 +122,28 @@ ARCHITECTURE struct OF Predictor IS
    END COMPONENT;
    COMPONENT BTB_Datapath
    PORT (
-      DataOut      : IN     btb_line ;
-      MREAD_L      : IN     std_logic ;
-      MWRITE_H     : IN     std_logic ;
-      ReadAddress  : IN     LC3b_word ;
-      WriteAddress : IN     LC3b_word ;
-      clk          : IN     std_logic ;
-      reset_l      : IN     std_logic ;
-      DATAIN       : OUT    btb_line ;
-      miss         : OUT    std_logic 
+      DataOut           : IN     btb_line ;
+      MREAD_L           : IN     std_logic ;
+      MWRITE_H          : IN     std_logic ;
+      ReadAddress       : IN     LC3b_word ;
+      WriteAddress      : IN     LC3b_word ;
+      clk               : IN     std_logic ;
+      reset_l           : IN     std_logic ;
+      DATAIN            : OUT    btb_line ;
+      hit               : OUT    std_logic ;
+      miss              : OUT    std_logic ;
+      write_btb_way_out : OUT    STD_LOGIC 
+   );
+   END COMPONENT;
+   COMPONENT TristateMux2_N
+   GENERIC (
+      n : integer
+   );
+   PORT (
+      A   : IN     std_logic_vector (n-1 DOWNTO 0);
+      B   : IN     std_logic_vector (n-1 DOWNTO 0);
+      sel : IN     LC3b_TRISTATE_2MUX_SEL ;
+      F   : OUT    std_logic_vector (n-1 DOWNTO 0)
    );
    END COMPONENT;
    COMPONENT ADD16
@@ -169,6 +193,7 @@ ARCHITECTURE struct OF Predictor IS
    FOR ALL : MUX2_16 USE ENTITY mp3lib.MUX2_16;
    FOR ALL : NOT1 USE ENTITY mp3lib.NOT1;
    FOR ALL : OR3 USE ENTITY mp3lib.OR3;
+   FOR ALL : TristateMux2_N USE ENTITY ece411.TristateMux2_N;
    -- pragma synthesis_on
 
 
@@ -176,13 +201,22 @@ BEGIN
    -- Architecture concurrent statements
    -- HDL Embedded Text Block 1 eb1
    two_16 <= x"0002";
-   target_pc <= btb_state.target;
+   target_pc <= btb_state_buffer.target;
    zero <= '0';
-   predict_branch <= btb_state.state(1);
+   predict_branch <= btb_state_buffer.state(1);
+   
+   
+   btb_target_out <= btb_state_buffer.target;
+   btb_state_out  <= btb_state_buffer.state;
+   
+   state_sel <= miss & hit;
+   default_state <= "01";
 
    -- HDL Embedded Text Block 2 eb2
    btb_state_high <= mem_btb_state.state(1);
    btb_state_low  <= mem_btb_state.state(0);
+   
+   write_btb_way    <= mem_btb_state.write_btb_way;
    
    btb_new_state  <= btb_new_state_high & btb_new_state_low;
 
@@ -190,9 +224,17 @@ BEGIN
    -- Instance port mappings.
    U_3 : BTBLineCombiner
       PORT MAP (
-         state        => btb_new_state,
-         target       => btb_target_pc,
-         btb_data_out => btb_data_out
+         state         => btb_new_state,
+         target        => btb_target_pc,
+         write_btb_way => write_btb_way,
+         btb_data_out  => btb_data_out
+      );
+   U_13 : BTBLineCombiner
+      PORT MAP (
+         state         => btb_muxed_state_out,
+         target        => btb_target_out,
+         write_btb_way => write_btb_way_out,
+         btb_data_out  => btb_state
       );
    U_1 : BTBLineSplitter
       PORT MAP (
@@ -202,15 +244,27 @@ BEGIN
       );
    BTB : BTB_Datapath
       PORT MAP (
-         DataOut      => btb_data_out,
-         MREAD_L      => zero,
-         MWRITE_H     => btb_write,
-         ReadAddress  => instr_addr,
-         WriteAddress => btb_pc,
-         clk          => CLK,
-         reset_l      => RESET_L,
-         DATAIN       => btb_state,
-         miss         => miss
+         DataOut           => btb_data_out,
+         MREAD_L           => zero,
+         MWRITE_H          => btb_write,
+         ReadAddress       => instr_addr,
+         WriteAddress      => btb_pc,
+         clk               => CLK,
+         reset_l           => RESET_L,
+         DATAIN            => btb_state_buffer,
+         hit               => hit,
+         miss              => miss,
+         write_btb_way_out => write_btb_way_out
+      );
+   U_15 : TristateMux2_N
+      GENERIC MAP (
+         n => 2
+      )
+      PORT MAP (
+         A   => btb_state_out,
+         B   => default_state,
+         sel => state_sel,
+         F   => btb_muxed_state_out
       );
    U_0 : ADD16
       PORT MAP (
@@ -254,11 +308,17 @@ BEGIN
          B => btb_state_low_not,
          F => F5
       );
+   U_14 : AND2
+      PORT MAP (
+         A => hit,
+         B => predict_branch,
+         F => F6
+      );
    U_2 : MUX2_16
       PORT MAP (
          A   => incr_pc_internal,
          B   => target_pc,
-         SEL => predict_branch,
+         SEL => F6,
          F   => next_pc
       );
    U_6 : NOT1

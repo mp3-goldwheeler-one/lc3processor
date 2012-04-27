@@ -62,21 +62,22 @@ ARCHITECTURE struct OF Cache_Arbiter IS
    SIGNAL I_READ_L         : STD_LOGIC;
    SIGNAL I_WRITE_L        : STD_LOGIC;
    SIGNAL in_data_access_H : STD_LOGIC;
-   SIGNAL in_data_access_l : std_logic;
+   SIGNAL in_data_access_L : std_logic;
    SIGNAL in_inst_access_H : STD_LOGIC;
-   SIGNAL in_inst_access_l : std_logic;
+   SIGNAL in_inst_access_L : std_logic;
 
 
    -- Component Declarations
-   COMPONENT ArbController
+   COMPONENT ArbiterController
    PORT (
+      CLK              : IN     std_logic ;
       D_ACCESS         : IN     STD_LOGIC ;
       I_ACCESS         : IN     STD_LOGIC ;
       MRESP_H          : IN     STD_LOGIC ;
       RESET_L          : IN     STD_LOGIC ;
       ArbiterSel       : OUT    STD_LOGIC ;
-      in_data_access_l : BUFFER std_logic ;
-      in_inst_access_l : BUFFER std_logic 
+      in_data_access_L : OUT    std_logic ;
+      in_inst_access_L : OUT    std_logic 
    );
    END COMPONENT;
    COMPONENT OWordMux2
@@ -126,7 +127,7 @@ ARCHITECTURE struct OF Cache_Arbiter IS
    -- Optional embedded configurations
    -- pragma synthesis_off
    FOR ALL : AND2 USE ENTITY mp3lib.AND2;
-   FOR ALL : ArbController USE ENTITY ece411.ArbController;
+   FOR ALL : ArbiterController USE ENTITY ece411.ArbiterController;
    FOR ALL : MUX2_16 USE ENTITY mp3lib.MUX2_16;
    FOR ALL : NAND2 USE ENTITY mp3lib.NAND2;
    FOR ALL : NOT1 USE ENTITY mp3lib.NOT1;
@@ -138,15 +139,16 @@ ARCHITECTURE struct OF Cache_Arbiter IS
 BEGIN
 
    -- Instance port mappings.
-   Arbitrator : ArbController
+   Arbitrator : ArbiterController
       PORT MAP (
+         CLK              => CLK,
          D_ACCESS         => D_ACCESS,
          I_ACCESS         => I_ACCESS,
          MRESP_H          => MRESP_H,
          RESET_L          => RESET_L,
          ArbiterSel       => ArbiterSel,
-         in_data_access_l => in_data_access_l,
-         in_inst_access_l => in_inst_access_l
+         in_data_access_L => in_data_access_L,
+         in_inst_access_L => in_inst_access_L
       );
    DataMux : OWordMux2
       PORT MAP (
@@ -200,36 +202,36 @@ BEGIN
       );
    daccess_inv : NOT1
       PORT MAP (
-         A => in_data_access_l,
+         A => in_data_access_L,
          F => in_data_access_H
       );
    iaccess_inv : NOT1
       PORT MAP (
-         A => in_inst_access_l,
+         A => in_inst_access_L,
          F => in_inst_access_H
       );
    U_3 : OR2
       PORT MAP (
          A => D_PMREAD_L,
-         B => in_data_access_l,
+         B => in_data_access_L,
          F => D_READ_L
       );
    U_4 : OR2
       PORT MAP (
          A => I_PMREAD_L,
-         B => in_inst_access_l,
+         B => in_inst_access_L,
          F => I_READ_L
       );
    U_7 : OR2
       PORT MAP (
          A => D_PMWRITE_L,
-         B => in_data_access_l,
+         B => in_data_access_L,
          F => D_WRITE_L
       );
    U_8 : OR2
       PORT MAP (
          A => I_PMWRITE_L,
-         B => in_inst_access_l,
+         B => in_inst_access_L,
          F => I_WRITE_L
       );
 

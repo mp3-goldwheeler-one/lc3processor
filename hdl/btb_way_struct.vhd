@@ -59,6 +59,9 @@ ARCHITECTURE struct OF BTB_Way IS
    );
    END COMPONENT;
    COMPONENT BTB_Line_Array
+   GENERIC (
+      DELAY : Time := DELAY_128B
+   );
    PORT (
       RESET_L    : IN     std_logic ;
       DataWrite  : IN     std_logic ;
@@ -127,6 +130,9 @@ BEGIN
          Y => Present
       );
    BTBArray : BTB_Line_Array
+      GENERIC MAP (
+         DELAY => DELAY_128B
+      )
       PORT MAP (
          RESET_L    => RESET_L,
          DataWrite  => DataWrite,
@@ -137,7 +143,7 @@ BEGIN
       );
    ValidArray : Bit_Array_RW
       GENERIC MAP (
-         DELAY => DELAY_256B
+         DELAY => DELAY_128B
       )
       PORT MAP (
          RESET_L    => RESET_L,
@@ -160,7 +166,7 @@ BEGIN
    TagArray : Data_Array_RW
       GENERIC MAP (
          N     => 12,
-         DELAY => DELAY_256B
+         DELAY => DELAY_128B
       )
       PORT MAP (
          RESET_L    => RESET_L,

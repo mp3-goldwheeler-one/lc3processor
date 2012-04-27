@@ -207,9 +207,9 @@ ARCHITECTURE struct OF fetchStage1 IS
       mem_taken                 : IN     std_logic ;
       mem_target_pc             : IN     lc3b_word ;
       target_pc_mux_sel         : IN     LC3B_tristate_4mux_sel ;
+      btb_state                 : OUT    btb_line ;
       incr_pc                   : OUT    LC3B_WORD ;
-      next_pc                   : OUT    LC3B_WORD ;
-      btb_state                 : BUFFER btb_line 
+      next_pc                   : OUT    LC3B_WORD 
    );
    END COMPONENT;
    COMPONENT TristateMux4_N
@@ -350,9 +350,9 @@ BEGIN
          mem_taken                 => mem_taken,
          mem_target_pc             => mem_target_pc,
          target_pc_mux_sel         => target_pc_mux_sel,
+         btb_state                 => btb_state,
          incr_pc                   => incr_pc,
-         next_pc                   => next_pc,
-         btb_state                 => btb_state
+         next_pc                   => next_pc
       );
    U_0 : TristateMux4_N
       GENERIC MAP (

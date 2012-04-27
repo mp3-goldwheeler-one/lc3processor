@@ -36,7 +36,7 @@ BEGIN
     if(mem_access /= '1') then
       wait until mem_access = '1';
     end if;
-    wait for 60ns;
+    wait for 65ns;
     LRUGate <= '1';
     wait until rising_edge(clk);
   end process;
@@ -44,16 +44,16 @@ BEGIN
   do_writegate : process
   begin
     writegate <= '0';
-    wait for 19ns;
+    wait for HALF_CLOCK_PERIOD;
     writegate <= '1';
-    wait for 19ns;
+    wait for HALF_CLOCK_PERIOD;
   end process;
 
   do_missgate : process
   begin
    missgate <= '0';
    wait until mem_access = '1';
-   wait for 54ns;
+   wait for 65ns;
    missgate <= '1';
    wait until rising_edge(clk);
   end process;

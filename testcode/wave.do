@@ -4,12 +4,16 @@ add wave -noupdate -format Logic /cpu/reset_l
 add wave -noupdate -format Logic -height 15 -radix hexadecimal /cpu/clk
 add wave -noupdate -divider Prediction
 add wave -noupdate -color Goldenrod -format Literal -itemcolor Goldenrod -expand /cpu/pipelineddatapath/fetch1/predictunit/btb/lru/data
-add wave -noupdate -color Goldenrod -format Logic -itemcolor Goldenrod /cpu/pipelineddatapath/fetch1/predictunit/btb/present0
-add wave -noupdate -color Goldenrod -format Logic -itemcolor Goldenrod /cpu/pipelineddatapath/fetch1/predictunit/btb/present1
+add wave -noupdate -format Logic /cpu/pipelineddatapath/fetch1/predictunit/btb/lru/reset_l
+add wave -noupdate -format Literal /cpu/pipelineddatapath/fetch1/predictunit/btb/writeindex
 add wave -noupdate -color Goldenrod -format Logic -itemcolor Goldenrod /cpu/pipelineddatapath/fetch1/predictunit/btb/mread_l
 add wave -noupdate -color Goldenrod -format Logic -itemcolor Goldenrod /cpu/pipelineddatapath/fetch1/predictunit/btb/mwrite_h
-add wave -noupdate -color Goldenrod -format Literal -itemcolor Goldenrod -expand /cpu/pipelineddatapath/fetch1/predictunit/btb/way0/btbarray/data
-add wave -noupdate -color Goldenrod -format Literal -itemcolor Goldenrod -expand /cpu/pipelineddatapath/fetch1/predictunit/btb/way1/btbarray/data
+add wave -noupdate -color Goldenrod -format Logic -itemcolor Goldenrod /cpu/pipelineddatapath/fetch1/predictunit/btb/write_btb_way
+add wave -noupdate -format Logic /cpu/pipelineddatapath/fetch1/predictunit/btb/write_btb_way_out
+add wave -noupdate -color Goldenrod -format Logic -itemcolor Goldenrod /cpu/pipelineddatapath/fetch1/predictunit/btb/present0
+add wave -noupdate -color Goldenrod -format Logic -itemcolor Goldenrod /cpu/pipelineddatapath/fetch1/predictunit/btb/present1
+add wave -noupdate -color Goldenrod -format Event -itemcolor Goldenrod -expand /cpu/pipelineddatapath/fetch1/predictunit/btb/way0/btbarray/data
+add wave -noupdate -color Goldenrod -format Event -itemcolor Goldenrod -expand /cpu/pipelineddatapath/fetch1/predictunit/btb/way1/btbarray/data
 add wave -noupdate -divider Fetch1
 add wave -noupdate -format Logic /cpu/pipelineddatapath/fetch1/load_pc
 add wave -noupdate -format Literal /cpu/pipelineddatapath/fetch1/next_pc
@@ -108,7 +112,6 @@ add wave -noupdate -color Thistle -format Literal -height 15 -itemcolor Thistle 
 add wave -noupdate -color Thistle -format Literal -height 15 -itemcolor Thistle /cpu/pipelineddatapath/aforwardpipe/exec_forward_srcb_sel
 add wave -noupdate -divider Stall
 add wave -noupdate -color Coral -format Logic -height 15 -itemcolor Coral /cpu/pipelineddatapath/astall/cache_ready
-add wave -noupdate -color Coral -format Logic -height 15 -itemcolor Coral /cpu/pipelineddatapath/astall/stall_load_use_buffer
 add wave -noupdate -color Coral -format Logic -height 15 -itemcolor Coral /cpu/pipelineddatapath/astall/load_fd
 add wave -noupdate -color Coral -format Logic -height 15 -itemcolor Coral /cpu/pipelineddatapath/astall/load_pc
 add wave -noupdate -color Coral -format Logic -height 15 -itemcolor Coral /cpu/pipelineddatapath/astall/load_fetch_decode_pipe
@@ -189,7 +192,7 @@ add wave -noupdate -format Literal /cpu/pipelineddatapath/mem2_data_in.instr
 add wave -noupdate -color {Green Yellow} -format Literal -itemcolor {Green Yellow} /cpu/pipelineddatapath/wb_data_in.instr
 add wave -noupdate -color {Sky Blue} -format Event -height 15 -itemcolor {Sky Blue} -expand /cpu/pipelineddatapath/decode/arf/ram
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {3164 ns} 0}
+WaveRestoreCursors {{Cursor 1} {2486 ns} 0}
 configure wave -namecolwidth 518
 configure wave -valuecolwidth 178
 configure wave -justifyvalue left
@@ -203,4 +206,4 @@ configure wave -gridperiod 1
 configure wave -griddelta 40
 configure wave -timeline 0
 update
-WaveRestoreZoom {3041 ns} {3761 ns}
+WaveRestoreZoom {2010 ns} {2668 ns}
