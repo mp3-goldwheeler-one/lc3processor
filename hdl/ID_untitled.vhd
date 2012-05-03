@@ -51,7 +51,7 @@ BEGIN
 	imm5      <= decode_instr(4 downto 0);
 	imm4      <= decode_instr(3 downto 0);
 	offset11  <= decode_instr(10 downto 0);
-	trapvec8  <= decode_instr(7 downto 0);
+	trapvec8  <= '0' & decode_instr(6 downto 0); --must ignore the high bit of the trap vector
 	bit5      <= decode_instr(5);
 	bit4      <= decode_instr(4);
 	direction <= decode_instr(4);
