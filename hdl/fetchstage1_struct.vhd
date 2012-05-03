@@ -29,7 +29,6 @@ ENTITY fetchStage1 IS
       exec_conditional          : IN     control_word;
       exec_control_buffer       : IN     exec_control_word;
       exec_load_pc              : IN     std_logic;
-      exec_pc                   : IN     lc3b_word;
       exec_prediction_correct   : IN     std_logic;
       exec_taken                : IN     std_logic;
       exec_target_pc            : IN     LC3b_word;
@@ -194,7 +193,6 @@ ARCHITECTURE struct OF fetchStage1 IS
       exec_conditional          : IN     control_word ;
       exec_control_buffer       : IN     exec_control_word ;
       exec_load_pc              : IN     std_logic ;
-      exec_pc                   : IN     lc3b_word ;
       exec_prediction_correct   : IN     std_logic ;
       exec_taken                : IN     std_logic ;
       exec_target_pc            : IN     LC3b_word ;
@@ -337,7 +335,6 @@ BEGIN
          exec_conditional          => exec_conditional,
          exec_control_buffer       => exec_control_buffer,
          exec_load_pc              => exec_load_pc,
-         exec_pc                   => exec_pc,
          exec_prediction_correct   => exec_prediction_correct,
          exec_taken                => exec_taken,
          exec_target_pc            => exec_target_pc,

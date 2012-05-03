@@ -94,7 +94,6 @@ ARCHITECTURE struct OF Datapath IS
    SIGNAL exec_fw_src2_sel           : LC3b_TRISTATE_4mux_sel;
    SIGNAL exec_insert_bubble         : LC3B_TRISTATE_2MUX_SEL;
    SIGNAL exec_load_pc               : std_logic;
-   SIGNAL exec_pc                    : lc3b_word;
    SIGNAL exec_prediction_correct    : std_logic;
    SIGNAL exec_taken                 : std_logic;
    SIGNAL exec_target_pc             : LC3b_word;
@@ -129,6 +128,7 @@ ARCHITECTURE struct OF Datapath IS
    SIGNAL mem1_flush                 : std_logic;
    SIGNAL mem1_flush_l               : std_logic;
    SIGNAL mem1_insert_bubble         : LC3B_TRISTATE_2MUX_SEL;
+   SIGNAL mem1_pc                    : lc3b_word;
    SIGNAL mem1_sr1_forward_sel       : STD_LOGIC_VECTOR(1 DOWNTO 0);
    SIGNAL mem1_sr1_fw_sel            : LC3b_TRISTATE_2MUX_SEL;
    SIGNAL mem1_sr2_forward_sel       : STD_LOGIC_VECTOR(1 DOWNTO 0);
@@ -283,7 +283,6 @@ ARCHITECTURE struct OF Datapath IS
       exec_control_buffer   : OUT    exec_control_word ;
       exec_data_out         : OUT    pipe_data ;
       exec_load_pc          : OUT    std_logic ;
-      exec_pc               : OUT    lc3b_word ;
       exec_taken            : OUT    std_logic ;
       exec_target_pc        : OUT    LC3b_word 
    );
@@ -334,7 +333,6 @@ ARCHITECTURE struct OF Datapath IS
       exec_conditional          : IN     control_word ;
       exec_control_buffer       : IN     exec_control_word ;
       exec_load_pc              : IN     std_logic ;
-      exec_pc                   : IN     lc3b_word ;
       exec_prediction_correct   : IN     std_logic ;
       exec_taken                : IN     std_logic ;
       exec_target_pc            : IN     LC3b_word ;
@@ -403,10 +401,10 @@ ARCHITECTURE struct OF Datapath IS
       exec_conditional          : IN     control_word ;
       exec_control_buffer       : IN     exec_control_word ;
       exec_load_pc              : IN     std_logic ;
-      exec_pc                   : IN     lc3b_word ;
       exec_taken                : IN     std_logic ;
       exec_target_pc            : IN     LC3b_word ;
       instr_addr                : IN     LC3b_word ;
+      mem1_pc                   : IN     lc3b_word ;
       mem2_pc                   : IN     lc3b_word ;
       mem_btb_state             : IN     btb_line ;
       mem_conditional           : IN     std_logic ;
@@ -518,7 +516,8 @@ ARCHITECTURE struct OF Datapath IS
       dcache_ReadIndex          : OUT    LC3b_C_INDEX ;
       dcache_interstage_data_in : OUT    LC3b_cache_interstage_data ;
       mem1_cc                   : OUT    LC3b_CC ;
-      mem1_data_out             : OUT    pipe_data 
+      mem1_data_out             : OUT    pipe_data ;
+      mem1_pc                   : OUT    lc3b_word 
    );
    END COMPONENT;
    COMPONENT memStage2
@@ -731,7 +730,6 @@ BEGIN
          exec_control_buffer   => exec_control_buffer,
          exec_data_out         => exec_data_out,
          exec_load_pc          => exec_load_pc,
-         exec_pc               => exec_pc,
          exec_taken            => exec_taken,
          exec_target_pc        => exec_target_pc
       );
@@ -779,7 +777,6 @@ BEGIN
          exec_conditional          => exec_conditional,
          exec_control_buffer       => exec_control_buffer,
          exec_load_pc              => exec_load_pc,
-         exec_pc                   => exec_pc,
          exec_prediction_correct   => exec_prediction_correct,
          exec_taken                => exec_taken,
          exec_target_pc            => exec_target_pc,
@@ -845,10 +842,10 @@ BEGIN
          exec_conditional          => exec_conditional,
          exec_control_buffer       => exec_control_buffer,
          exec_load_pc              => exec_load_pc,
-         exec_pc                   => exec_pc,
          exec_taken                => exec_taken,
          exec_target_pc            => exec_target_pc,
          instr_addr                => instr_addr,
+         mem1_pc                   => mem1_pc,
          mem2_pc                   => mem2_pc,
          mem_btb_state             => mem_btb_state,
          mem_conditional           => mem_conditional,
@@ -955,7 +952,8 @@ BEGIN
          dcache_ReadIndex          => dcache_ReadIndex,
          dcache_interstage_data_in => dcache_interstage_data_in,
          mem1_cc                   => mem1_cc,
-         mem1_data_out             => mem1_data_out
+         mem1_data_out             => mem1_data_out,
+         mem1_pc                   => mem1_pc
       );
    mem2 : memStage2
       PORT MAP (

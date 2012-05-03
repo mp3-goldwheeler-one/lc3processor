@@ -30,7 +30,6 @@ ENTITY execStage IS
       exec_control_buffer   : OUT    exec_control_word;
       exec_data_out         : OUT    pipe_data;
       exec_load_pc          : OUT    std_logic;
-      exec_pc               : OUT    lc3b_word;
       exec_taken            : OUT    std_logic;
       exec_target_pc        : OUT    LC3b_word
    );
@@ -70,6 +69,7 @@ ARCHITECTURE struct OF execStage IS
    SIGNAL data_addr         : lc3b_word;
    SIGNAL dr                : lc3b_reg;
    SIGNAL dr_val            : lc3b_word;
+   SIGNAL exec_pc           : lc3b_word;
    SIGNAL exec_wb_data      : LC3B_word;
    SIGNAL fwd_cc            : LC3B_cc;
    SIGNAL fwd_sr1           : LC3B_WORD;
@@ -113,9 +113,6 @@ ARCHITECTURE struct OF execStage IS
    SIGNAL wb_cc             : lc3b_cc;
    SIGNAL wb_data           : LC3B_word;
    SIGNAL z_match           : std_logic;
-
-   -- Implicit buffer signal declarations
-   SIGNAL exec_pc_internal : lc3b_word;
 
 
    -- Component Declarations
@@ -318,7 +315,7 @@ BEGIN
       );
    U_12 : PipeDataCombiner
       PORT MAP (
-         pc          => exec_pc_internal,
+         pc          => exec_pc,
          incr_pc     => incr_pc,
          instr       => instr,
          aluout      => aluout,
@@ -347,7 +344,7 @@ BEGIN
    U_11 : PipeDataSplitter
       PORT MAP (
          data_in     => exec_data_in,
-         pc          => exec_pc_internal,
+         pc          => exec_pc,
          incr_pc     => incr_pc,
          instr       => instr,
          aluout      => OPEN,
@@ -504,8 +501,5 @@ BEGIN
          C => p_match,
          F => ben
       );
-
-   -- Implicit buffered output assignments
-   exec_pc <= exec_pc_internal;
 
 END struct;

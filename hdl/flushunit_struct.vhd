@@ -27,10 +27,10 @@ ENTITY flushUnit IS
       exec_conditional          : IN     control_word;
       exec_control_buffer       : IN     exec_control_word;
       exec_load_pc              : IN     std_logic;
-      exec_pc                   : IN     lc3b_word;
       exec_taken                : IN     std_logic;
       exec_target_pc            : IN     LC3b_word;
       instr_addr                : IN     LC3b_word;
+      mem1_pc                   : IN     lc3b_word;
       mem2_pc                   : IN     lc3b_word;
       mem_btb_state             : IN     btb_line;
       mem_conditional           : IN     std_logic;
@@ -79,20 +79,20 @@ ARCHITECTURE struct OF flushUnit IS
    -- Architecture declarations
 
    -- Internal signal declarations
-   SIGNAL F               : STD_LOGIC;
+   SIGNAL B               : STD_LOGIC;
    SIGNAL F1              : STD_LOGIC;
-   SIGNAL F2              : STD_LOGIC;
    SIGNAL F3              : STD_LOGIC;
-   SIGNAL F4              : STD_LOGIC;
-   SIGNAL F5              : STD_LOGIC;
    SIGNAL F7              : STD_LOGIC;
+   SIGNAL dec_match       : STD_LOGIC;
    SIGNAL decode_mismatch : std_logic;
+   SIGNAL exec_match      : STD_LOGIC;
    SIGNAL exec_mismatch   : std_logic;
    SIGNAL exec_mismatch_l : std_logic;
    SIGNAL flush_exec      : STD_LOGIC;
    SIGNAL flush_exec_l    : STD_LOGIC;
    SIGNAL flush_fd        : STD_LOGIC;
    SIGNAL flush_fd_l      : STD_LOGIC;
+   SIGNAL mem_match       : STD_LOGIC;
    SIGNAL mem_mismatch    : std_logic;
    SIGNAL mem_mismatch_l  : std_logic;
    SIGNAL no_mispredict   : STD_LOGIC;
@@ -112,13 +112,6 @@ ARCHITECTURE struct OF flushUnit IS
    PORT (
       A : IN     LC3B_WORD ;
       B : IN     LC3B_WORD ;
-      F : OUT    STD_LOGIC 
-   );
-   END COMPONENT;
-   COMPONENT NAND2
-   PORT (
-      A : IN     STD_LOGIC ;
-      B : IN     STD_LOGIC ;
       F : OUT    STD_LOGIC 
    );
    END COMPONENT;
@@ -163,7 +156,6 @@ ARCHITECTURE struct OF flushUnit IS
    -- pragma synthesis_off
    FOR ALL : AND2 USE ENTITY mp3lib.AND2;
    FOR ALL : COMP16 USE ENTITY mp3lib.COMP16;
-   FOR ALL : NAND2 USE ENTITY mp3lib.NAND2;
    FOR ALL : NOR2 USE ENTITY mp3lib.NOR2;
    FOR ALL : NOR3 USE ENTITY mp3lib.NOR3;
    FOR ALL : NOT1 USE ENTITY mp3lib.NOT1;
@@ -196,24 +188,6 @@ BEGIN
 
 
    -- Instance port mappings.
-   U_3 : AND2
-      PORT MAP (
-         A => F1,
-         B => decode_load_pc,
-         F => decode_mismatch
-      );
-   U_4 : AND2
-      PORT MAP (
-         A => F3,
-         B => exec_load_pc,
-         F => exec_mismatch
-      );
-   U_5 : AND2
-      PORT MAP (
-         A => F5,
-         B => mem_load_pc,
-         F => mem_mismatch
-      );
    U_9 : AND2
       PORT MAP (
          A => exec_mismatch,
@@ -234,33 +208,39 @@ BEGIN
       );
    U_0 : COMP16
       PORT MAP (
-         A => exec_pc,
+         A => mem1_pc,
          B => mem_target_pc,
-         F => F4
+         F => mem_match
       );
    U_1 : COMP16
       PORT MAP (
          A => decode_pc,
          B => exec_target_pc,
-         F => F2
+         F => exec_match
       );
    U_2 : COMP16
       PORT MAP (
          A => instr_addr,
          B => decode_target_pc,
-         F => F
+         F => dec_match
       );
-   U_18 : NAND2
+   U_3 : NOR2
       PORT MAP (
-         A => F5,
-         B => mem_load_pc,
-         F => mem_mismatch_l
+         A => dec_match,
+         B => F1,
+         F => decode_mismatch
       );
-   U_19 : NAND2
+   U_4 : NOR2
       PORT MAP (
-         A => F3,
-         B => exec_load_pc,
-         F => exec_mismatch_l
+         A => exec_match,
+         B => F3,
+         F => exec_mismatch
+      );
+   U_5 : NOR2
+      PORT MAP (
+         A => mem_match,
+         B => B,
+         F => mem_mismatch
       );
    U_16 : NOR2
       PORT MAP (
@@ -282,26 +262,38 @@ BEGIN
          C => decode_mismatch,
          F => flush_fd_l
       );
-   U_6 : NOT1
-      PORT MAP (
-         A => F,
-         F => F1
-      );
    U_7 : NOT1
       PORT MAP (
-         A => F2,
+         A => exec_load_pc,
          F => F3
       );
    U_8 : NOT1
       PORT MAP (
-         A => F4,
-         F => F5
+         A => mem_load_pc,
+         F => B
+      );
+   U_17 : NOT1
+      PORT MAP (
+         A => decode_load_pc,
+         F => F1
       );
    U_11 : OR2
       PORT MAP (
          A => exec_mismatch,
          B => mem_mismatch,
          F => flush_exec
+      );
+   U_18 : OR2
+      PORT MAP (
+         A => mem_match,
+         B => B,
+         F => mem_mismatch_l
+      );
+   U_19 : OR2
+      PORT MAP (
+         A => exec_match,
+         B => F3,
+         F => exec_mismatch_l
       );
    U_12 : OR3
       PORT MAP (

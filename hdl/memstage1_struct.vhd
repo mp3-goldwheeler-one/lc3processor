@@ -22,7 +22,8 @@ ENTITY memStage1 IS
       dcache_ReadIndex          : OUT    LC3b_C_INDEX;
       dcache_interstage_data_in : OUT    LC3b_cache_interstage_data;
       mem1_cc                   : OUT    LC3b_CC;
-      mem1_data_out             : OUT    pipe_data
+      mem1_data_out             : OUT    pipe_data;
+      mem1_pc                   : OUT    lc3b_word
    );
 
 -- Declarations
@@ -59,7 +60,6 @@ ARCHITECTURE struct OF memStage1 IS
    SIGNAL imm5        : LC3B_IMM5;
    SIGNAL incr_pc     : lc3b_word;
    SIGNAL instr       : lc3b_word;
-   SIGNAL mem1_pc     : lc3b_word;
    SIGNAL mem_data_in : lc3b_word;
    SIGNAL nzp         : LC3B_cc;
    SIGNAL off11       : LC3B_OFFSET11;
@@ -78,6 +78,7 @@ ARCHITECTURE struct OF memStage1 IS
 
    -- Implicit buffer signal declarations
    SIGNAL dcache_ReadIndex_internal : LC3b_C_INDEX;
+   SIGNAL mem1_pc_internal          : lc3b_word;
 
 
    -- Component Declarations
@@ -190,7 +191,7 @@ BEGIN
       );
    U_14 : PipeDataCombiner
       PORT MAP (
-         pc          => mem1_pc,
+         pc          => mem1_pc_internal,
          incr_pc     => incr_pc,
          instr       => instr,
          aluout      => aluout,
@@ -219,7 +220,7 @@ BEGIN
    U_13 : PipeDataSplitter
       PORT MAP (
          data_in     => mem1_data_in,
-         pc          => mem1_pc,
+         pc          => mem1_pc_internal,
          incr_pc     => incr_pc,
          instr       => instr,
          aluout      => aluout,
@@ -275,5 +276,6 @@ BEGIN
 
    -- Implicit buffered output assignments
    dcache_ReadIndex <= dcache_ReadIndex_internal;
+   mem1_pc          <= mem1_pc_internal;
 
 END struct;

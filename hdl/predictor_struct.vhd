@@ -29,7 +29,6 @@ ENTITY Predictor IS
       exec_conditional          : IN     control_word;
       exec_control_buffer       : IN     exec_control_word;
       exec_load_pc              : IN     std_logic;
-      exec_pc                   : IN     lc3b_word;
       exec_prediction_correct   : IN     std_logic;
       exec_taken                : IN     std_logic;
       exec_target_pc            : IN     LC3b_word;
