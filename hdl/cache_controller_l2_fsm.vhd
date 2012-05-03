@@ -18,7 +18,6 @@ ENTITY Cache_Controller_L2 IS
       mem_access         : IN     std_logic;
       miss               : IN     std_logic;
       LRUgate            : OUT    std_logic;
-      PMREAD_L           : OUT    std_logic;
       in_idlehit         : OUT    std_logic;
       in_idlehit2        : OUT    std_logic;
       in_load            : OUT    std_logic;
@@ -100,15 +99,15 @@ BEGIN
                next_state <= LOAD;
             END IF;
          WHEN IDLE_HIT2 => 
+            next_state <= HIT_RESP;
+         WHEN HIT_RESP => 
             IF (miss = '0') THEN 
-               next_state <= HIT_RESP;
+               next_state <= IDLE_HIT;
             ELSIF (miss = '1' and evict_buffer_valid = '0') THEN 
                next_state <= LOAD;
             ELSE
-               next_state <= IDLE_HIT2;
+               next_state <= HIT_RESP;
             END IF;
-         WHEN HIT_RESP => 
-            next_state <= IDLE_HIT;
          WHEN LOAD_RESP => 
             next_state <= IDLE_HIT;
          WHEN OTHERS =>
@@ -124,7 +123,6 @@ BEGIN
    BEGIN
       -- Default Assignment
       LRUgate <= '0';
-      PMREAD_L <= '1';
       in_idlehit <= '0';
       in_idlehit2 <= '0';
       in_load <= '0';
@@ -137,12 +135,11 @@ BEGIN
             in_idlehit <= '1';
          WHEN LOAD => 
             in_load <= '1';
-            PMREAD_L <= '0' after 2ns;
          WHEN IDLE_HIT2 => 
             in_idlehit  <= '1';
             in_idlehit2 <= '1';
          WHEN HIT_RESP => 
-            LRUgate <= '1' after 1 ns;
+            LRUgate <= '1' after 7 ns;
             in_idlehit <= '1';
             process_hit <= '1';
          WHEN LOAD_RESP => 

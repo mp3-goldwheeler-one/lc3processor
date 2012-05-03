@@ -29,6 +29,7 @@ ENTITY L2_Cache_Datapath IS
       MRESP_H            : OUT    std_logic;
       PMADDRESS          : OUT    LC3B_WORD;
       PMDATAOUT          : OUT    LC3B_PWORD;
+      PMREAD_L           : OUT    STD_LOGIC;
       PMWRITE_L          : OUT    STD_LOGIC;
       evict_buffer_valid : OUT    std_logic;
       miss               : OUT    std_logic;
@@ -74,6 +75,7 @@ ARCHITECTURE struct OF L2_Cache_Datapath IS
    SIGNAL F1                     : STD_LOGIC;
    SIGNAL F2                     : STD_LOGIC;
    SIGNAL F3                     : STD_LOGIC;
+   SIGNAL F4                     : STD_LOGIC;
    SIGNAL Index                  : lc3b_l2_c_index;
    SIGNAL LRU_Way                : LRU_8_Section;
    SIGNAL LRU_Way0               : std_logic;
@@ -113,6 +115,9 @@ ARCHITECTURE struct OF L2_Cache_Datapath IS
    SIGNAL cacheline_out          : LC3B_PWORD;
    SIGNAL current_line           : LRU_8_Line;
    SIGNAL dirty                  : std_logic;
+   SIGNAL do_load                : STD_LOGIC;
+   SIGNAL do_load_l              : STD_LOGIC;
+   SIGNAL evict_buffer_valid_l   : std_logic;
    SIGNAL evicted_address        : LC3b_word;
    SIGNAL hit                    : std_logic;
    SIGNAL load0                  : std_logic;
@@ -203,6 +208,12 @@ ARCHITECTURE struct OF L2_Cache_Datapath IS
       DataOut   : OUT    LRU_8_Line 
    );
    END COMPONENT;
+   COMPONENT DelayRead
+   PORT (
+      do_load_l : IN     STD_LOGIC ;
+      PMREAD_L  : OUT    STD_LOGIC 
+   );
+   END COMPONENT;
    COMPONENT Encoder_8_3
    PORT (
       A  : IN     std_logic ;
@@ -251,12 +262,6 @@ ARCHITECTURE struct OF L2_Cache_Datapath IS
       H   : IN     std_logic ;
       Sel : IN     std_logic_vector (2 DOWNTO 0);
       Y   : OUT    std_logic 
-   );
-   END COMPONENT;
-   COMPONENT NOT1
-   PORT (
-      A : IN     std_logic ;
-      Y : OUT    std_logic 
    );
    END COMPONENT;
    COMPONENT OWordSelector
@@ -385,12 +390,12 @@ ARCHITECTURE struct OF L2_Cache_Datapath IS
    FOR ALL : AND3 USE ENTITY mp3lib.AND3;
    FOR ALL : Comparator USE ENTITY ece411.Comparator;
    FOR ALL : Data_Array_L2 USE ENTITY ece411.Data_Array_L2;
+   FOR ALL : DelayRead USE ENTITY ece411.DelayRead;
    FOR ALL : Encoder_8_3 USE ENTITY ece411.Encoder_8_3;
    FOR ALL : EvictionBuffer1 USE ENTITY ece411.EvictionBuffer1;
    FOR ALL : LRU_8_Logic USE ENTITY ece411.LRU_8_Logic;
    FOR ALL : Mux8_1 USE ENTITY ece411.Mux8_1;
    FOR ALL : NOR2 USE ENTITY mp3lib.NOR2;
-   FOR ALL : NOT1 USE ENTITY ece411.NOT1;
    FOR ALL : OWordSelector USE ENTITY ece411.OWordSelector;
    FOR ALL : Or4 USE ENTITY ece411.Or4;
    FOR ALL : PDataCombiner USE ENTITY ece411.PDataCombiner;
@@ -672,6 +677,11 @@ BEGIN
          DataIn    => updated_line,
          DataOut   => current_line
       );
+   U_63 : DelayRead
+      PORT MAP (
+         do_load_l => do_load_l,
+         PMREAD_L  => PMREAD_L
+      );
    PresentEncoder : Encoder_8_3
       PORT MAP (
          A  => present0,
@@ -724,17 +734,17 @@ BEGIN
          B => MWRITE_L,
          Y => mem_access
       );
-   U_4 : NOT1
+   U_4 : ENTITY ece411.NOT1
       PORT MAP (
          A => ProtoHit,
          Y => Protomiss
       );
-   U_20 : NOT1
+   U_20 : ENTITY ece411.NOT1
       PORT MAP (
          A => in_load_resp,
          Y => not_loading
       );
-   U_58 : NOT1
+   U_58 : ENTITY ece411.NOT1
       PORT MAP (
          A => MWRITE_L,
          Y => write
@@ -983,7 +993,7 @@ BEGIN
       PORT MAP (
          A   => evicted_address,
          B   => Address,
-         Sel => in_load,
+         Sel => do_load,
          F   => PMADDRESS
       );
    U_6 : WordMux8
@@ -1025,6 +1035,13 @@ BEGIN
          C => process_hit,
          F => truehit
       );
+   U_61 : AND3
+      PORT MAP (
+         A => process_hit,
+         B => evict_buffer_valid_l,
+         C => miss_internal,
+         F => F4
+      );
    U_18 : ENTITY mp3lib.NAND2
       PORT MAP (
          A => evict_buffer_valid_internal,
@@ -1049,6 +1066,17 @@ BEGIN
          B => in_load,
          F => B
       );
+   U_60 : NOR2
+      PORT MAP (
+         A => in_load,
+         B => F4,
+         F => do_load_l
+      );
+   U_62 : ENTITY mp3lib.NOT1
+      PORT MAP (
+         A => evict_buffer_valid_internal,
+         F => evict_buffer_valid_l
+      );
    U_0 : ENTITY mp3lib.OR2
       PORT MAP (
          A => F,
@@ -1066,6 +1094,12 @@ BEGIN
          A => LRUgate,
          B => in_load_resp,
          F => writegate
+      );
+   U_64 : ENTITY mp3lib.OR2
+      PORT MAP (
+         A => in_load,
+         B => F4,
+         F => do_load
       );
 
    -- Implicit buffered output assignments

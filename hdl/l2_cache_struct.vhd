@@ -71,7 +71,6 @@ ARCHITECTURE struct OF L2_Cache IS
       mem_access         : IN     std_logic ;
       miss               : IN     std_logic ;
       LRUgate            : OUT    std_logic ;
-      PMREAD_L           : OUT    std_logic ;
       in_idlehit         : OUT    std_logic ;
       in_idlehit2        : OUT    std_logic ;
       in_load            : OUT    std_logic ;
@@ -99,6 +98,7 @@ ARCHITECTURE struct OF L2_Cache IS
       MRESP_H            : OUT    std_logic ;
       PMADDRESS          : OUT    LC3B_WORD ;
       PMDATAOUT          : OUT    LC3B_PWORD ;
+      PMREAD_L           : OUT    STD_LOGIC ;
       PMWRITE_L          : OUT    STD_LOGIC ;
       evict_buffer_valid : OUT    std_logic ;
       miss               : OUT    std_logic ;
@@ -125,7 +125,6 @@ BEGIN
          mem_access         => mem_access,
          miss               => miss,
          LRUgate            => LRUgate,
-         PMREAD_L           => PMREAD_L,
          in_idlehit         => in_idlehit,
          in_idlehit2        => in_idlehit2,
          in_load            => in_load,
@@ -152,6 +151,7 @@ BEGIN
          MRESP_H            => MRESP_H,
          PMADDRESS          => PMADDRESS,
          PMDATAOUT          => PMDATAOUT,
+         PMREAD_L           => PMREAD_L,
          PMWRITE_L          => PMWRITE_L,
          evict_buffer_valid => evict_buffer_valid,
          miss               => miss,
