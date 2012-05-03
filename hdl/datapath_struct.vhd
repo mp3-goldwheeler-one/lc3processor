@@ -67,7 +67,7 @@ ARCHITECTURE struct OF Datapath IS
    SIGNAL decode_data_out            : pipe_data;
    SIGNAL decode_flush               : std_logic;
    SIGNAL decode_flush_l             : std_logic;
-   SIGNAL decode_insert_bubble       : std_logic;
+   SIGNAL decode_insert_bubble       : LC3b_TRISTATE_2MUX_SEL;
    SIGNAL decode_load_pc             : std_logic;
    SIGNAL decode_pc                  : lc3b_word;
    SIGNAL decode_prediction_correct  : STD_LOGIC;
@@ -217,7 +217,7 @@ ARCHITECTURE struct OF Datapath IS
       stall_load_use_buffer : IN     STD_LOGIC ;
       uarch_flush           : IN     std_logic ;
       uarch_flush_l         : IN     std_logic ;
-      decode_insert_bubble  : OUT    std_logic ;
+      decode_insert_bubble  : OUT    LC3b_TRISTATE_2MUX_SEL ;
       exec_insert_bubble    : OUT    LC3B_TRISTATE_2MUX_SEL ;
       fetch2_insert_bubble  : OUT    std_logic ;
       mem1_insert_bubble    : OUT    LC3B_TRISTATE_2MUX_SEL ;
@@ -356,7 +356,7 @@ ARCHITECTURE struct OF Datapath IS
    PORT (
       CLK                        : IN     std_logic ;
       RESET_L                    : IN     STD_LOGIC ;
-      decode_insert_bubble       : IN     std_logic ;
+      decode_insert_bubble       : IN     LC3b_TRISTATE_2MUX_SEL ;
       fetch2_data_in             : IN     pipe_data ;
       icache_ReadIndex           : IN     lc3b_c_index ;
       icache_interstage_data_out : IN     LC3b_cache_interstage_data ;

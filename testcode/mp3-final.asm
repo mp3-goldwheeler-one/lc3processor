@@ -6,7 +6,7 @@ SEGMENT  CodeSegment1:
 	
 START:	
 
-LEA R0, DataSegment	 
+LEA R0, DataSegment ; x00
 
 ADD R1, R1, 12		
 NOP
@@ -16,7 +16,7 @@ NOP
 ADD R1, R1, -5		
 NOP
 NOP
-NOP
+NOP                 ; x10
 
 ADD R1, R1, 0		
 NOP
@@ -28,7 +28,7 @@ STR R1, R0, aacus
 				
 AND R2, R0, 4x0F	
 NOP
-NOP
+NOP                 ; x20
 NOP
 STR R2, R0, joiner
 NOP
@@ -37,7 +37,7 @@ NOP
 				
 LDR R3, R0, DEEB
 NOP
-NOP
+NOP                 ; x30
 NOP
 LDR R4, R0, LEAF
 NOP
@@ -45,7 +45,7 @@ NOP
 NOP
 LDR R5, R0, D22D
 NOP
-NOP
+NOP                 ; x40
 NOP
 LDR R6, R0, LIFE
 NOP
@@ -56,7 +56,7 @@ NOP
 
 ADD R3, R3, R4
 NOP
-NOP
+NOP                 ; x50
 NOP
 
 ADD R3, R3, R3
@@ -69,7 +69,7 @@ STR R3, R0, calcx
 				
 
 AND R4, R5, R3
-NOP
+NOP                 ; x60
 NOP
 NOP
 
@@ -81,7 +81,7 @@ NOP
 NOP
 NOP
 
-STR R5, R0, duh
+STR R5, R0, duh      ; x70
 
 				
 
@@ -92,7 +92,7 @@ NOP
 LDR R7, R0, FOED
 NOP
 NOP
-NOP
+NOP                  ; x80
 LSHF R6, R6, 8
 NOP
 NOP
@@ -102,7 +102,7 @@ NOP
 RSHFL R7, R7, 3
 NOP
 NOP
-NOP
+NOP                  ; x90
 
 				
 
@@ -113,7 +113,7 @@ NOP
 STR R6, R0, fivespd
 NOP
 NOP
-NOP
+NOP                  ; xA0
 STR R7, R0, fivespd
 NOP
 NOP
@@ -124,7 +124,7 @@ NOP
 LDR R1, R0, ZERO
 LDR R2, R0, ZERO
 LDR R3, R0, D22D
-LDR R4, R0, LIFE
+LDR R4, R0, LIFE     ; xB0
 LDR R5, R0, FOED
 LDR R6, R0, DEEB
 LDR R7, R0, LEAF
@@ -137,7 +137,7 @@ NOP
 NOP
 NOP
 				
-LEA R2, HOWHIGH
+LEA R2, HOWHIGH      ; xC0
 NOP
 NOP
 NOP
@@ -147,7 +147,7 @@ NOP
 NOP
 NOP
 
-LDR R1, R0, GOOF
+LDR R1, R0, GOOF     ; xD0
 NOP
 NOP
 NOP
@@ -159,7 +159,7 @@ NOP
 NOP
 
 				
-LDR R2, R0, DEEB
+LDR R2, R0, DEEB      ; xE0
 NOP
 NOP
 NOP
@@ -168,7 +168,7 @@ STR R2, R0, SPOT1
 LDR R3, R0, FOED
 LDR R4, R0, LEAF
 NOP
-NOP
+NOP                     ; xF0
 NOP
 STR R3, R0, SPOT2
 STR R4, R0, SPOT3
@@ -176,7 +176,7 @@ LDR R5, R0, GOOD
 NOP
 NOP
 NOP
-STR R5, R0, SPOT4
+STR R5, R0, SPOT4       ; x100
 NOP
 NOP
 NOP
@@ -185,7 +185,7 @@ LDR R5, R0, SPOT1
 LDR R4, R0, SPOT2		
 LDR R3, R0, SPOT3		
 LDR R2, R0, SPOT4		
-STR R5, R0, SPOT4	
+STR R5, R0, SPOT4	    ; x110
 STR R4, R0, SPOT4
 STR R3, R0, SPOT4
 STR R2, R0, SPOT4
@@ -193,7 +193,7 @@ NOP
 NOP
 NOP
 ADD R2, R2, R3
-NOP
+NOP                     ; x120
 NOP
 NOP
 ADD R3, R4, R5
@@ -201,7 +201,7 @@ NOP
 NOP
 NOP
 ADD R2, R2, R3
-NOP
+NOP                     ; x130
 NOP
 NOP
 
@@ -213,7 +213,7 @@ NOP
 NOP
 
 STB R6, R3, ZOOP
-LDR R4, R0, ZOOP
+LDR R4, R0, ZOOP        ; x140
 				
 
 STB R7, R0, BEAD
@@ -223,7 +223,7 @@ NOP
 NOP
 STR R3, R0, chew
 STR R4, R0, chew
-ADD R3, R3, R4
+ADD R3, R3, R4          ; x150
 				
 
 LDR R4, R0, ZERO
@@ -237,7 +237,7 @@ LEA R5, MUDDLER
 NOP
 NOP
 NOP
-JSRR R5
+JSRR R5                 ; x160
 
 STR R5, R0, MUDPIE
 				
@@ -250,7 +250,7 @@ LDB R6, R6, COOKIE
 NOP
 
 				
-LDB R7, R0, COOKIE
+LDB R7, R0, COOKIE      ; x170
 NOP
 STR R6, R0, crumb
 NOP
@@ -258,7 +258,7 @@ STR R7, R0, crumb
 NOP
 NOP
 NOP
-ADD R6, R6, R7
+ADD R6, R6, R7          ; x180
 
 				
 
@@ -273,7 +273,7 @@ LDR R2,R0, ZERO
 LDR R3,R0, ZERO
 LDR R4,R0, GOOD		
 LDR R5,R0, GOOD
-LDR R6,R0, GOOD
+LDR R6,R0, GOOD         ; x190
 				
 
 LDI R1, R0, TEST
@@ -285,7 +285,7 @@ NOP
 STI R4, R0, DONE
 NOP
 NOP
-NOP
+NOP                     ; x1A0
 LDR R2, R0, RESULT 
 
 STR R1, R0, GOOF
@@ -295,7 +295,7 @@ NOP
 AND R3, R3, 0
 BRp DOH
 BRn DOH
-BRnp DOH
+BRnp DOH                ; x1B0
 BRz WOOHOO
 BRnz DOH
 BRnzp DOH
@@ -307,7 +307,7 @@ WOOHOO:
 ADD R3, R3, 6
 AND R4,R4,0
 BRz SOFAR
-ADD R3, R3, 1
+ADD R3, R3, 1           ; x1c0
 SOFAR:
 ADD R3, R3, 6
 AND R4,R4,0
@@ -318,7 +318,7 @@ NOP
 NOP
 NOP
 ADD R4, R4, 10
-NOP
+NOP                     ; x1D0
 BRp SOGOOD
 DOH2:
 ADD R3, R3, 6
@@ -329,7 +329,7 @@ NOP
 NOP
 NOP
 GetOverHere:
-ADD R3, R3, R4
+ADD R3, R3, R4          ; x1E0
 NOP
 NOP
 NOP
@@ -340,8 +340,8 @@ STR R1, R0, SPOT1
 STR R2, R0, SPOT2
 STR R3, R0, SPOT3
 
-LEA R1, bouncer
-END_m:	JMP R1		
+LEA R1, bouncer         ; x1F0
+END_m:	JMP R1
 
 SEGMENT DataSegment:		
 

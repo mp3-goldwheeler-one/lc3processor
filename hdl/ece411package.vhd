@@ -44,7 +44,7 @@ PACKAGE LC3B_TYPES IS
     SUBTYPE LC3B_L2_C_INDEX  IS STD_LOGIC_VECTOR(2 DOWNTO 0);
     SUBTYPE LC3B_L2_C_TAG    IS STD_LOGIC_VECTOR(7 DOWNTO 0);
 
-    subtype lc3b_alumux_sel  is std_logic_vector(1 downto 0);
+    subtype lc3b_alumux_sel  is LC3b_TRISTATE_4MUX_SEL;
     subtype btb_state_counter is std_logic_vector(1 downto 0);
     subtype LRU_4_Line is std_logic_vector(7 downto 0);
     subtype LRU_4_Section is std_logic_vector(1 downto 0);
@@ -137,10 +137,10 @@ PACKAGE LC3B_TYPES IS
 	PROCEDURE MYDRAMINIT_64K (
 		VARIABLE MEM : OUT MEMORY_ARRAY_64K);
 
-	CONSTANT alumux_sr2  : LC3B_4MUX_SEL := "00";
-	CONSTANT alumux_srbb : LC3B_4MUX_SEL := "01";
-	CONSTANT alumux_imm5 : LC3B_4MUX_SEL := "10";
-	CONSTANT alumux_idx6 : LC3B_4MUX_SEL := "11";
+	CONSTANT alumux_sr2  : LC3B_TRISTATE_4MUX_SEL := "0001";
+	CONSTANT alumux_srbb : LC3B_TRISTATE_4MUX_SEL := "0010";
+	CONSTANT alumux_imm5 : LC3B_TRISTATE_4MUX_SEL := "0100";
+	CONSTANT alumux_idx6 : LC3B_TRISTATE_4MUX_SEL := "1000";
 
 	SUBTYPE uop_rom_sel IS std_logic_vector(3 downto 0);
 	CONSTANT uop_rom_idx_default : uop_rom_sel := "0000";
@@ -389,7 +389,7 @@ PACKAGE LC3B_TYPES IS
 	CONSTANT default_control_word : control_word := (
 		dec   => default_dec_control,
 		exec  => (
-			alumux_sel     => "XX",
+			alumux_sel     => "XXXX",
 			aluop          => "XXX",
 			shift_imm      => 'X',
 			srcamux_sel    => "XX",
@@ -620,7 +620,7 @@ PACKAGE LC3B_TYPES IS
 	CONSTANT br_instr : control_word := (
 		dec   => default_dec_control,
 		exec  => (
-			alumux_sel     => "XX",
+			alumux_sel     => "XXXX",
 			aluop          => "XXX",
 			shift_imm      => 'X',
 			srcamux_sel    => "00",
@@ -650,7 +650,7 @@ PACKAGE LC3B_TYPES IS
 			sr1_needed    => '1',
 			sr2_needed    => '0'
 		), exec  => (
-			alumux_sel     => "XX",
+			alumux_sel     => "XXXX",
 			aluop          => "XXX",
 			shift_imm      => 'X',
 			srcamux_sel    => "00",
@@ -680,7 +680,7 @@ PACKAGE LC3B_TYPES IS
 			sr1_needed    => '0',
 			sr2_needed    => '0'
 		), exec  => (
-			alumux_sel     => "XX",
+			alumux_sel     => "XXXX",
 			aluop          => ALU_PASS,
 			shift_imm      => 'X',
 			srcamux_sel    => "01",
@@ -710,7 +710,7 @@ PACKAGE LC3B_TYPES IS
 			sr1_needed    => '1',
 			sr2_needed    => '0'
 		), exec  => (
-			alumux_sel     => "XX",
+			alumux_sel     => "XXXX",
 			aluop          => ALU_PASS,
 			shift_imm      => 'X',
 			srcamux_sel    => "01",
@@ -1162,7 +1162,7 @@ PACKAGE LC3B_TYPES IS
 			sr1_needed    => '0',
 			sr2_needed    => '0'
 		), exec  => (
-			alumux_sel     => "XX",
+			alumux_sel     => "XXXX",
 			aluop          => ALU_PASS,
 			shift_imm      => 'X',
 			srcamux_sel    => "10",

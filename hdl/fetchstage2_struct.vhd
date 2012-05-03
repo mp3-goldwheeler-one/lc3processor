@@ -13,7 +13,7 @@ ENTITY fetchStage2 IS
    PORT( 
       CLK                        : IN     std_logic;
       RESET_L                    : IN     STD_LOGIC;
-      decode_insert_bubble       : IN     std_logic;
+      decode_insert_bubble       : IN     LC3b_TRISTATE_2MUX_SEL;
       fetch2_data_in             : IN     pipe_data;
       icache_ReadIndex           : IN     lc3b_c_index;
       icache_interstage_data_out : IN     LC3b_cache_interstage_data;
@@ -55,36 +55,37 @@ ARCHITECTURE struct OF fetchStage2 IS
    -- Architecture declarations
 
    -- Internal signal declarations
-   SIGNAL Dataout      : LC3b_word;
-   SIGNAL F            : STD_LOGIC;
-   SIGNAL MRESP_H      : std_logic;
-   SIGNAL Zero_16      : LC3B_WORD;
-   SIGNAL aluout       : lc3b_word;
-   SIGNAL btb_data     : btb_line;
-   SIGNAL cc           : LC3B_cc;
-   SIGNAL data_addr    : lc3b_word;
-   SIGNAL dr           : lc3b_reg;
-   SIGNAL dr_val       : lc3b_word;
-   SIGNAL fetch_instr  : LC3b_word;
-   SIGNAL idx6         : LC3B_INDEX6;
-   SIGNAL imm4         : LC3B_IMM4;
-   SIGNAL imm5         : LC3B_IMM5;
-   SIGNAL incr_pc      : lc3b_word;
-   SIGNAL instr        : lc3b_word;
-   SIGNAL mem_data_in  : lc3b_word;
-   SIGNAL nzp          : LC3B_cc;
-   SIGNAL off11        : LC3B_OFFSET11;
-   SIGNAL off9         : LC3B_OFFSET9;
-   SIGNAL one          : std_logic;
-   SIGNAL read_instr_l : std_logic;
-   SIGNAL sr1          : lc3b_reg;
-   SIGNAL sr1_val      : lc3b_word;
-   SIGNAL sr2          : lc3b_reg;
-   SIGNAL sr2_val      : lc3b_word;
-   SIGNAL taken        : std_logic;
-   SIGNAL target_pc    : lc3b_word;
-   SIGNAL trapvect8    : LC3B_TRAPVECT8;
-   SIGNAL wb_data      : LC3B_word;
+   SIGNAL Dataout        : LC3b_word;
+   SIGNAL MRESP_H        : std_logic;
+   SIGNAL Zero_16        : LC3B_WORD;
+   SIGNAL aluout         : lc3b_word;
+   SIGNAL btb_data       : btb_line;
+   SIGNAL cc             : LC3B_cc;
+   SIGNAL data_addr      : lc3b_word;
+   SIGNAL dr             : lc3b_reg;
+   SIGNAL dr_val         : lc3b_word;
+   SIGNAL fetch_instr    : LC3b_word;
+   SIGNAL idx6           : LC3B_INDEX6;
+   SIGNAL imm4           : LC3B_IMM4;
+   SIGNAL imm5           : LC3B_IMM5;
+   SIGNAL incr_pc        : lc3b_word;
+   SIGNAL instr          : lc3b_word;
+   SIGNAL intermed_instr : LC3b_WORD;
+   SIGNAL mem_data_in    : lc3b_word;
+   SIGNAL nzp            : LC3B_cc;
+   SIGNAL off11          : LC3B_OFFSET11;
+   SIGNAL off9           : LC3B_OFFSET9;
+   SIGNAL one            : std_logic;
+   SIGNAL read_instr_l   : std_logic;
+   SIGNAL read_instr_sel : LC3b_TRISTATE_2MUX_SEL;
+   SIGNAL sr1            : lc3b_reg;
+   SIGNAL sr1_val        : lc3b_word;
+   SIGNAL sr2            : lc3b_reg;
+   SIGNAL sr2_val        : lc3b_word;
+   SIGNAL taken          : std_logic;
+   SIGNAL target_pc      : lc3b_word;
+   SIGNAL trapvect8      : LC3B_TRAPVECT8;
+   SIGNAL wb_data        : LC3B_word;
 
 
    -- Component Declarations
@@ -168,12 +169,15 @@ ARCHITECTURE struct OF fetchStage2 IS
       MRESP_H         : BUFFER std_logic 
    );
    END COMPONENT;
-   COMPONENT MUX2_16
+   COMPONENT TristateMux2_N
+   GENERIC (
+      n : integer
+   );
    PORT (
-      A   : IN     LC3B_WORD ;
-      B   : IN     LC3B_WORD ;
-      SEL : IN     STD_LOGIC ;
-      F   : OUT    LC3B_WORD 
+      A   : IN     std_logic_vector (n-1 DOWNTO 0);
+      B   : IN     std_logic_vector (n-1 DOWNTO 0);
+      sel : IN     LC3b_TRISTATE_2MUX_SEL ;
+      F   : OUT    std_logic_vector (n-1 DOWNTO 0)
    );
    END COMPONENT;
    COMPONENT NOT1
@@ -192,12 +196,12 @@ ARCHITECTURE struct OF fetchStage2 IS
 
    -- Optional embedded configurations
    -- pragma synthesis_off
-   FOR ALL : MUX2_16 USE ENTITY mp3lib.MUX2_16;
    FOR ALL : NOT1 USE ENTITY mp3lib.NOT1;
    FOR ALL : OR2 USE ENTITY mp3lib.OR2;
    FOR ALL : PipeDataCombiner USE ENTITY ece411.PipeDataCombiner;
    FOR ALL : PipeDataSplitter USE ENTITY ece411.PipeDataSplitter;
    FOR ALL : Pipelined_L1_Stage2 USE ENTITY ece411.Pipelined_L1_Stage2;
+   FOR ALL : TristateMux2_N USE ENTITY ece411.TristateMux2_N;
    -- pragma synthesis_on
 
 
@@ -207,6 +211,7 @@ BEGIN
    one <= '1';
    Zero_16 <= x"0000";
    Dataout <= (Others => 'X');
+   read_instr_sel <= read_instr_l & read_instr;
 
 
    -- Instance port mappings.
@@ -287,12 +292,25 @@ BEGIN
          feedback        => icache_feedback,
          MRESP_H         => MRESP_H
       );
-   U_2 : MUX2_16
+   U_2 : TristateMux2_N
+      GENERIC MAP (
+         n => 16
+      )
+      PORT MAP (
+         A   => intermed_instr,
+         B   => Zero_16,
+         sel => decode_insert_bubble,
+         F   => fetch_instr
+      );
+   U_6 : TristateMux2_N
+      GENERIC MAP (
+         n => 16
+      )
       PORT MAP (
          A   => instr,
          B   => Zero_16,
-         SEL => F,
-         F   => fetch_instr
+         sel => read_instr_sel,
+         F   => intermed_instr
       );
    U_3 : NOT1
       PORT MAP (
@@ -304,12 +322,6 @@ BEGIN
          A => read_instr_l,
          B => MRESP_H,
          F => fetch_ready
-      );
-   U_5 : OR2
-      PORT MAP (
-         A => read_instr_l,
-         B => decode_insert_bubble,
-         F => F
       );
 
 END struct;

@@ -60,7 +60,7 @@ ARCHITECTURE struct OF execStage IS
    -- Internal signal declarations
    SIGNAL B                 : LC3B_WORD;
    SIGNAL F2                : LC3B_WORD;
-   SIGNAL alumux_sel        : LC3b_4mux_sel;
+   SIGNAL alumux_sel        : LC3b_TRISTATE_4mux_sel;
    SIGNAL aluop             : LC3B_ALUOP;
    SIGNAL aluout            : lc3b_word;
    SIGNAL ben               : STD_LOGIC;
@@ -384,6 +384,18 @@ BEGIN
          in9    => offset9,
          output => offset9_16
       );
+   U_0 : TristateMux4_N
+      GENERIC MAP (
+         n => 16
+      )
+      PORT MAP (
+         A   => fwd_sr2,
+         B   => srcb_b,
+         C   => imm5_16,
+         D   => imm6_16,
+         Sel => alumux_sel,
+         F   => B
+      );
    U_8 : TristateMux4_N
       GENERIC MAP (
          n => 16
@@ -460,15 +472,6 @@ BEGIN
          B   => mem2_mem_data,
          SEL => exec_forward_addr_sel,
          F   => data_addr
-      );
-   U_0 : MUX4_16
-      PORT MAP (
-         A   => fwd_sr2,
-         B   => srcb_b,
-         C   => imm5_16,
-         D   => imm6_16,
-         SEL => alumux_sel,
-         F   => B
       );
    U_4 : MUX4_16
       PORT MAP (

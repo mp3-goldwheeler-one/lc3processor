@@ -94,19 +94,19 @@ value "/home/goldste6/ece411/mp3/hds/bubbleUnit"
 )
 (vvPair
 variable "date"
-value "04/26/12"
+value "05/02/12"
 )
 (vvPair
 variable "day"
-value "Thu"
+value "Wed"
 )
 (vvPair
 variable "day_long"
-value "Thursday"
+value "Wednesday"
 )
 (vvPair
 variable "dd"
-value "26"
+value "02"
 )
 (vvPair
 variable "entity_name"
@@ -134,7 +134,7 @@ value "ews"
 )
 (vvPair
 variable "host"
-value "linux6.ews.illinois.edu"
+value "gelib-057-04.ews.illinois.edu"
 )
 (vvPair
 variable "language"
@@ -150,7 +150,7 @@ value "$HDS_PROJECT_DIR/compile"
 )
 (vvPair
 variable "mm"
-value "04"
+value "05"
 )
 (vvPair
 variable "module_name"
@@ -158,11 +158,11 @@ value "bubbleUnit"
 )
 (vvPair
 variable "month"
-value "Apr"
+value "May"
 )
 (vvPair
 variable "month_long"
-value "April"
+value "May"
 )
 (vvPair
 variable "p"
@@ -210,7 +210,7 @@ value "<TBD>"
 )
 (vvPair
 variable "time"
-value "17:37:27"
+value "22:35:15"
 )
 (vvPair
 variable "unit"
@@ -687,7 +687,7 @@ font "courier,8,0"
 xt "17200,12200,46700,17600"
 st "
 fetch2_insert_bubble <= fetch2_flush;
-decode_insert_bubble <= decode_flush;
+decode_insert_bubble <= decode_flush & decode_flush_l;
 exec_insert_bubble   <= exec_do_bubble & exec_do_bubble_l;
 mem1_insert_bubble   <= mem1_flush & mem1_flush_l;
 mem2_insert_bubble   <= mem2_flush & mem2_flush_l;
@@ -1085,7 +1085,7 @@ tm "WireNameMgr"
 uid 225,0
 decl (Decl
 n "decode_insert_bubble"
-t "std_logic"
+t "LC3b_TRISTATE_2MUX_SEL"
 o 15
 suid 9,0
 )
@@ -1094,8 +1094,8 @@ uid 226,0
 va (VaSet
 font "courier,8,0"
 )
-xt "51000,14500,68000,15400"
-st "decode_insert_bubble  : std_logic
+xt "51000,14500,74500,15400"
+st "decode_insert_bubble  : LC3b_TRISTATE_2MUX_SEL
 "
 )
 )
@@ -3535,13 +3535,13 @@ tm "BdCompilerDirectivesTextMgr"
 ]
 associable 1
 )
-windowSize "-6,23,1268,721"
-viewArea "-12813,7942,69993,49621"
+windowSize "-8,27,1608,1183"
+viewArea "-12800,7900,97247,85715"
 cachedDiagramExtent "-3000,0,74500,51000"
 hasePageBreakOrigin 1
 pageBreakOrigin "-5000,0"
 active 1
-lastUid 842,0
+lastUid 892,0
 defaultCommentText (CommentText
 shape (Rectangle
 layer 0
@@ -4674,7 +4674,7 @@ port (LogicalPort
 m 1
 decl (Decl
 n "decode_insert_bubble"
-t "std_logic"
+t "LC3b_TRISTATE_2MUX_SEL"
 o 15
 suid 9,0
 )
