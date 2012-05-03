@@ -17,13 +17,14 @@ USE ece411.LC3b_types.all;
 ENTITY Data_Array_RW IS
    GENERIC( 
       N     : Integer;
-      DELAY : Time := DELAY_256B
+      DELAY : Time := DELAY_256B;
+      INDEX_LEN : Integer := 3
    );
    PORT( 
       RESET_L    : IN     std_logic;
       DataWrite  : IN     std_logic;
-      ReadIndex  : IN     LC3B_C_INDEX;
-      WriteIndex : IN     LC3B_C_INDEX;
+      ReadIndex  : IN     std_logic_vector(INDEX_LEN-1 downto 0);
+      WriteIndex : IN     std_logic_vector(INDEX_LEN-1 downto 0);
       DataIn     : IN     std_logic_vector (N-1 DOWNTO 0);
       DataOut    : OUT    std_logic_vector (N-1 DOWNTO 0)
    );
@@ -34,7 +35,7 @@ END Data_Array_RW ;
 
 --
 ARCHITECTURE untitled OF Data_Array_RW IS
-  Type DataArray IS array (7 downto 0) of std_logic_vector(N-1 downto 0);
+  Type DataArray IS array (2**INDEX_LEN-1 downto 0) of std_logic_vector(N-1 downto 0);
   signal Data : DataArray;
 BEGIN
   --------------------------------------------------------------
@@ -53,14 +54,9 @@ BEGIN
   begin
     DataIndex := to_integer(unsigned(WriteIndex));
     if (reset_l = '0') then
-      Data(0) <= (Others => 'X');
-      Data(1) <= (Others => 'X');
-      Data(2) <= (Others => 'X');
-      Data(3) <= (Others => 'X');
-      Data(4) <= (Others => 'X');
-      Data(5) <= (Others => 'X');
-      Data(6) <= (Others => 'X');
-      Data(7) <= (Others => 'X');
+      for i in 0 to 2**INDEX_LEN-1 loop
+        Data(i) <= (Others => 'X');
+      end loop;
     end if;
     if (dataWrite = '1') then
       Data(DataIndex) <= DataIn;

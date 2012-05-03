@@ -24,7 +24,7 @@ elements [
 (GiElement
 name "N"
 type "Integer"
-value "12"
+value "11"
 )
 (GiElement
 name "Delay"
@@ -54,6 +54,11 @@ name "DELAY"
 type "Time"
 value "DELAY_128B"
 )
+(GiElement
+name "INDEX_LEN"
+type "INTEGER"
+value "4"
+)
 ]
 mwi 0
 uid 1391,0
@@ -80,12 +85,17 @@ elements [
 (GiElement
 name "N"
 type "Integer"
-value "12"
+value "11"
 )
 (GiElement
 name "DELAY"
 type "Time"
 value "DELAY_128B"
+)
+(GiElement
+name "INDEX_LEN"
+type "Integer"
+value "4"
 )
 ]
 mwi 0
@@ -145,19 +155,19 @@ value "/home/goldste6/ece411/mp3/hds/BTB_Way"
 )
 (vvPair
 variable "date"
-value "04/27/12"
+value "05/03/12"
 )
 (vvPair
 variable "day"
-value "Fri"
+value "Thu"
 )
 (vvPair
 variable "day_long"
-value "Friday"
+value "Thursday"
 )
 (vvPair
 variable "dd"
-value "27"
+value "03"
 )
 (vvPair
 variable "entity_name"
@@ -185,7 +195,7 @@ value "ews"
 )
 (vvPair
 variable "host"
-value "gelib-057-17.ews.illinois.edu"
+value "gelib-057-04.ews.illinois.edu"
 )
 (vvPair
 variable "language"
@@ -209,7 +219,7 @@ value "$HDS_PROJECT_DIR/compile"
 )
 (vvPair
 variable "mm"
-value "04"
+value "05"
 )
 (vvPair
 variable "module_name"
@@ -217,11 +227,11 @@ value "BTB_Way"
 )
 (vvPair
 variable "month"
-value "Apr"
+value "May"
 )
 (vvPair
 variable "month_long"
-value "April"
+value "May"
 )
 (vvPair
 variable "p"
@@ -269,7 +279,7 @@ value "<TBD>"
 )
 (vvPair
 variable "time"
-value "00:12:00"
+value "00:43:14"
 )
 (vvPair
 variable "unit"
@@ -322,7 +332,7 @@ fg "0,0,32768"
 bg "0,0,32768"
 font "courier,8,0"
 )
-xt "48200,54050,59700,54950"
+xt "48200,54050,61700,54950"
 st "
 by %user on %dd %month %year
 "
@@ -890,7 +900,7 @@ uid 414,0
 decl (Decl
 n "Tag"
 t "std_logic_vector"
-b "(11 DOWNTO 0)"
+b "(10 DOWNTO 0)"
 o 11
 suid 14,0
 )
@@ -900,7 +910,7 @@ va (VaSet
 font "courier,8,0"
 )
 xt "46000,12400,71000,13300"
-st "SIGNAL Tag        : std_logic_vector(11 DOWNTO 0)"
+st "SIGNAL Tag        : std_logic_vector(10 DOWNTO 0)"
 )
 )
 *21 (SaComponent
@@ -1073,7 +1083,7 @@ va (VaSet
 font "courier,8,0"
 )
 xt "3000,40200,23500,42000"
-st "N     = 12                 ( Integer )  
+st "N     = 11                 ( Integer )  
 Delay = DELAY_COMPARE16    ( time    )  "
 )
 header ""
@@ -1082,7 +1092,7 @@ elements [
 (GiElement
 name "N"
 type "Integer"
-value "12"
+value "11"
 )
 (GiElement
 name "Delay"
@@ -1659,9 +1669,11 @@ blo "49000,27250"
 )
 )
 thePort (LogicalPort
+lang 2
 decl (Decl
 n "ReadIndex"
-t "LC3b_c_index"
+t "std_logic_vector"
+b "(INDEX_LEN-1 downto 0)"
 o 3
 )
 )
@@ -1693,9 +1705,11 @@ blo "49000,28250"
 )
 )
 thePort (LogicalPort
+lang 2
 decl (Decl
 n "WriteIndex"
-t "LC3b_c_index"
+t "std_logic_vector"
+b "(INDEX_LEN-1 downto 0)"
 o 4
 )
 )
@@ -1759,9 +1773,9 @@ uid 1399,0
 va (VaSet
 font "courier,8,0"
 )
-xt "48000,22100,64500,23000"
-st "DELAY = DELAY_128B    ( Time )  
-"
+xt "48000,21200,68000,23000"
+st "DELAY     = DELAY_128B    ( Time    )  
+INDEX_LEN = 4             ( INTEGER )  "
 )
 header ""
 )
@@ -1770,6 +1784,11 @@ elements [
 name "DELAY"
 type "Time"
 value "DELAY_128B"
+)
+(GiElement
+name "INDEX_LEN"
+type "INTEGER"
+value "4"
 )
 ]
 )
@@ -1788,6 +1807,7 @@ ftype 10
 ordering 1
 viewiconposition 0
 portVis (PortSigDisplay
+sTC 0
 )
 archFileType "UNKNOWN"
 )
@@ -1795,7 +1815,8 @@ archFileType "UNKNOWN"
 uid 1477,0
 decl (Decl
 n "ReadIndex"
-t "lc3b_c_index"
+t "std_logic_vector"
+b "(3 DOWNTO 0)"
 o 4
 suid 37,0
 )
@@ -1804,8 +1825,8 @@ uid 1478,0
 va (VaSet
 font "courier,8,0"
 )
-xt "46000,5200,59000,6100"
-st "ReadIndex  : lc3b_c_index"
+xt "46000,5200,67000,6100"
+st "ReadIndex  : std_logic_vector(3 DOWNTO 0)"
 )
 )
 *52 (PortIoIn
@@ -1858,7 +1879,8 @@ tm "WireNameMgr"
 uid 1487,0
 decl (Decl
 n "WriteIndex"
-t "LC3b_c_index"
+t "std_logic_vector"
+b "(3 DOWNTO 0)"
 o 6
 suid 38,0
 )
@@ -1867,8 +1889,8 @@ uid 1488,0
 va (VaSet
 font "courier,8,0"
 )
-xt "46000,7000,59000,7900"
-st "WriteIndex : LC3b_c_index"
+xt "46000,7000,67000,7900"
+st "WriteIndex : std_logic_vector(3 DOWNTO 0)"
 )
 )
 *54 (SaComponent
@@ -2050,7 +2072,8 @@ thePort (LogicalPort
 lang 2
 decl (Decl
 n "ReadIndex"
-t "LC3b_c_index"
+t "std_logic_vector"
+b "(3 downto 0)"
 o 3
 suid 6,0
 )
@@ -2086,7 +2109,8 @@ thePort (LogicalPort
 lang 2
 decl (Decl
 n "WriteIndex"
-t "LC3b_c_index"
+t "std_logic_vector"
+b "(3 downto 0)"
 o 4
 suid 7,0
 )
@@ -2152,8 +2176,7 @@ va (VaSet
 font "courier,8,0"
 )
 xt "30000,22100,46500,23000"
-st "DELAY = DELAY_128B    ( Time )  
-"
+st "DELAY = DELAY_128B    ( Time )  "
 )
 header ""
 )
@@ -2362,10 +2385,10 @@ blo "14000,27250"
 )
 )
 thePort (LogicalPort
-lang 2
 decl (Decl
 n "ReadIndex"
-t "LC3b_c_index"
+t "std_logic_vector"
+b "(INDEX_LEN-1 downto 0)"
 o 3
 suid 6,0
 )
@@ -2398,10 +2421,10 @@ blo "14000,28250"
 )
 )
 thePort (LogicalPort
-lang 2
 decl (Decl
 n "WriteIndex"
-t "LC3b_c_index"
+t "std_logic_vector"
+b "(INDEX_LEN-1 downto 0)"
 o 4
 suid 7,0
 )
@@ -2466,10 +2489,10 @@ uid 1877,0
 va (VaSet
 font "courier,8,0"
 )
-xt "13000,21200,31000,23000"
-st "N     = 12            ( Integer )  
-DELAY = DELAY_128B    ( Time    )  
-"
+xt "13000,20300,33000,23000"
+st "N         = 11            ( Integer )  
+DELAY     = DELAY_128B    ( Time    )  
+INDEX_LEN = 4             ( Integer )  "
 )
 header ""
 )
@@ -2477,12 +2500,17 @@ elements [
 (GiElement
 name "N"
 type "Integer"
-value "12"
+value "11"
 )
 (GiElement
 name "DELAY"
 type "Time"
 value "DELAY_128B"
+)
+(GiElement
+name "INDEX_LEN"
+type "Integer"
+value "4"
 )
 ]
 )
@@ -2510,7 +2538,7 @@ uid 1941,0
 decl (Decl
 n "ReadTag"
 t "std_logic_vector"
-b "(11 DOWNTO 0)"
+b "(10 DOWNTO 0)"
 o 5
 suid 39,0
 )
@@ -2520,7 +2548,7 @@ va (VaSet
 font "courier,8,0"
 )
 xt "46000,6100,67500,7000"
-st "ReadTag    : std_logic_vector(11 DOWNTO 0)"
+st "ReadTag    : std_logic_vector(10 DOWNTO 0)"
 )
 )
 *75 (Net
@@ -2528,7 +2556,7 @@ uid 1943,0
 decl (Decl
 n "WriteTag"
 t "std_logic_vector"
-b "(11 DOWNTO 0)"
+b "(10 DOWNTO 0)"
 o 7
 suid 40,0
 )
@@ -2538,7 +2566,7 @@ va (VaSet
 font "courier,8,0"
 )
 xt "46000,7900,67500,8800"
-st "WriteTag   : std_logic_vector(11 DOWNTO 0)"
+st "WriteTag   : std_logic_vector(10 DOWNTO 0)"
 )
 )
 *76 (PortIoIn
@@ -3287,7 +3315,7 @@ va (VaSet
 font "courier,8,0"
 )
 xt "22000,43100,30500,44000"
-st "ReadTag : (11:0)"
+st "ReadTag : (10:0)"
 blo "22000,43800"
 tm "WireNameMgr"
 )
@@ -3750,7 +3778,7 @@ tm "BdCompilerDirectivesTextMgr"
 associable 1
 )
 windowSize "-6,27,1606,1179"
-viewArea "-13900,3300,93053,78837"
+viewArea "-16904,-12832,87910,61195"
 cachedDiagramExtent "-500,0,85000,55000"
 pageSetupInfo (PageSetupInfo
 fileName "/home/goldste6/ece411/mp2.2/way.ps"
@@ -3771,7 +3799,7 @@ exportStdPackageRefs 1
 hasePageBreakOrigin 1
 pageBreakOrigin "-1000,0"
 active 1
-lastUid 2102,0
+lastUid 2142,0
 defaultCommentText (CommentText
 shape (Rectangle
 layer 0
@@ -4906,7 +4934,7 @@ m 4
 decl (Decl
 n "Tag"
 t "std_logic_vector"
-b "(11 DOWNTO 0)"
+b "(10 DOWNTO 0)"
 o 11
 suid 14,0
 )
@@ -4953,7 +4981,8 @@ uid 614,0
 port (LogicalPort
 decl (Decl
 n "ReadIndex"
-t "lc3b_c_index"
+t "std_logic_vector"
+b "(3 DOWNTO 0)"
 o 4
 suid 37,0
 )
@@ -4964,7 +4993,8 @@ uid 1479,0
 port (LogicalPort
 decl (Decl
 n "WriteIndex"
-t "LC3b_c_index"
+t "std_logic_vector"
+b "(3 DOWNTO 0)"
 o 6
 suid 38,0
 )
@@ -4976,7 +5006,7 @@ port (LogicalPort
 decl (Decl
 n "ReadTag"
 t "std_logic_vector"
-b "(11 DOWNTO 0)"
+b "(10 DOWNTO 0)"
 o 5
 suid 39,0
 )
@@ -4988,7 +5018,7 @@ port (LogicalPort
 decl (Decl
 n "WriteTag"
 t "std_logic_vector"
-b "(11 DOWNTO 0)"
+b "(10 DOWNTO 0)"
 o 7
 suid 40,0
 )

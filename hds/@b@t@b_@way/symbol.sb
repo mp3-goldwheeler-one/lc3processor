@@ -125,7 +125,8 @@ uid 140,0
 port (LogicalPort
 decl (Decl
 n "ReadIndex"
-t "lc3b_c_index"
+t "std_logic_vector"
+b "(3 DOWNTO 0)"
 o 4
 suid 19,0
 )
@@ -136,7 +137,8 @@ uid 645,0
 port (LogicalPort
 decl (Decl
 n "WriteIndex"
-t "LC3b_c_index"
+t "std_logic_vector"
+b "(3 DOWNTO 0)"
 o 6
 suid 20,0
 )
@@ -148,7 +150,7 @@ port (LogicalPort
 decl (Decl
 n "WriteTag"
 t "std_logic_vector"
-b "(11 DOWNTO 0)"
+b "(10 DOWNTO 0)"
 o 7
 suid 21,0
 )
@@ -160,7 +162,7 @@ port (LogicalPort
 decl (Decl
 n "ReadTag"
 t "std_logic_vector"
-b "(11 DOWNTO 0)"
+b "(10 DOWNTO 0)"
 o 5
 suid 22,0
 )
@@ -348,23 +350,23 @@ VExpander (VariableExpander
 vvMap [
 (vvPair
 variable "HDLDir"
-value "/home/one1/Desktop/lc3processor/hdl"
+value "/home/goldste6/ece411/mp3/hdl"
 )
 (vvPair
 variable "HDSDir"
-value "/home/one1/Desktop/lc3processor/hds"
+value "/home/goldste6/ece411/mp3/hds"
 )
 (vvPair
 variable "SideDataDesignDir"
-value "/home/one1/Desktop/lc3processor/hds/@b@t@b_@way/symbol.sb.info"
+value "/home/goldste6/ece411/mp3/hds/@b@t@b_@way/symbol.sb.info"
 )
 (vvPair
 variable "SideDataUserDir"
-value "/home/one1/Desktop/lc3processor/hds/@b@t@b_@way/symbol.sb.user"
+value "/home/goldste6/ece411/mp3/hds/@b@t@b_@way/symbol.sb.user"
 )
 (vvPair
 variable "SourceDir"
-value "/home/one1/Desktop/lc3processor/hds"
+value "/home/goldste6/ece411/mp3/hds"
 )
 (vvPair
 variable "appl"
@@ -380,15 +382,15 @@ value "%(unit)_config"
 )
 (vvPair
 variable "d"
-value "/home/one1/Desktop/lc3processor/hds/@b@t@b_@way"
+value "/home/goldste6/ece411/mp3/hds/@b@t@b_@way"
 )
 (vvPair
 variable "d_logical"
-value "/home/one1/Desktop/lc3processor/hds/BTB_Way"
+value "/home/goldste6/ece411/mp3/hds/BTB_Way"
 )
 (vvPair
 variable "date"
-value "04/26/12"
+value "05/03/12"
 )
 (vvPair
 variable "day"
@@ -400,7 +402,7 @@ value "Thursday"
 )
 (vvPair
 variable "dd"
-value "26"
+value "03"
 )
 (vvPair
 variable "entity_name"
@@ -428,7 +430,7 @@ value "ews"
 )
 (vvPair
 variable "host"
-value "gelib-057-16.ews.illinois.edu"
+value "gelib-057-04.ews.illinois.edu"
 )
 (vvPair
 variable "language"
@@ -452,7 +454,7 @@ value "$HDS_PROJECT_DIR/compile"
 )
 (vvPair
 variable "mm"
-value "04"
+value "05"
 )
 (vvPair
 variable "module_name"
@@ -460,19 +462,19 @@ value "BTB_Way"
 )
 (vvPair
 variable "month"
-value "Apr"
+value "May"
 )
 (vvPair
 variable "month_long"
-value "April"
+value "May"
 )
 (vvPair
 variable "p"
-value "/home/one1/Desktop/lc3processor/hds/@b@t@b_@way/symbol.sb"
+value "/home/goldste6/ece411/mp3/hds/@b@t@b_@way/symbol.sb"
 )
 (vvPair
 variable "p_logical"
-value "/home/one1/Desktop/lc3processor/hds/BTB_Way/symbol.sb"
+value "/home/goldste6/ece411/mp3/hds/BTB_Way/symbol.sb"
 )
 (vvPair
 variable "project_name"
@@ -492,7 +494,7 @@ value "<TBD>"
 )
 (vvPair
 variable "task_ModelSimPath"
-value "$HDS_HOME/../Modeltech/linux"
+value "<TBD>"
 )
 (vvPair
 variable "task_NC-SimPath"
@@ -512,7 +514,7 @@ value "<TBD>"
 )
 (vvPair
 variable "time"
-value "16:53:38"
+value "00:40:07"
 )
 (vvPair
 variable "unit"
@@ -520,7 +522,7 @@ value "BTB_Way"
 )
 (vvPair
 variable "user"
-value "one1"
+value "goldste6"
 )
 (vvPair
 variable "version"
@@ -796,8 +798,8 @@ uid 649,0
 va (VaSet
 font "courier,8,0"
 )
-xt "16000,21550,20500,22450"
-st "ReadIndex"
+xt "16000,21550,25000,22450"
+st "ReadIndex : (3:0)"
 blo "16000,22250"
 tm "CptPortNameMgr"
 )
@@ -807,14 +809,15 @@ uid 650,0
 va (VaSet
 font "courier,8,0"
 )
-xt "44000,4500,62000,5400"
-st "ReadIndex  : IN     lc3b_c_index  ;
+xt "44000,4500,70000,5400"
+st "ReadIndex  : IN     std_logic_vector (3 DOWNTO 0) ;
 "
 )
 thePort (LogicalPort
 decl (Decl
 n "ReadIndex"
-t "lc3b_c_index"
+t "std_logic_vector"
+b "(3 DOWNTO 0)"
 o 4
 suid 19,0
 )
@@ -841,8 +844,8 @@ uid 668,0
 va (VaSet
 font "courier,8,0"
 )
-xt "16000,22550,21500,23450"
-st "WriteIndex"
+xt "16000,22550,25500,23450"
+st "WriteIndex : (3:0)"
 blo "16000,23250"
 tm "CptPortNameMgr"
 )
@@ -852,14 +855,15 @@ uid 669,0
 va (VaSet
 font "courier,8,0"
 )
-xt "44000,6300,62000,7200"
-st "WriteIndex : IN     LC3b_c_index  ;
+xt "44000,6300,70000,7200"
+st "WriteIndex : IN     std_logic_vector (3 DOWNTO 0) ;
 "
 )
 thePort (LogicalPort
 decl (Decl
 n "WriteIndex"
-t "LC3b_c_index"
+t "std_logic_vector"
+b "(3 DOWNTO 0)"
 o 6
 suid 20,0
 )
@@ -887,7 +891,7 @@ va (VaSet
 font "courier,8,0"
 )
 xt "16000,25550,25000,26450"
-st "WriteTag : (11:0)"
+st "WriteTag : (10:0)"
 blo "16000,26250"
 tm "CptPortNameMgr"
 )
@@ -898,14 +902,14 @@ va (VaSet
 font "courier,8,0"
 )
 xt "44000,7200,70500,8100"
-st "WriteTag   : IN     std_logic_vector (11 DOWNTO 0) ;
+st "WriteTag   : IN     std_logic_vector (10 DOWNTO 0) ;
 "
 )
 thePort (LogicalPort
 decl (Decl
 n "WriteTag"
 t "std_logic_vector"
-b "(11 DOWNTO 0)"
+b "(10 DOWNTO 0)"
 o 7
 suid 21,0
 )
@@ -933,7 +937,7 @@ va (VaSet
 font "courier,8,0"
 )
 xt "16000,24550,24500,25450"
-st "ReadTag : (11:0)"
+st "ReadTag : (10:0)"
 blo "16000,25250"
 tm "CptPortNameMgr"
 )
@@ -944,14 +948,14 @@ va (VaSet
 font "courier,8,0"
 )
 xt "44000,5400,70500,6300"
-st "ReadTag    : IN     std_logic_vector (11 DOWNTO 0) ;
+st "ReadTag    : IN     std_logic_vector (10 DOWNTO 0) ;
 "
 )
 thePort (LogicalPort
 decl (Decl
 n "ReadTag"
 t "std_logic_vector"
-b "(11 DOWNTO 0)"
+b "(10 DOWNTO 0)"
 o 5
 suid 22,0
 )
@@ -1040,7 +1044,7 @@ fg "0,0,32768"
 bg "0,0,32768"
 font "courier,8,0"
 )
-xt "32200,50050,45700,50950"
+xt "32200,50050,43700,50950"
 st "
 by %user on %dd %month %year
 "
@@ -1638,6 +1642,6 @@ xt "42000,0,42000,0"
 tm "SyDeclarativeTextMgr"
 )
 )
-lastUid 925,0
+lastUid 937,0
 okToSyncOnLoad 1
 )

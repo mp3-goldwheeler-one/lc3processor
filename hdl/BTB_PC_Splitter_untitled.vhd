@@ -17,8 +17,8 @@ USE ece411.LC3b_types.all;
 ENTITY BTB_PC_Splitter IS
    PORT( 
       Address : IN     LC3b_word;
-      Tag     : OUT    std_logic_vector (11 DOWNTO 0);
-      Index   : OUT    std_logic_vector (2 DOWNTO 0)
+      Tag     : OUT    std_logic_vector (10 DOWNTO 0);
+      Index   : OUT    std_logic_vector (3 DOWNTO 0)
    );
 
 -- Declarations
@@ -28,7 +28,7 @@ END BTB_PC_Splitter ;
 --
 ARCHITECTURE untitled OF BTB_PC_Splitter IS
 BEGIN
-  Tag <= Address(15 downto 4);
-  Index <= Address(3 downto 1);
+  Tag <= Address(15 downto 5);
+  Index <= Address(4 downto 1);
 END ARCHITECTURE untitled;
 

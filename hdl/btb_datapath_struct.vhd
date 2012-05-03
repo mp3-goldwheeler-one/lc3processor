@@ -52,12 +52,12 @@ ARCHITECTURE struct OF BTB_Datapath IS
    SIGNAL MWRITE_L        : STD_LOGIC;
    SIGNAL ProtoHit        : std_logic;
    SIGNAL Protomiss       : std_logic;
-   SIGNAL ReadIndex       : lc3b_c_index;
-   SIGNAL ReadTag         : std_logic_vector(11 DOWNTO 0);
+   SIGNAL ReadIndex       : std_logic_vector(3 DOWNTO 0);
+   SIGNAL ReadTag         : std_logic_vector(10 DOWNTO 0);
    SIGNAL Way0Dataout     : btb_line;
    SIGNAL Way1Dataout     : btb_line;
-   SIGNAL WriteIndex      : lc3b_c_index;
-   SIGNAL WriteTag        : std_logic_vector(11 DOWNTO 0);
+   SIGNAL WriteIndex      : std_logic_vector(3 DOWNTO 0);
+   SIGNAL WriteTag        : std_logic_vector(10 DOWNTO 0);
    SIGNAL Y               : std_logic;
    SIGNAL load0           : std_logic;
    SIGNAL load1           : std_logic;
@@ -91,8 +91,8 @@ ARCHITECTURE struct OF BTB_Datapath IS
    COMPONENT BTB_PC_Splitter
    PORT (
       Address : IN     LC3b_word ;
-      Tag     : OUT    std_logic_vector (11 DOWNTO 0);
-      Index   : OUT    std_logic_vector (2 DOWNTO 0)
+      Tag     : OUT    std_logic_vector (10 DOWNTO 0);
+      Index   : OUT    std_logic_vector (3 DOWNTO 0)
    );
    END COMPONENT;
    COMPONENT BTB_Timer
@@ -106,23 +106,24 @@ ARCHITECTURE struct OF BTB_Datapath IS
       DataIn     : IN     btb_line ;
       DataWrite  : IN     std_logic ;
       RESET_L    : IN     std_logic ;
-      ReadIndex  : IN     lc3b_c_index ;
-      ReadTag    : IN     std_logic_vector (11 DOWNTO 0);
-      WriteIndex : IN     LC3b_c_index ;
-      WriteTag   : IN     std_logic_vector (11 DOWNTO 0);
+      ReadIndex  : IN     std_logic_vector (3 DOWNTO 0);
+      ReadTag    : IN     std_logic_vector (10 DOWNTO 0);
+      WriteIndex : IN     std_logic_vector (3 DOWNTO 0);
+      WriteTag   : IN     std_logic_vector (10 DOWNTO 0);
       DataOut    : OUT    btb_line ;
       Present    : OUT    std_logic 
    );
    END COMPONENT;
    COMPONENT Bit_Array_RW
    GENERIC (
-      DELAY : Time := DELAY_256B
+      DELAY     : Time    := DELAY_256B;
+      INDEX_LEN : INTEGER := 3
    );
    PORT (
       RESET_L    : IN     std_logic ;
       DataWrite  : IN     std_logic ;
-      ReadIndex  : IN     LC3b_c_index ;
-      WriteIndex : IN     LC3b_c_index ;
+      ReadIndex  : IN     std_logic_vector (INDEX_LEN-1 DOWNTO 0);
+      WriteIndex : IN     std_logic_vector (INDEX_LEN-1 DOWNTO 0);
       DataIn     : IN     std_logic ;
       DataOut    : OUT    std_logic 
    );
@@ -256,14 +257,15 @@ BEGIN
       );
    LRU : Bit_Array_RW
       GENERIC MAP (
-         DELAY => DELAY_128B
+         DELAY     => DELAY_128B,
+         INDEX_LEN => 4
       )
       PORT MAP (
          RESET_L    => reset_l,
          DataWrite  => F,
          ReadIndex  => ReadIndex,
          WriteIndex => WriteIndex,
-         DataIn     => write_btb_way,
+         DataIn     => write_btb_way_l,
          DataOut    => lru_way
       );
    U_2 : NAND2

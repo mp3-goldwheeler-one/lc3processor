@@ -27,9 +27,14 @@ type "Integer"
 value "9"
 )
 (GiElement
-name "Delay"
+name "DELAY"
 type "Time"
 value "DELAY_256B"
+)
+(GiElement
+name "INDEX_LEN"
+type "Integer"
+value "3"
 )
 ]
 mwi 0
@@ -46,9 +51,14 @@ type "Integer"
 value "128"
 )
 (GiElement
-name "Delay"
+name "DELAY"
 type "Time"
 value "DELAY_256B"
+)
+(GiElement
+name "INDEX_LEN"
+type "Integer"
+value "3"
 )
 ]
 mwi 0
@@ -60,9 +70,14 @@ duLibraryName "ece411"
 duName "Bit_Array_RW"
 elements [
 (GiElement
-name "Delay"
+name "DELAY"
 type "Time"
 value "DELAY_256B"
+)
+(GiElement
+name "INDEX_LEN"
+type "INTEGER"
+value "3"
 )
 ]
 mwi 0
@@ -74,9 +89,14 @@ duLibraryName "ece411"
 duName "Bit_Array_RW"
 elements [
 (GiElement
-name "Delay"
+name "DELAY"
 type "Time"
 value "DELAY_256B"
+)
+(GiElement
+name "INDEX_LEN"
+type "INTEGER"
+value "3"
 )
 ]
 mwi 0
@@ -136,19 +156,19 @@ value "/home/goldste6/ece411/mp3/hds/L1Way"
 )
 (vvPair
 variable "date"
-value "04/25/12"
+value "05/03/12"
 )
 (vvPair
 variable "day"
-value "Wed"
+value "Thu"
 )
 (vvPair
 variable "day_long"
-value "Wednesday"
+value "Thursday"
 )
 (vvPair
 variable "dd"
-value "25"
+value "03"
 )
 (vvPair
 variable "entity_name"
@@ -176,7 +196,7 @@ value "ews"
 )
 (vvPair
 variable "host"
-value "gelib-057-33.ews.illinois.edu"
+value "gelib-057-04.ews.illinois.edu"
 )
 (vvPair
 variable "language"
@@ -192,7 +212,7 @@ value "$HDS_PROJECT_DIR/compile"
 )
 (vvPair
 variable "mm"
-value "04"
+value "05"
 )
 (vvPair
 variable "module_name"
@@ -200,11 +220,11 @@ value "L1Way"
 )
 (vvPair
 variable "month"
-value "Apr"
+value "May"
 )
 (vvPair
 variable "month_long"
-value "April"
+value "May"
 )
 (vvPair
 variable "p"
@@ -252,7 +272,7 @@ value "<TBD>"
 )
 (vvPair
 variable "time"
-value "22:59:15"
+value "00:46:48"
 )
 (vvPair
 variable "unit"
@@ -389,7 +409,8 @@ va (VaSet
 font "courier,8,0"
 )
 xt "22000,3600,35000,4500"
-st "ReadIndex  : lc3b_c_index"
+st "ReadIndex  : lc3b_c_index
+"
 )
 )
 *4 (PortIoOut
@@ -497,7 +518,8 @@ va (VaSet
 font "courier,8,0"
 )
 xt "22000,6300,35000,7200"
-st "WriteIndex : LC3b_c_index"
+st "WriteIndex : LC3b_c_index
+"
 )
 )
 *7 (PortIoIn
@@ -560,7 +582,8 @@ va (VaSet
 font "courier,8,0"
 )
 xt "22000,7200,34000,8100"
-st "WriteTag   : LC3b_c_tag"
+st "WriteTag   : LC3b_c_tag
+"
 )
 )
 *9 (Grouping
@@ -1095,7 +1118,8 @@ va (VaSet
 font "courier,8,0"
 )
 xt "22000,2700,33500,3600"
-st "RESET_L    : std_logic"
+st "RESET_L    : std_logic
+"
 )
 )
 *25 (Net
@@ -1112,7 +1136,8 @@ va (VaSet
 font "courier,8,0"
 )
 xt "22000,4500,33500,5400"
-st "Set_Dirty  : std_logic"
+st "Set_Dirty  : std_logic
+"
 )
 )
 *26 (Net
@@ -1129,7 +1154,8 @@ va (VaSet
 font "courier,8,0"
 )
 xt "22000,5400,34000,6300"
-st "WayDataIn  : LC3b_OWORD"
+st "WayDataIn  : LC3b_OWORD
+"
 )
 )
 *27 (PortIoOut
@@ -1324,7 +1350,8 @@ blo "6000,28250"
 thePort (LogicalPort
 decl (Decl
 n "ReadIndex"
-t "LC3B_C_INDEX"
+t "std_logic_vector"
+b "(INDEX_LEN-1 downto 0)"
 o 3
 suid 3,0
 )
@@ -1359,7 +1386,8 @@ blo "6000,29250"
 thePort (LogicalPort
 decl (Decl
 n "WriteIndex"
-t "LC3B_C_INDEX"
+t "std_logic_vector"
+b "(INDEX_LEN-1 downto 0)"
 o 4
 suid 4,0
 )
@@ -1397,7 +1425,7 @@ thePort (LogicalPort
 decl (Decl
 n "DataIn"
 t "std_logic_vector"
-b "(N-1 downto 0)"
+b "(N-1 DOWNTO 0)"
 o 5
 suid 5,0
 )
@@ -1435,7 +1463,7 @@ m 1
 decl (Decl
 n "DataOut"
 t "std_logic_vector"
-b "(N-1 downto 0)"
+b "(N-1 DOWNTO 0)"
 o 6
 suid 6,0
 )
@@ -1500,9 +1528,10 @@ uid 794,0
 va (VaSet
 font "courier,8,0"
 )
-xt "2000,41200,20000,43000"
-st "N     = 9             ( Integer )  
-Delay = DELAY_256B    ( Time    )  
+xt "2000,41200,22000,43900"
+st "N         = 9             ( Integer )  
+DELAY     = DELAY_256B    ( Time    )  
+INDEX_LEN = 3             ( Integer )  
 "
 )
 header ""
@@ -1514,9 +1543,14 @@ type "Integer"
 value "9"
 )
 (GiElement
-name "Delay"
+name "DELAY"
 type "Time"
 value "DELAY_256B"
+)
+(GiElement
+name "INDEX_LEN"
+type "Integer"
+value "3"
 )
 ]
 )
@@ -1641,7 +1675,8 @@ blo "22000,28250"
 thePort (LogicalPort
 decl (Decl
 n "ReadIndex"
-t "LC3B_C_INDEX"
+t "std_logic_vector"
+b "(INDEX_LEN-1 downto 0)"
 o 3
 suid 3,0
 )
@@ -1676,7 +1711,8 @@ blo "22000,29250"
 thePort (LogicalPort
 decl (Decl
 n "WriteIndex"
-t "LC3B_C_INDEX"
+t "std_logic_vector"
+b "(INDEX_LEN-1 downto 0)"
 o 4
 suid 4,0
 )
@@ -1714,7 +1750,7 @@ thePort (LogicalPort
 decl (Decl
 n "DataIn"
 t "std_logic_vector"
-b "(N-1 downto 0)"
+b "(N-1 DOWNTO 0)"
 o 5
 suid 5,0
 )
@@ -1752,7 +1788,7 @@ m 1
 decl (Decl
 n "DataOut"
 t "std_logic_vector"
-b "(N-1 downto 0)"
+b "(N-1 DOWNTO 0)"
 o 6
 suid 6,0
 )
@@ -1817,9 +1853,10 @@ uid 998,0
 va (VaSet
 font "courier,8,0"
 )
-xt "20000,38200,38000,40000"
-st "N     = 128           ( Integer )  
-Delay = DELAY_256B    ( Time    )  
+xt "20000,38200,40000,40900"
+st "N         = 128           ( Integer )  
+DELAY     = DELAY_256B    ( Time    )  
+INDEX_LEN = 3             ( Integer )  
 "
 )
 header ""
@@ -1831,9 +1868,14 @@ type "Integer"
 value "128"
 )
 (GiElement
-name "Delay"
+name "DELAY"
 type "Time"
 value "DELAY_256B"
+)
+(GiElement
+name "INDEX_LEN"
+type "Integer"
+value "3"
 )
 ]
 )
@@ -1956,9 +1998,11 @@ blo "38000,28250"
 )
 )
 thePort (LogicalPort
+lang 2
 decl (Decl
 n "ReadIndex"
-t "LC3b_C_INDEX"
+t "std_logic_vector"
+b "(INDEX_LEN-1 downto 0)"
 o 3
 suid 3,0
 )
@@ -1991,9 +2035,11 @@ blo "38000,29250"
 )
 )
 thePort (LogicalPort
+lang 2
 decl (Decl
 n "WriteIndex"
-t "LC3B_C_INDEX"
+t "std_logic_vector"
+b "(INDEX_LEN-1 downto 0)"
 o 4
 suid 4,0
 )
@@ -2132,17 +2178,23 @@ uid 1032,0
 va (VaSet
 font "courier,8,0"
 )
-xt "35000,41100,51500,42000"
-st "Delay = DELAY_256B    ( Time )  
+xt "35000,41100,55000,42900"
+st "DELAY     = DELAY_256B    ( Time    )  
+INDEX_LEN = 3             ( INTEGER )  
 "
 )
 header ""
 )
 elements [
 (GiElement
-name "Delay"
+name "DELAY"
 type "Time"
 value "DELAY_256B"
+)
+(GiElement
+name "INDEX_LEN"
+type "INTEGER"
+value "3"
 )
 ]
 )
@@ -2161,6 +2213,7 @@ ftype 10
 ordering 1
 viewiconposition 0
 portVis (PortSigDisplay
+sTC 0
 )
 archFileType "UNKNOWN"
 )
@@ -2264,9 +2317,11 @@ blo "53000,28250"
 )
 )
 thePort (LogicalPort
+lang 2
 decl (Decl
 n "ReadIndex"
-t "LC3b_C_INDEX"
+t "std_logic_vector"
+b "(INDEX_LEN-1 downto 0)"
 o 3
 suid 3,0
 )
@@ -2299,9 +2354,11 @@ blo "53000,29250"
 )
 )
 thePort (LogicalPort
+lang 2
 decl (Decl
 n "WriteIndex"
-t "LC3B_C_INDEX"
+t "std_logic_vector"
+b "(INDEX_LEN-1 downto 0)"
 o 4
 suid 4,0
 )
@@ -2440,17 +2497,23 @@ uid 1066,0
 va (VaSet
 font "courier,8,0"
 )
-xt "52000,23100,68500,24000"
-st "Delay = DELAY_256B    ( Time )  
+xt "52000,23100,72000,24900"
+st "DELAY     = DELAY_256B    ( Time    )  
+INDEX_LEN = 3             ( INTEGER )  
 "
 )
 header ""
 )
 elements [
 (GiElement
-name "Delay"
+name "DELAY"
 type "Time"
 value "DELAY_256B"
+)
+(GiElement
+name "INDEX_LEN"
+type "INTEGER"
+value "3"
 )
 ]
 )
@@ -2469,6 +2532,7 @@ ftype 10
 ordering 1
 viewiconposition 0
 portVis (PortSigDisplay
+sTC 0
 )
 archFileType "UNKNOWN"
 )
@@ -2486,7 +2550,8 @@ va (VaSet
 font "courier,8,0"
 )
 xt "22000,1800,33500,2700"
-st "DataWrite  : std_logic"
+st "DataWrite  : std_logic
+"
 )
 )
 *70 (Net
@@ -2503,7 +2568,8 @@ va (VaSet
 font "courier,8,0"
 )
 xt "22000,9000,34000,9900"
-st "TagOut     : LC3b_C_TAG"
+st "TagOut     : LC3b_C_TAG
+"
 )
 )
 *71 (Net
@@ -2520,7 +2586,8 @@ va (VaSet
 font "courier,8,0"
 )
 xt "22000,10800,34000,11700"
-st "WayDataout : LC3B_OWORD"
+st "WayDataout : LC3B_OWORD
+"
 )
 )
 *72 (Net
@@ -2537,7 +2604,8 @@ va (VaSet
 font "courier,8,0"
 )
 xt "22000,8100,33500,9000"
-st "Dirty      : std_logic"
+st "Dirty      : std_logic
+"
 )
 )
 *73 (Net
@@ -2554,7 +2622,8 @@ va (VaSet
 font "courier,8,0"
 )
 xt "22000,9900,33500,10800"
-st "Valid      : std_logic"
+st "Valid      : std_logic
+"
 )
 )
 *74 (Wire
@@ -3821,13 +3890,13 @@ tm "BdCompilerDirectivesTextMgr"
 ]
 associable 1
 )
-windowSize "-6,27,1434,881"
-viewArea "-20000,-11800,96832,53768"
-cachedDiagramExtent "-9500,0,68500,51000"
+windowSize "-6,31,1434,885"
+viewArea "-18444,15839,75265,68430"
+cachedDiagramExtent "-9500,0,72000,51000"
 hasePageBreakOrigin 1
 pageBreakOrigin "-78000,0"
 active 1
-lastUid 1153,0
+lastUid 1211,0
 defaultCommentText (CommentText
 shape (Rectangle
 layer 0

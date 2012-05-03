@@ -14,10 +14,10 @@ ENTITY BTB_Way IS
       DataIn     : IN     btb_line;
       DataWrite  : IN     std_logic;
       RESET_L    : IN     std_logic;
-      ReadIndex  : IN     lc3b_c_index;
-      ReadTag    : IN     std_logic_vector (11 DOWNTO 0);
-      WriteIndex : IN     LC3b_c_index;
-      WriteTag   : IN     std_logic_vector (11 DOWNTO 0);
+      ReadIndex  : IN     std_logic_vector (3 DOWNTO 0);
+      ReadTag    : IN     std_logic_vector (10 DOWNTO 0);
+      WriteIndex : IN     std_logic_vector (3 DOWNTO 0);
+      WriteTag   : IN     std_logic_vector (10 DOWNTO 0);
       DataOut    : OUT    btb_line;
       Present    : OUT    std_logic
    );
@@ -46,7 +46,7 @@ ARCHITECTURE struct OF BTB_Way IS
 
    -- Internal signal declarations
    SIGNAL CompVal : std_logic;
-   SIGNAL Tag     : std_logic_vector(11 DOWNTO 0);
+   SIGNAL Tag     : std_logic_vector(10 DOWNTO 0);
    SIGNAL Valid   : std_logic;
 
 
@@ -65,21 +65,22 @@ ARCHITECTURE struct OF BTB_Way IS
    PORT (
       RESET_L    : IN     std_logic ;
       DataWrite  : IN     std_logic ;
-      ReadIndex  : IN     LC3b_c_index ;
-      WriteIndex : IN     LC3b_c_index ;
+      ReadIndex  : IN     std_logic_vector (3 DOWNTO 0);
+      WriteIndex : IN     std_logic_vector (3 DOWNTO 0);
       DataIn     : IN     btb_line ;
       DataOut    : OUT    btb_line 
    );
    END COMPONENT;
    COMPONENT Bit_Array_RW
    GENERIC (
-      DELAY : Time := DELAY_256B
+      DELAY     : Time    := DELAY_256B;
+      INDEX_LEN : INTEGER := 3
    );
    PORT (
       RESET_L    : IN     std_logic ;
       DataWrite  : IN     std_logic ;
-      ReadIndex  : IN     LC3b_c_index ;
-      WriteIndex : IN     LC3b_c_index ;
+      ReadIndex  : IN     std_logic_vector (INDEX_LEN-1 DOWNTO 0);
+      WriteIndex : IN     std_logic_vector (INDEX_LEN-1 DOWNTO 0);
       DataIn     : IN     std_logic ;
       DataOut    : OUT    std_logic 
    );
@@ -97,15 +98,16 @@ ARCHITECTURE struct OF BTB_Way IS
    END COMPONENT;
    COMPONENT Data_Array_RW
    GENERIC (
-      N     : Integer;
-      DELAY : Time
+      N         : Integer;
+      DELAY     : Time;
+      INDEX_LEN : Integer
    );
    PORT (
       DataIn     : IN     std_logic_vector (N-1 DOWNTO 0);
       DataWrite  : IN     std_logic;
       RESET_L    : IN     std_logic;
-      ReadIndex  : IN     LC3b_c_index;
-      WriteIndex : IN     LC3b_c_index;
+      ReadIndex  : IN     std_logic_vector (INDEX_LEN-1 DOWNTO 0);
+      WriteIndex : IN     std_logic_vector (INDEX_LEN-1 DOWNTO 0);
       DataOut    : OUT    std_logic_vector (N-1 DOWNTO 0)
    );
    END COMPONENT;
@@ -143,7 +145,8 @@ BEGIN
       );
    ValidArray : Bit_Array_RW
       GENERIC MAP (
-         DELAY => DELAY_128B
+         DELAY     => DELAY_128B,
+         INDEX_LEN => 4
       )
       PORT MAP (
          RESET_L    => RESET_L,
@@ -155,7 +158,7 @@ BEGIN
       );
    TagCompare : Comparator
       GENERIC MAP (
-         N     => 12,
+         N     => 11,
          Delay => DELAY_COMPARE16
       )
       PORT MAP (
@@ -165,8 +168,9 @@ BEGIN
       );
    TagArray : Data_Array_RW
       GENERIC MAP (
-         N     => 12,
-         DELAY => DELAY_128B
+         N         => 11,
+         DELAY     => DELAY_128B,
+         INDEX_LEN => 4
       )
       PORT MAP (
          RESET_L    => RESET_L,

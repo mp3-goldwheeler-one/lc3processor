@@ -15,14 +15,15 @@ LIBRARY ece411;
 USE ece411.LC3b_types.all;
 
 ENTITY Bit_Array_RW IS
-   GENERIC(
-     DELAY : Time := DELAY_256B
+   GENERIC( 
+      DELAY     : Time    := DELAY_256B;
+      INDEX_LEN : INTEGER := 3
    );
    PORT( 
       RESET_L    : IN     std_logic;
       DataWrite  : IN     std_logic;
-      ReadIndex  : IN     LC3b_c_index;
-      WriteIndex : IN     LC3b_c_index;
+      ReadIndex  : IN     std_logic_vector (INDEX_LEN-1 DOWNTO 0);
+      WriteIndex : IN     std_logic_vector (INDEX_LEN-1 DOWNTO 0);
       DataIn     : IN     std_logic;
       DataOut    : OUT    std_logic
    );
@@ -33,7 +34,7 @@ END Bit_Array_RW ;
 
 --
 ARCHITECTURE untitled OF Bit_Array_RW IS
-  Type DataArray IS array (7 downto 0) of std_logic;
+  Type DataArray IS array (2**INDEX_LEN-1 downto 0) of std_logic;
   signal Data : DataArray;
 BEGIN
   --------------------------------------------------------------
@@ -52,14 +53,9 @@ BEGIN
   begin
     DataIndex := to_integer(unsigned(WriteIndex));
     if (reset_l = '0') then
-      Data(0) <= '0';
-      Data(1) <= '0';
-      Data(2) <= '0';
-      Data(3) <= '0';
-      Data(4) <= '0';
-      Data(5) <= '0';
-      Data(6) <= '0';
-      Data(7) <= '0';
+      for i in 0 to 2**INDEX_LEN-1 loop
+        Data(i) <= '0';
+      end loop;
     end if;
     if (dataWrite = '1') then
       Data(DataIndex) <= DataIn;
