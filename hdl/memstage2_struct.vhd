@@ -405,7 +405,7 @@ BEGIN
       );
    U_4 : AND2
       PORT MAP (
-         A => mem_write_byte_l,
+         A => mem_write_word_l,
          B => F1,
          F => data_mwritel_l
       );
@@ -495,7 +495,7 @@ BEGIN
    U_2 : OR2
       PORT MAP (
          A => addr_low_bit,
-         B => mem_write_word_l,
+         B => mem_write_byte_l,
          F => F1
       );
    U_3 : OR2

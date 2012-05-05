@@ -80,10 +80,10 @@ BEGIN
    BEGIN
       CASE current_state IS
          WHEN idle => 
-            IF (D_ACCESS = '1') THEN 
-               next_state <= DataAccess;
-            ELSIF (I_ACCESS = '1') THEN 
+            IF (I_ACCESS = '1') THEN 
                next_state <= InstAccess;
+            ELSIF (D_ACCESS = '1') THEN 
+               next_state <= DataAccess;
             ELSE
                next_state <= idle;
             END IF;
